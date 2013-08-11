@@ -1908,7 +1908,6 @@ void LoadMusicFiles(char *mpath)
     }
     ListBox_InsertString(hwnd, 0, "No Music");
     ListBox_SetCurSel(hwnd, -1);
-    free(mbuf);
 }
 
 void LoadTracks()
@@ -1927,7 +1926,6 @@ void LoadTracks()
     }
     ListBox_InsertString(hwnd, 0, "No Music");
     ListBox_SetCurSel(hwnd, -1);
-    free(mbuf);
 }
 
 void ListSavedGames(void)                                            // 100130
