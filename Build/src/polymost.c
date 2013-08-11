@@ -3970,7 +3970,7 @@ void polymost_drawsprite (long snum)
 
 		case 3: //Voxel sprite
 #ifdef USE_OPENGL
-			if (rendmode == 3 && (unsigned)globalpicnum < (unsigned)MAXVOXELS && voxmodels[globalpicnum])   /
+			if (rendmode == 3 && (unsigned)globalpicnum < (unsigned)MAXVOXELS && voxmodels[globalpicnum])
 				voxdraw(voxmodels[globalpicnum], tspr);
 #endif
 		    break;

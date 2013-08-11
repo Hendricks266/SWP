@@ -51,7 +51,7 @@ Prepared for public release: 03/28/2005 - Charlie Wiederhold, 3D Realms
 // Added /j addsearchpath
 // Added Removed Zilla end credits
 // February 2008 - 394
-// Added key and armor box to status
+// Added key and armor box to status                                  border - inv = panel
 // Added Screen FOV + Widescreen  - credit Plagman
 // Fixed Weaponstay (opposite) (sprite.c)
 // June 2008 - 395
@@ -98,15 +98,15 @@ Prepared for public release: 03/28/2005 - Charlie Wiederhold, 3D Realms
 // Added Fixed commandline help /?
 // Added Commandline Info to game menu in menus.c
 // October 2008 - 406
-// Added Palette 23 (gold) for menu text also in menus.c               gs.MenuTextColor
+// Added Palette 23 (gold) for menu text also in menus.c              gs.MenuTextColor
 // Fixed screensize 8 bit statusbar
 // Fixed multiplay
-// Adjust armor box for WB                                             inv - panel
+// Adjust armor box for WB                                            inv - panel
 // Added emergency exit
 // October 2008 - 408
 // Fixed the Load saved game
 // November 2008 - 409
-// Added Usegoodalpha to menu  (Alpha Channel)                         enhances background transparency - no clamping
+// Added Usegoodalpha to menu  (Alpha Channel)                        enhances background transparency - no clamping
 // November - 2008
 // Fixed crosshair in bbp = 8 in draw.c
 // December 2008 - 4102
@@ -197,7 +197,7 @@ Prepared for public release: 03/28/2005 - Charlie Wiederhold, 3D Realms
 // July  - 2009 - 4233
 // Fixed alternate hud in 8 bit - gamepics.h
 // Added RTS enabled in singleplay
-// Added search for map.rts or addon.rts - RTSCustom                    setup.c
+// Added search for map.rts or addon.rts - RTSCustom                  setup.c
 // Added ForceSetup = 1 at initial startup
 // Fixed always show menu at startup etc
 // July  - 2009 - 4234
@@ -236,45 +236,44 @@ Prepared for public release: 03/28/2005 - Charlie Wiederhold, 3D Realms
 // Added Music Menu
 // Nov   - 2009 - 4252
 // Fixed Autosaved loading
-// Fixed sprite crash if secnum < 0                                     sprite.c
-// Added Delete to kill music                                           menus.c
+// Fixed sprite crash if secnum < 0                                   sprite.c
+// Added Delete to kill music                                         menus.c
 // Added stop music when switching (stopsound)
-// Fixed savegame load                                                  startwin.game
+// Fixed savegame load                                                startwin.game
 // Fixed game end crash (PlayMusic)
 // Added SwpRev
 // Dec   - 2009 - 426
 // Changed Playmusic from lower to uppercase (crashes)
 // Added weaponhide
-// Resized minihud icons and text size                                  panel.c inv.c gamep.h
-// Redid crosshair                                                      draw.c
+// Resized minihud icons and text size                                panel.c inv.c gamep.h
+// Redid crosshair                                                    draw.c
 // Fixed bonus screen exit
 // Moved weaponicons and alt minihud to video
 // Moved version to Options Menu bottom
 // Jan   - 2010 - 427
-// Switch to dx80
-// Added check for windows 7                                            menus.c multivoc.c winlayer.c
-// Improved horiz mouse jitter                                          winlayer.c
+// Added check for windows 7                                          menus.c multivoc.c winlayer.c
+// Improved horiz mouse jitter                                        winlayer.c
 // Removed ogg routine in sounds.c
 // Added Musicfolder now whatever folder selected in menu
-// Fixed several crashes _st1.map - sounds                              sounds.c - sprite.c
+// Fixed several crashes _st1.map - sounds                            sounds.c - sprite.c
 // Added minihudtyp - classic/modern/alternate
-// Added clear color fades                                              inv.c
-// Removed keys in classic minihud                                      panel.c
+// Added clear color fades                                            inv.c
+// Removed keys in classic minihud                                    panel.c
 // Except for _hrp removed lower case in startwin.game
-// Made F7 variable keybind for gamefunc_Third_Person                   _function.h function.h
+// Made F7 variable keybind for gamefunc_Third_Person                 _function.h function.h
 // Added 10% to mouse movements
-// Added underwater blue tint if highres                                inv.c player.c
-// Added refreshrate to log on video setting                            winlayer.c sdlayer.c
-// Added semi fix for 8 bit mode in win7                                winlayer.c
+// Added underwater blue tint if highres                              inv.c player.c
+// Added refreshrate to log on video setting                          winlayer.c sdlayer.c
+// Added semi fix for 8 bit mode in win7                              winlayer.c
 // Fixed missed autosaved games
 // Improved internal map colors
 // Added pathsearchmode for user maps/music/games
-// Added MOUSE_X_MAX_VALUE / MOUSE_Y_MAX_VALUE                          menus.c
-// Added nohrp command in commandline (must be 1st)
+// Added MOUSE_X_MAX_VALUE / MOUSE_Y_MAX_VALUE                        menus.c
+// Added nohrp command in commandline (must be 1st or 2nd)
 // Removed 8 bit mode if win7
 // Added NoHrp to configs and menu
 // Change map status option in start menu to nohrp
-// Shifted userstats to top right                                       draw.c
+// Shifted userstats to top right                                     draw.c
 // shifted internal map display correct places
 // Replaced internal map arrow with lowang
 // Compiled with MinGW Version 4.4.0
@@ -282,7 +281,7 @@ Prepared for public release: 03/28/2005 - Charlie Wiederhold, 3D Realms
 // Armor 000 put back
 // Mouse speed wider
 // Moved CommandLineHelp to Start Menu (win7) messagebox
-// Added extra buffersize to initprintf                                 sdlayer.c winlayer.c
+// Added extra buffersize to initprintf                               sdlayer.c winlayer.c
 // Added Level Stats option to start menu
 // Fixed alt not working in third person
 // Added new pic to startup menu
@@ -293,7 +292,7 @@ Prepared for public release: 03/28/2005 - Charlie Wiederhold, 3D Realms
 // March - 2010 - 429 - Released as 4.3.0
 // Added mouse speed adjustments to config.c
 // Compile back in gcc 4.3.3
-// Added forced fwrite SaveGameDescr                                 save.c
+// Added forced fwrite SaveGameDescr                                  save.c
 // Added svgame for each .grp addon
 // Added dolower(char *cpath)
 // Added maps played in start menu
@@ -310,20 +309,20 @@ Prepared for public release: 03/28/2005 - Charlie Wiederhold, 3D Realms
 // Added video settings in start menu when fullscreen on/off
 // Fixed LCD/CRT not seperating in gameres
 // Fixed Host / Client not seperating in start menu
-// Added LoopFactor in configs for setting CD music repeat time         cd.c
+// Added LoopFactor in configs for setting CD music repeat time       cd.c
 // Added check for Tne (kill music 1st level) iTne
 // Allow startmenu multiplay monster selection in singleplay
 // Added iStart to stop changing music at startup
 // Changed iBright int etc to short etc  (startwin)
-// Added MNU_CheckStart                                                 menus.c
-// Changed MNU_DrawOptionString to add shade                            menus.c
+// Added MNU_CheckStart                                               menus.c
+// Changed MNU_DrawOptionString to add shade                          menus.c
 // Added start an auto save option (startwin)
 // Added Rootfolder if '0' in game.c
 // Fixed DeleteAutoSave deleting correct file paths
-// Added modified AutoSaveGame                                          weapon sprite winlayer
+// Added modified AutoSaveGame                                        weapon sprite winlayer
 // Modified and forced autosave at runlevel
-// Changed int autosave, autodone to short                              gamep config player game.h
-// Added ST1 hack                                                       sprite
+// Changed int autosave, autodone to short                            gamep config player game.h
+// Added ST1 hack                                                     sprite
 // Delete LevelSong at game end for music from swcustom
 // Added 2nd try for map in maps/ if Level not found:
 // Made Episode and Skill text smaller like options
@@ -334,6 +333,28 @@ Prepared for public release: 03/28/2005 - Charlie Wiederhold, 3D Realms
 // Changed logo
 // Made Deselect in menu 'Defaults' and selective to page
 // Fixed deselect not working on several items
+// March 2010 - 4.3.2.0
+// Added -by detection for bypass press(x) and start menu
+// Added -nohrp can also be 2nd
+// Trimmed logo
+// gcc 4.4/5 fix from eduke                                           pragmas.h
+// August 2010 - 4.3.2.1
+// 8 bit rendering check for vista/win7                               winlayer.c
+// Fixed loading saved game name in log
+// August 2010 - 4.3.2.2
+// Saved game now saves current track and not redbook[level]
+// Log displays correct loaded saved game
+// Log displays track number loaded
+// Added game save restore options                                    save.c
+// Fixed 'Apply' causing crash in multiplayer                         menus.c
+// Adjusted time limit display                                        panel.c
+// Added MenuTrack                                                    startwin.game
+// Added LastMusic
+// September 2010 - 4.3.2.3
+// Added coolie die with head if no ghost spawn                       coolie.c names2.h
+// Added -rts to commandline
+// Added stopsong if cdplay in multiplayer end
+// September 2010 - 4.3.2.4
 //
 
 #define MAIN
@@ -410,7 +431,7 @@ BOOL Global_PLock = TRUE;
 BOOL Global_PLock = FALSE;
 #endif
 
-long GameVersion = 16;
+long GameVersion = 16;	// 12 was original source release. For future releases increment by two.
 CHAR DemoText[3][64];
 int DemoTextYstart = 0;
 //int xCol = 0;
@@ -995,7 +1016,7 @@ VOID setup2dscreen(VOID)
 
 
 VOID TerminateGame(VOID)
-    {
+{
     int i,j;
     long oldtotalclock;
 
@@ -1006,10 +1027,10 @@ VOID TerminateGame(VOID)
     uninitmultiplayers();
 
     if (CleanExit)
-        {
+    {
         SybexScreen();
         //TenScreen();
-        }
+    }
 
     ////--->>>> sound stuff was there
     //uninitkeys();
@@ -1030,7 +1051,7 @@ VOID TerminateGame(VOID)
         DosScreen();
 
     uninitgroupfile();
-    }
+}
 
 VOID LoadLevel(char *filename)
 {
@@ -1041,17 +1062,17 @@ VOID LoadLevel(char *filename)
         sprintf(ds,"maps/%s", filename);
         if (loadboard(ds, SW_SHAREWARE ? 1 : 0, &Player[0].posx, &Player[0].posy, &Player[0].posz, &Player[0].pang, &Player[0].cursectnum) == -1)
         {
-            TerminateGame();
+           TerminateGame();
 #ifdef RENDERTYPEWIN
   	       {
-		   char msg[256];
-		   Bsnprintf(msg, 256, "Level not found: %s", filename);
-		   wm_msgbox(apptitle, msg);
+		       char msg[256];
+		       Bsnprintf(msg, 256, "Level not found: %s", filename);
+		       wm_msgbox(apptitle, msg);
 	       }
 #else
            printf("Level Not Found: %s\n", filename);
 #endif
-        exit(0);
+           exit(0);
         }
     }
 }
@@ -1856,7 +1877,7 @@ VOID InitLevel(VOID)
 
 
 VOID TerminateLevel(VOID)
-    {
+{
     VOID pClearSpriteList(PLAYERp pp);
     int i, nexti, stat, pnum, ndx;
     SECT_USERp *sectu;
@@ -1867,19 +1888,28 @@ VOID TerminateLevel(VOID)
 
     // Free any track points
     for (ndx = 0; ndx < MAX_TRACKS; ndx++)
-        {
+    {
         if (Track[ndx].TrackPoint)
-            {
+        {
             FreeMem(Track[ndx].TrackPoint);
             // !JIM! I added null assigner
             Track[ndx].TrackPoint = NULL;
-            }
         }
+    }
 
     // Clear the tracks
     memset(Track, 0, sizeof(Track));
 
-    StopSound();
+    if (iLoad == 0)                                                  // dont kill reloaded music
+    {
+        StopFX();
+        StopSong();
+        if (LoadSavedGame >= 0)
+            CDAudio_Stop();
+    }
+
+    iLoad == 0;
+
     Terminate3DSounds();        // Kill the 3d sounds linked list
     //ClearSoundLocks();
 
@@ -1888,46 +1918,46 @@ VOID TerminateLevel(VOID)
     //AnimClear();
 
     for (stat = STAT_PLAYER0; stat < STAT_PLAYER0 + numplayers; stat++)
-        {
+    {
 
         pnum = stat - STAT_PLAYER0;
 
         TRAVERSE_SPRITE_STAT(headspritestat[stat], i, nexti)
-            {
+        {
             if (User[i])
                 memcpy(&puser[pnum], User[i], sizeof(USER));
-            }
         }
+    }
 
     // Kill User memory and delete sprites
     // for (stat = 0; stat < STAT_ALL; stat++)
     for (stat = 0; stat < MAXSTATUS; stat++)
-        {
+    {
         TRAVERSE_SPRITE_STAT(headspritestat[stat], i, nexti)
-            {
+        {
             KillSprite(i);
-            }
         }
+    }
 
     // Free SectUser memory
     for (sectu = &SectUser[0];
         sectu < &SectUser[MAXSECTORS];
         sectu++)
-        {
+    {
         if (*sectu)
-            {
+        {
             ////DSPRINTF(ds,"Sect User Free %d",sectu-SectUser);
             //MONO_PRINT(ds);
             FreeMem(*sectu);
             *sectu = NULL;
-            }
         }
+    }
 
     //memset(&User[0], 0, sizeof(User));
     memset(&SectUser[0], 0, sizeof(SectUser));
 
     TRAVERSE_CONNECT(pnum)
-        {
+    {
         PLAYERp pp = Player + pnum;
 
         // Free panel sprites for players
@@ -1953,12 +1983,12 @@ VOID TerminateLevel(VOID)
         pp->Killer = -1;
 
         INITLIST(&pp->PanelSpriteList);
-        }
+    }
 
     JS_UnInitLockouts();
 
 //HEAP_CHECK();
-    }
+}
 
 VOID NewLevel(VOID)
 {
@@ -2199,7 +2229,7 @@ VOID LogoLevel(VOID)
 }
 
 VOID CreditsLevel(VOID)
-    {
+{
     char called;
     long fin;
     int i;
@@ -2229,22 +2259,25 @@ VOID CreditsLevel(VOID)
 
     CDAudio_Stop();
     StopSong();
-    CDAudio_Play(ThemeTrack[5], FALSE);
 
-    if (!CDAudio_Playing())
-       {
-       CDAudio_Play(ThemeTrack[0], FALSE);
-       if (!CDAudio_Playing())
-          {
-          if (!PlayMusic(ThemeSongs[5]))
-             {
-             handle = PlaySound(DIGI_NOLIKEMUSIC,&zero,&zero,&zero,v3df_none);
-             if (handle > 0)
-                 while(FX_SoundActive(handle));
-             return;
-             }
+    if (gs.PlayCD)
+    {
+        CDAudio_Play(ThemeTrack[5], FALSE);
+        if (!CDAudio_Playing())
+        {
+           CDAudio_Play(ThemeTrack[0], FALSE);
+           if (!CDAudio_Playing())
+           {
+              if (!PlayMusic(ThemeSongs[5]))
+              {
+                 handle = PlaySound(DIGI_NOLIKEMUSIC,&zero,&zero,&zero,v3df_none);
+                 if (handle > 0)
+                     while(FX_SoundActive(handle));
+                 return;
+              }
           }
        }
+    }
 
     ready2send = 0;
     totalclock = lastUpdate = 0;
@@ -2254,14 +2287,14 @@ VOID CreditsLevel(VOID)
     curpic = CREDITS1_PIC;
 
     while (TRUE)
-        {
+    {
         // taken from top of faketimerhandler
         // limits checks to max of 40 times a second
         if (totalclock >= ototalclock + synctics)
-            {
+        {
             ototalclock += synctics;
             timer += synctics;
-            }
+        }
 
         if (gs.PlayCD)
             CDAudio_Update();
@@ -2273,32 +2306,32 @@ VOID CreditsLevel(VOID)
         nextpage();
 
         if (timer > 8*120)
-            {
+        {
             curpic = CREDITS2_PIC;
-            }
+        }
 
         if (timer > 16*120)
-            {
+        {
             timer = 0;
             curpic = CREDITS1_PIC;
-            }
+        }
 
         if (!CDAudio_Playing())
             break;
 
         if (KEY_PRESSED(KEYSC_ESC))
             break;
-        }
+    }
 
     // put up a blank screen while loading
     clearview(0);
     nextpage();
     ResetKeys();
     CDAudio_Stop();
-    }
+}
 
 VOID SybexScreen(VOID)
-    {
+{
     if (!SW_SHAREWARE) return;
 
     if (CommEnabled)
@@ -2313,7 +2346,7 @@ VOID SybexScreen(VOID)
     ResetKeys();
     while (!KeyPressed() && !quitevent) handleevents();
 
-    }
+}
 
 // CTW REMOVED
 /*
@@ -2942,6 +2975,7 @@ VOID BonusScreen(PLAYERp pp)
        int x = 0;
        if (gs.PlayCD)
        {
+          StopSong();
           CDAudio_Stop();
 	      CDAudio_Play(ThemeTrack[1], TRUE);
 	      x = 1;
@@ -3215,6 +3249,7 @@ VOID EndGameSequence(VOID)
           if (gs.PlayCD)
           {
              CDAudio_Stop();
+             StopSong();
              //CDAudio_Play(2,TRUE); // Play theme after game ends
              CDAudio_Play(ThemeTrack[0], TRUE);
              Level=0;
@@ -3265,7 +3300,6 @@ VOID StatScreen(PLAYERp mpp)
     ResetPalette(mpp);
     COVER_SetReverb(0); // Reset reverb
     StopSound();
-
 
     if (FinishAnim)
     {
@@ -3411,7 +3445,8 @@ VOID StatScreen(PLAYERp mpp)
 
     if (!SW_SHAREWARE && gs.PlayCD)
     {
-        CDAudio_Stop();
+       CDAudio_Stop();
+       StopSong();
        if (gNet.TimeLimitClock == 0)
        {
            CDAudio_Play(ThemeTrack[1], TRUE);
@@ -3438,8 +3473,6 @@ VOID StatScreen(PLAYERp mpp)
 
     bStatScreen = FALSE;
     StopSound();
-    if (!SW_SHAREWARE && gs.PlayCD)
-        CDAudio_Stop();
     Terminate3DSounds();
     ExitMenus();
 }
@@ -3678,8 +3711,6 @@ VOID InitRunLevel(VOID)
 
     waitforeverybody(6);
 
-    StopSong();
-
     if (Bstrcasecmp(CacheLastLevel, LevelName) != 0)
         DoTheCache();
 
@@ -3697,6 +3728,7 @@ VOID InitRunLevel(VOID)
 
     if (!SW_SHAREWARE && gs.PlayCD)
     {
+        StopSong();
         if (Level == 0) // For user maps
         {
            i = RedBookSong[2+RANDOM_RANGE(14)];
@@ -3711,7 +3743,6 @@ VOID InitRunLevel(VOID)
            gs.PlayCD = 0;
            if (gs.MusicOn)
            {
-              InitMusic();
 	          PlayMusic(LevelSong);
            }
 	   }
@@ -3719,8 +3750,10 @@ VOID InitRunLevel(VOID)
     else
     if (gs.MusicOn)
     {
-       PlayMusic(LevelSong);
+        PlayMusic(LevelSong);
     }
+    else
+        StopSong();
 
     InitPrediction(&Player[myconnectindex]);
 
@@ -3747,29 +3780,52 @@ VOID InitRunLevel(VOID)
 
 VOID RunLevel(VOID)
 {
-    int i;
+    int i, j=LoadSavedGame;
 
     if (LoadSavedGame >= 0)
     {
-       initprintf("  - Loading saved game: %s\n", svgame);
        KB_ClearKeysDown();
-       LoadGame(LoadSavedGame);
+       if (MenuTrack > 0)
+       {
+           LoadSavedGame = 99;
+           LoadGame(j);
+           LoadSavedGame = j;
+        }
+       else
+           LoadGame(LoadSavedGame);
+
        if (LoadSavedGame < 10)
        {
            LastSaveNum = LoadSavedGame;
            QuickLoadNum = LoadSavedGame;
+           if (UserMapName[0] != 0)
+           {
+               strcpy(MenuMap, UserMapName);
+               SetLastPlayed(MenuMap, 1);
+           }
        }
+
        LoadSavedGame = -1;
     }
     else
     {
        InitRunLevel();
     }
+
     FX_SetVolume(gs.SoundVolume);
     if (!SW_SHAREWARE && gs.PlayCD)
         CDAudio_SetVolume(gs.MusicVolume);
     else
         MUSIC_SetVolume(gs.MusicVolume);
+
+    if (!SW_SHAREWARE && gs.PlayCD && MenuTrack > 0)
+    {
+        StopSong();
+        CDAudio_Init();
+        CDAudio_Stop();
+        CDAudio_Play(MenuTrack, TRUE);
+        initprintf("  - Playing Track = %d\n", MenuTrack);
+    }
 
     if (Autosave > 0 && numplayers <= 1 && Autodone == 0)
     {
@@ -3953,7 +4009,7 @@ int DetectShareware(void)
     long L;
     int  h;
 
-    h = kopen4load("SW.GRP", 0);
+    h = kopen4load("SW.GRP", 0);      // retail L = 47536148 | shareware L = 26056769
     if (h >= 0)
     {
         L = kfilelength(h);
@@ -4480,6 +4536,12 @@ VOID CheckCommandLine(long argc, char *argv[])
            checkforsaves(UserMapName);
     }
     else
+	if (Bstrncasecmp(arg, "rts", 3) == 0)
+    {
+       strcpy(RTSCustom, argv[++cnt]);
+       initprintf("Using RTS file: %s\n", RTSCustom);
+    }
+    else
     if (Bstrncasecmp(arg, "game", 4) == 0  && !SW_SHAREWARE)
        {
        if (strlen(arg) > 4)
@@ -4565,24 +4627,22 @@ VOID CheckCommandLine(long argc, char *argv[])
 
 long app_main(long argc, char *argv[])
 {
-    int i, k;
+    int i;
     int stat, nexti;
     VOID DoSector(VOID);
     VOID gameinput(VOID);
     ULONG TotalMemory;
-    int32 CONFIG_ReadSetup(void);
 
     wm_setapptitle("SWP - Version "SwpVer);
 
-    for (i=1;i<argc;i++)
+    for (i=1; i<argc; i++)
     {
 	   if (argv[i][0] != '-' && argv[i][0] != '/')
 	       continue;
 	   if (!Bstrcasecmp(argv[i]+1, "setup"))
-	      {
+	   {
 	      CommandSetup = TRUE;
-	      //ForceSetup = 1;
-	      }
+	   }
 	   else
 	   if (!Bstrcasecmp(argv[i]+1, "?"))
 	   {
@@ -4595,14 +4655,14 @@ long app_main(long argc, char *argv[])
 
 #ifdef RENDERTYPEWIN
 	if (win_checkinstance())
-	   {
+    {
 	   if (argc > 1 && Bstrcasecmp(argv[1]+1, "z") != 0 && Bstrcasecmp(argv[1]+1, "setup") != 0)
-	      {
+	   {
 	      if (!wm_ynbox("Shadow Warrior","Another SWP game is currently running. "
 		 			    "Do you wish to continue starting this copy ?"))
 			  return 0;
-		  }
 	   }
+   }
 #endif
 
     if (argc > 1 && Bstrcasecmp(argv[1]+1, "z") == 0)
@@ -4610,6 +4670,12 @@ long app_main(long argc, char *argv[])
 
     if (argc > 1 && Bstrcasecmp(argv[1]+1, "nohrp") == 0)
 	    NoHrp = 1;
+    else
+    if (argc > 2 && Bstrcasecmp(argv[2]+1, "nohrp") == 0)
+	    NoHrp = 1;
+
+    if (argc > 1 && Bstrcasecmp(argv[1]+1, "by") == 0)
+	    bypass = 1;
 
 #ifdef _WIN32
 	if (!access("user_profiles_enabled", F_OK))
@@ -4684,7 +4750,6 @@ long app_main(long argc, char *argv[])
 	   }
     }
 
-    i = 0; //CONFIG_ReadSetup();
     if (gs.UseDarts)
         useDarts = TRUE;
 
@@ -4708,7 +4773,7 @@ long app_main(long argc, char *argv[])
 	    initprintf("Detected registered Grp\n");
 
 #if defined RENDERTYPEWIN || (defined RENDERTYPESDL && (defined __APPLE__ || defined HAVE_GTK2))
-	if (i < 0 || ForceSetup || CommandSetup)
+	if (bypass == 0 && (ForceSetup || CommandSetup))
 	{
 		if (quitevent || !startwin_run())
 		{
@@ -4760,8 +4825,8 @@ long app_main(long argc, char *argv[])
     initgroupfile(grpfile);
     initprintf("Adding Group file: %s\n", grpfile);
 
-    k = initgroupfile("SWP.grp");
-    if (k >= 0)
+    i = initgroupfile("SWP.grp");
+    if (i >= 0)
         initprintf("Adding Group file: %s\n", "SWP.grp");
 
     #if 0
@@ -4843,7 +4908,7 @@ long app_main(long argc, char *argv[])
     if (NoHrp)
         mPal = 16;     // stops switching colors from white/blue
 
-    hicsetpalettetint(mPal, 255, gs.MenuTextColor*18, 16, 0);  // menu
+    hicsetpalettetint(mPal, 255, gs.MenuTextColor*18, 16, 0);
 
     Control();
 
@@ -5233,7 +5298,7 @@ VOID FunctionKeys(PLAYERp pp)
 
     if (KEY_PRESSED(KEYSC_ALT) || KEY_PRESSED(KEYSC_RALT))
     {
-        if (rts_delay > 16 && fn_key && !gs.ParentalLock && !Global_PLock) // CommEnabled && wxrt
+        if (rts_delay > 16 && fn_key && !gs.ParentalLock && !Global_PLock) // CommEnabled
         {
             KEY_PRESSED(sc_F1 + fn_key - 1) = 0;
 
@@ -6186,7 +6251,7 @@ VOID getinput(SW_PACKET *loc)
             }
         }
 
-    if (BUTTON(gamefunc_Alt_Fire))
+    if (BUTTON(gamefunc_Alt_Fire))                                   // altfire
         {
         USERp u = User[pp->PlayerSprite];
         short this_weapon = u->WeaponNum + 1;

@@ -24,7 +24,8 @@ Prepared for public release: 03/28/2005 - Charlie Wiederhold, 3D Realms
 */
 //-------------------------------------------------------------------------
 
-// Added Ninja Sliced fix
+// Added ninja sliced fix
+// Added coolie die with head
 //
 
 #ifndef NAMES2_H
@@ -458,6 +459,7 @@ STAT_QUICK_DEFEND
 #define COOLG_PAIN_R4 COOLG_PAIN_R0 //+ (COOLIE_PAIN_FRAMES * 4)
 
 #define COOLIE_DEAD_NOHEAD 1440
+#define COOLIE_DEAD_HEAD 4267
 #define COOLIE_DIE 4260
 #define COOLIE_DEAD 4268
 

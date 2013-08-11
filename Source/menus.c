@@ -58,7 +58,7 @@ Prepared for public release: 03/28/2005 - Charlie Wiederhold, 3D Realms
 // Added variable Palette 23 for menu text
 // Fixed screensize 8 bit status bar
 // Added wangbang stuff
-// Added usegoodalpha (Alpha Channel)              enhances background transparency - no clamping
+// Added usegoodalpha (Alpha Channel)           enhances background transparency - no clamping
 // Added Texture compression
 // Added PutStringInfo2 to text.c
 // Added RandomMusic
@@ -78,7 +78,7 @@ Prepared for public release: 03/28/2005 - Charlie Wiederhold, 3D Realms
 // Added colors to multi display
 // Added force weaponswitch off if multiplay
 // Version 4.2.4
-// Added changed menu palette from 32 to 10 mPal   32 interfered with night goggles (pal.h)
+// Added changed menu palette from 32 to 10 mPal32 interfered with night goggles (pal.h)
 // Version 4.2.5
 // Added Delete to kill music
 // Version 4.2.6
@@ -89,13 +89,14 @@ Prepared for public release: 03/28/2005 - Charlie Wiederhold, 3D Realms
 // Added underwater tint
 // Added MOUSE_X_MAX_VALUE / MOUSE_Y_MAX_VALUE
 // Added NoHrp to configs
-// Added screencapture to menus                  16
+// Added screencapture to menus
 // Added vsync
 // Added cd force loop
 // Added MNU_BitCheck
 // Added MNU_CheckStart
 // Changed MNU_DrawOptionString to add shade
 // Fixed DeleteAutoSave deleting correct file
+// Added -by detection for bypass press(x)
 //
 
 #include "build.h"
@@ -142,8 +143,9 @@ extern int32 ScreenMode,ScreenWidth,ScreenHeight,ScreenBPP;
 extern BOOL bGrp;
 extern int vsync;
 extern char *svgame[40];
+extern short bypass;
 
-BOOL bGameQuit = FALSE;
+BOOL  bGameQuit = FALSE;
 short MenuTextColor = 1;
 extern BOOL ShellFlag;
 extern short mPal;
@@ -262,6 +264,10 @@ char maxtextlen;                        // max length allowed for current
 static struct { int xdim,ydim; } validresolutions[MAXVALIDMODES];
 static int numvalidresolutions = 0, validbpps[8], numvalidbpps = 3;
 
+extern char UserMapName[80];
+extern char CurrMapName[80];
+extern char UserAddon[80];
+
 static void UpdateValidModes(int bpp, int fs)
 {
 	int i, j;
@@ -320,10 +326,6 @@ static BOOL ApplyModeSettings(MenuItem *item)
 
 	return FALSE;
 }
-
-extern char UserMapName[80];
-extern char CurrMapName[80];
-extern char UserAddon[80];
 
 MenuItem hacks_i[] =
     {
@@ -1094,14 +1096,14 @@ BOOL MNU_KeySetupCustom(UserCall call, MenuItem *item)
 
 			j = OPT_LINE(0)+(i-topitem)*8;                                    // start at 0
 			// draw left message
-			MNU_DrawSmallString(OPT_XS+45, j, ds, (i==currentkey)?0:12, 16);
+			MNU_DrawSmallString(OPT_XS+45, j, ds, (i==currentkey)?0:12, 16);  // + 45 in
 
 			p = getkeyname(KeyboardKeys[i][0]);
 			if (!p || KeyboardKeys[i][0]==0xff)
 			    p = "  -";
 			// draw primary settings
 			MNU_DrawSmallString(OPT_XSIDE, j, (char*)p, (i==currentkey)?-5:12,
-					(i==currentkey && currentcol==0) ? 14:17);
+					(i==currentkey && currentcol==0) ? 14:17);       // 14 = red 17 = silver
 
 			if (i == gamefunc_Show_Console)
 			    continue;
@@ -1111,7 +1113,7 @@ BOOL MNU_KeySetupCustom(UserCall call, MenuItem *item)
 			    p = "  -";
 			// draw secondary settings
 			MNU_DrawSmallString(OPT_XSIDE + 4*14, j, (char*)p, (i==currentkey)?-5:12,
-					(i==currentkey && currentcol==1) ? 14:11);
+					(i==currentkey && currentcol==1) ? 14:11);       // 11 = green
 		}
 
 		{
@@ -1303,14 +1305,14 @@ BOOL MNU_MouseSetupCustom(UserCall call, MenuItem *item)
 
             // text part
 			j = OPT_LINE(1)+i*8;
-            MNU_DrawSmallString(OPT_XS+70, j, ds, (i==currentbut)?0:12, 16);
+            MNU_DrawSmallString(OPT_XS+70, j, ds, (i==currentbut)?0:12, 16);   //  + 45 in
 
 			p = MouseFunctions[y][x] < 0 ? "  -" : gamefunctions[MouseFunctions[y][x]];
 			for (x=0; p[x]; x++) ds[x] = (p[x] == '_' ? ' ' : p[x]);
 			ds[x] = 0;
 			// binding part
 			MNU_DrawSmallString(OPT_XSIDE+20, j, ds, (i==currentbut)?-5:12,
-					(i==currentbut) ? 14:17);
+					(i==currentbut) ? 14:17);                                  // 17
 		}
 	}
 
@@ -1714,7 +1716,10 @@ BOOL MNU_QuitCustom(UserCall call, MenuItem_p item)
 
         dialog[0] = S_QUITYN;
         dialog[1] = " ";
-        dialog[2] = "Press (X) for Startup Menu.";
+        if (bypass == 0)
+            dialog[2] = "Press (X) for Startup Menu.";
+        else
+            dialog[2] = " ";
     }
 
     ret = MNU_Dialog();
@@ -1757,7 +1762,7 @@ BOOL MNU_QuitCustom(UserCall call, MenuItem_p item)
         ExitMenus();
     }
 
-    if (KB_KeyPressed(sc_X))
+    if (bypass == 0 && KB_KeyPressed(sc_X))
     {
         if (CommEnabled || CommPlayers >= 2)
         {
@@ -1767,7 +1772,6 @@ BOOL MNU_QuitCustom(UserCall call, MenuItem_p item)
         }
         QuitFlag = TRUE;
         ShellFlag = TRUE;
-        StopSong();
         StopSound();
         ExitMenus();
     }
@@ -1844,6 +1848,7 @@ BOOL MNU_QuickLoadCustom(UserCall call, MenuItem_p item)
            ready2send = 1;
            LastSaveNum = -1;
            strcpy(CurrMapName, UserMapName);
+
            KB_ClearKeysDown();
            ExitMenus();
         }
@@ -3274,7 +3279,6 @@ void MNU_DoButton(MenuItem_p item, BOOL draw)
             {
                BOOL bak = DemoMode;
                CDAudio_Stop();
-               StopSong();
                StopSound();
                CDAudio_Init();
                GetUserMusic();
@@ -3292,8 +3296,8 @@ void MNU_DoButton(MenuItem_p item, BOOL draw)
             else
             {
                BOOL bak = DemoMode;
+
                CDAudio_Stop();
-               StopSong();
                StopSound();
                NumUserMusic = 0;
                GetUserMusic();
@@ -5595,7 +5599,6 @@ BOOL MNU_CheckOption(MenuItem *item)
     return (TRUE);
 }
 
-
 BOOL MNU_ShareMapsCheck(MenuItem *item)
 {
     extern BOOL bNoUserMaps;
@@ -5616,9 +5619,9 @@ BOOL MNU_HostingCheck(MenuItem *item)
 
 BOOL MNU_CheckMulti(MenuItem *item)
 {
-    if (CommEnabled)
+    if (!CommEnabled)
         SET(item->flags, mf_disabled);
-    MNU_ShareWareCheck(item);
+    //MNU_ShareWareCheck(item);
     return (TRUE);
 }
 
@@ -5817,6 +5820,9 @@ BOOL MNU_StartMultiGame(void)
 
     if (!bHosting)                  // apply
     {
+        if (UserMapName[0] == 0 && gs.NetLevel == 0)
+            return FALSE;
+
         if (CommEnabled || CommPlayers >= 2)
         {
             PACKET_NAME_CHANGE p;
@@ -5932,7 +5938,6 @@ BOOL MNU_CDMusicKeyIn(void)
 	{
 		KB_ClearKeyDown(sc_Delete);
         CDAudio_Stop();
-        StopSong();
         StopSound();
 	}
 
@@ -6034,8 +6039,6 @@ BOOL MNU_MusicKeyIn(void)
 	if (KB_KeyPressed(sc_Delete))
 	{
 		KB_ClearKeyDown(sc_Delete);
-        CDAudio_Stop();
-        StopSong();
         StopSound();
 	}
 
@@ -6091,6 +6094,7 @@ BOOL MNU_SetMusic(void)
 	   if (gs.PlayCD)
 	   {
 	       CDAudio_Stop();
+	       StopSong();
 	       if (MusicCursor == 0)  // current track
 	           CDAudio_Play(CurrentTrack, TRUE);
 	       else

@@ -1,6 +1,7 @@
 // This file has been modified from Ken Silverman's original release
 // by Jonathon Fowler (jonof@edgenetwk.com)
 
+// gcc fix from eduke                            wxyz
 
 #ifndef __pragmas_h__
 #define __pragmas_h__
@@ -1035,8 +1036,10 @@ void copybufreverse(void *S, void *D, long c);
 	   __asm__ __volatile__ ("addl %%ebx, %%esi; movw (%%eax), %%cx; movb (%%ebx), %%dl; " \
 				"movb %%cl, (%%ebx); movb (%%esi), %%dh; movb %%ch, (%%esi); " \
 				"movw %%dx, (%%eax)" \
-		: : "a" (__a), "b" (__b), "S" (__S) : "ecx", "edx", "memory", "cc"); \
-	 0; })
+        : "=S" (__S) : "a" (__a), "b" (__b), "S" (__S) : "ecx", "edx", "memory", "cc"); \
+	 0; })                                                                                   //gcc fix from eduke wxyz
+
+//		: : "a" (__a), "b" (__b), "S" (__S) : "ecx", "edx", "memory", "cc");
 
 
 #define qinterpolatedown16(a,c,d,S) \
@@ -1067,12 +1070,12 @@ void copybufreverse(void *S, void *D, long c);
 
 
 //}}}
-	
+
 #elif defined(__WATCOMC__) && !defined(NOASM)	// __GNUC__ && __i386__
 
 //
 // Watcom C inline assembler
-// 
+//
 
 //{{{
 long sqr(long);
@@ -2922,7 +2925,7 @@ long swapchar2(void*,void*,long);
 
 //
 // Microsoft C inline assembler
-// 
+//
 
 //{{{
 static __inline long sqr(long a)
@@ -2968,7 +2971,7 @@ MULSCALE(17)	MULSCALE(18)	MULSCALE(19)	MULSCALE(20)
 MULSCALE(21)	MULSCALE(22)	MULSCALE(23)	MULSCALE(24)
 MULSCALE(25)	MULSCALE(26)	MULSCALE(27)	MULSCALE(28)
 MULSCALE(29)	MULSCALE(30)	MULSCALE(31)
-#undef MULSCALE	
+#undef MULSCALE
 static __inline long mulscale32(long a, long d)
 {
 	_asm {
@@ -3016,7 +3019,7 @@ DMULSCALE(17)	DMULSCALE(18)	DMULSCALE(19)	DMULSCALE(20)
 DMULSCALE(21)	DMULSCALE(22)	DMULSCALE(23)	DMULSCALE(24)
 DMULSCALE(25)	DMULSCALE(26)	DMULSCALE(27)	DMULSCALE(28)
 DMULSCALE(29)	DMULSCALE(30)	DMULSCALE(31)
-#undef DMULSCALE	
+#undef DMULSCALE
 static __inline long dmulscale32(long a, long d, long S, long D)
 {
 	_asm {
@@ -3059,7 +3062,7 @@ TMULSCALE(17)	TMULSCALE(18)	TMULSCALE(19)	TMULSCALE(20)
 TMULSCALE(21)	TMULSCALE(22)	TMULSCALE(23)	TMULSCALE(24)
 TMULSCALE(25)	TMULSCALE(26)	TMULSCALE(27)	TMULSCALE(28)
 TMULSCALE(29)	TMULSCALE(30)	TMULSCALE(31)
-#undef TMULSCALE	
+#undef TMULSCALE
 static __inline long tmulscale32(long a, long d, long b, long c, long S, long D)
 {
 	_asm {

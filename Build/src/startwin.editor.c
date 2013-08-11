@@ -1,4 +1,6 @@
 
+// Added -z for build play
+
 #ifndef RENDERTYPEWIN
 #error Only for Windows
 #endif

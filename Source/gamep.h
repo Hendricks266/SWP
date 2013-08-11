@@ -47,6 +47,8 @@ extern char PlayerNameArg[40] = "";
 extern char IPAddressArg[8][40];
 extern short TimeLimitTable[9];
 
+short iLoad = 0;
+short bypass = 0;
 short iTne = 0;
 short mPal = 10;
 BOOL bStatScreen = FALSE;
@@ -79,6 +81,7 @@ char RTSCustom[128] = "";
 char fname[128];
 char *svgame[40];
 char MapsPlayed[2000][40];
+char LastMusic[80];
 
 extern char  UserMaps[1000][32];
 extern char  MyMaps[15][32];
@@ -111,6 +114,8 @@ extern char  RootFolder[128];
 extern char  MusicFolder[80];
 extern char  MapsFolder[80];
 extern char  GameFolder[80];
+
+extern short MenuTrack;
 
 extern char  MenuMap[80];
 extern char  MenuMusic[80];
@@ -194,9 +199,6 @@ BOOL PlayMusic(char *Musicname)
     int x, fp;
     char ubuf[128];
 
-    if (Musicname[0] == NULL)
-        return FALSE;
-
     if (MusicDevice < 0)
         return FALSE;
 
@@ -209,12 +211,23 @@ BOOL PlayMusic(char *Musicname)
     if (iTne == 1 && Level == 1 && strstr(ubuf, "e1l01.mid"))
         return FALSE;
 
+    if (gs.PlayCD && CDAudio_Playing())
+        return FALSE;
+
+    if (Bstrcmp(ubuf, LastMusic) == 0)
+    {
+        //initprintf("  - Same as Last Music : %s\n", ubuf);
+        return TRUE;
+    }
+    else
+        strcpy(LastMusic, ubuf);
+
+    StopFX();
+    StopSong();
+    CDAudio_Stop();
+
     if (strstr(ubuf, ".mid") || strstr(ubuf, ".wav"))
     {
-        CDAudio_Stop();
-        StopSong();
-        StopSound();
-
         fp = kopen4load(ubuf, 0);
 
         if (fp < 0)
@@ -225,6 +238,7 @@ BOOL PlayMusic(char *Musicname)
 
         close(fp);
 
+        InitMusic();
         PlaySong(ubuf, -1, TRUE, TRUE);
         initprintf("  - Playing Music : %s\n", ubuf);
         return TRUE;
@@ -404,7 +418,7 @@ int checksearchpath(char *pth)
     return z;
 }
 
-//--------------------------------- Auto Saved Game wxas --------------------------------
+//--------------------------------- Auto Saved Game --------------------------------
 
 void AutoSaveGame(short disp, int iTime)
 {
@@ -480,7 +494,7 @@ int getfilenames(char *path, char kind[])
 	return(0);
 }
 
-//--------------------------------- Random Music Selection wxrm --------------------------------
+//--------------------------------- Random Music Selection --------------------------------
 
 int GetRandom(short num)
 {
@@ -576,7 +590,7 @@ void LoadDefFiles(short iTyp)
 long SetupUserMap()
 {
     long i = 0;
-    char mp[40];
+    char mp[80];
     char mt[10];
 
     SetLastPlayed(MenuMap, 1);

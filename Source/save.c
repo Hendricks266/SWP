@@ -27,6 +27,8 @@ Prepared for public release: 03/28/2005 - Charlie Wiederhold, 3D Realms
 // Added modifications for music
 // Added Autosave
 // Forced fwrite(SaveGameDescr
+// Added game save restore options
+// Added no music if autosave
 //
 
 #define MAIN
@@ -72,13 +74,15 @@ TO DO
 //////////////////////////////////////////////////////////////////////////////
 */
 
-extern long lastUpdate;
-extern BYTE RedBookSong[40];
-extern char UserMapName[80];
-extern char palette[256*3];
-extern char LevelSong[16];
+extern short CurrentTrack;
+extern char LastMusic[80];
 extern char SaveGameDescr[11][80];
 extern char *svgame[40];
+extern char UserMapName[80];
+extern long lastUpdate;
+extern BYTE RedBookSong[40];
+extern char palette[256*3];
+extern char LevelSong[16];
 extern long PlayClock;
 extern short TotalKillable;
 extern short LevelSecrets;
@@ -241,7 +245,7 @@ int SaveGame(short save_num)
     char game_name[80];
     long cnt = 0, saveisshot=0;
     OrgTileP otp, next_otp;
-    BYTE cdatrack = RedBookSong[Level];
+    BYTE cdatrack = CurrentTrack; //RedBookSong[Level];
 
     Saveable_Init();
 
@@ -690,7 +694,7 @@ int SaveGame(short save_num)
     MWRITE(BossSpriteNum, sizeof(BossSpriteNum), 1, fil);
     //MWRITE(&Zombies, sizeof(Zombies), 1, fil);
 
-    fwrite("swp",3,1,fil);                                           // 20100204  forced here
+    fwrite("swp",3,1,fil);                                           // forced here
     fwrite(SaveGameDescr[save_num],20,1,fil);
 
     MCLOSE(fil);
@@ -793,12 +797,31 @@ int LoadGame(short save_num)
     short SndVolBak = gs.SoundVolume;
     short MusVolBak = gs.MusicVolume;
 
+    long msSpeed  = gs.MouseSpeed;
+    long msScaleX = gs.MouseScaleX;
+    long msScaleY = gs.MouseScaleY;
+    BOOL msInvert = gs.MouseInvert;
+    BOOL WeapSwit = gs.WeaponSwitch;
+    BOOL SwapYiny = gs.SwapYinyang;
+    BOOL UseNinHk = gs.UseNinjaHack;
+    BOOL UseCarHk = gs.UseCarHack;
+    BOOL AutoRun2 = gs.AutoRun;
+    BOOL AutoAim2 = gs.AutoAim;
+    BYTE Usexhair = gs.Crosshair;
+
     long RotNdx;
     long StateStartNdx;
     long StateNdx;
     long StateEndNdx;
     long ver;
     extern BOOL InMenuLevel;
+    extern short LoadSavedGame;
+
+    char gm[6];
+
+    gm[0] = 0;
+    sprintf(gm, "game%d", save_num);
+    initprintf("  - Loading saved game: %s%s\n", svgame, gm);
 
     Saveable_Init();
 
@@ -809,6 +832,7 @@ int LoadGame(short save_num)
     }
     else
         sprintf(game_name,"%sgame%d.sav",svgame,save_num);
+
     if ((fil = MOPEN_READ(game_name)) == MF_ERR)
         return(-1);
 
@@ -823,17 +847,23 @@ int LoadGame(short save_num)
     if (InMenuLevel)
         StopSong();
     else
+    {
+        extern short iLoad;
+        iLoad = 1;
         TerminateLevel();
-    Terminate3DSounds();
+    }
 
+    Terminate3DSounds();
     Terminate3DSounds();
 
     MREAD(SaveGameDescr[save_num], sizeof(SaveGameDescr[save_num]),1,fil);
-
     MREAD(&Level,sizeof(Level),1,fil);
     MREAD(&Skill,sizeof(Skill),1,fil);
+
     if (ver == GameVersion)
+    {
         MREAD(UserMapName,sizeof(UserMapName),1,fil);
+    }
 
     ScreenLoadSaveSetup(Player + myconnectindex);
     ScreenLoad(fil);
@@ -1200,21 +1230,9 @@ int LoadGame(short save_num)
 
     MREAD(&gs,sizeof(gs),1,fil);
 
-/*
-    {
-    BOOL AmbBak = gs.Ambient;
-    BOOL MusicBak = gs.MusicOn;
-    BOOL FxBak = gs.FxOn;
-    short SndVolBak = gs.SoundVolume;
-    short MusVolBak = gs.MusicVolume;
-    MREAD(&gs,sizeof(gs),1,fil);
-    gs.Ambient = AmbBak;
-    gs.SoundVolume = SndVolBak;
-    gs.MusicVolume = MusVolBak;
-    gs.MusicOn = MusicBak;
-    gs.FxOn = FxBak;
-    }
-*/
+    if (cdatrack < 4)
+        cdatrack = 4;
+
     //COVERsetbrightness(gs.Brightness,(char *)palette_data);
 
     MREAD(picanm,sizeof(picanm),1,fil);
@@ -1228,7 +1246,9 @@ int LoadGame(short save_num)
     MREAD(&Bunny_Count,sizeof(Bunny_Count),1,fil);
 
     if (ver == 14)
+    {
         MREAD(UserMapName,sizeof(UserMapName),1,fil);
+    }
     MREAD(&GodMode,sizeof(GodMode),1,fil);
 
     MREAD(&serpwasseen, sizeof(serpwasseen), 1, fil);
@@ -1239,7 +1259,6 @@ int LoadGame(short save_num)
 
     MCLOSE(fil);
 
-
     //!!IMPORTANT - this POST stuff will not work here now becaus it does actual reads
     //
     // POST processing of info MREAD in
@@ -1247,24 +1266,24 @@ int LoadGame(short save_num)
 
     #if PANEL_SAVE
     for (i = 0; i < numplayers; i++)
-        {
+    {
         pp = &Player[i];
         TRAVERSE(&pp->PanelSpriteList, psp, next)
-            {
+        {
             // dont need to set Next and Prev this was done
             // when sprites were inserted
 
             // sibling is the only PanelSprite (malloced ptr) in the PanelSprite struct
             psp->sibling = PanelNdxToSprite(pp, (long)psp->sibling);
-            }
         }
+    }
     #endif
 
     if (Bstrcasecmp(CacheLastLevel, LevelName) != 0)
-        {
+    {
         SetupPreCache();
         DoTheCache();
-        }
+    }
 
     // what is this for? don't remember
     totalclock = totalsynctics;
@@ -1272,10 +1291,10 @@ int LoadGame(short save_num)
 
     // this is ok - just duplicating sector list with pointers
     for (sop = SectorObject; sop < &SectorObject[SIZ(SectorObject)]; sop++)
-        {
+    {
         for (i = 0; i < sop->num_sectors; i++)
             sop->sectp[i] = &sector[sop->sector[i]];
-        }
+    }
 
     //!!Again this will not work here
     //restore players info
@@ -1319,50 +1338,13 @@ int LoadGame(short save_num)
     screenpeek = myconnectindex;
     PlayingLevel = Level;
 
-    if (!SW_SHAREWARE && gs.PlayCD)
-       {
-       CDAudio_Stop();
-       CDAudio_Init();
-       CDAudio_Play(cdatrack, TRUE);
-       if (!CDAudio_Playing())
-          {
-          gs.PlayCD = 0;
-          if (gs.MusicOn)
-             {
-             InitMusic();
-             PlayMusic(LevelSong);
-             }
-          }
-       }
-    else
-       {
-       if (gs.MusicOn)
-          {
-          InitMusic();
-          PlayMusic(LevelSong);
-          }
-       }
-
-    if (gs.Ambient)
-        StartAmbientSound();
-    FX_SetVolume(gs.SoundVolume);
-
-    if (!SW_SHAREWARE && gs.PlayCD)
-       {
-       CDAudio_SetVolume(gs.MusicVolume);
-       }
-    else
-       {
-       MUSIC_SetVolume(gs.MusicVolume);
-       }
-
     TRAVERSE_CONNECT(i)
-        {
+    {
         Player[i].PlayerTalking = FALSE;
         Player[i].TalkVocnum = -1;
         Player[i].TalkVocHandle = -1;
         Player[i].StartColor = 0;
-        }
+    }
 
     // this is not a new game
     NewGame = FALSE;
@@ -1377,18 +1359,76 @@ int LoadGame(short save_num)
     gs.FxOn = FxBak;
     gs.PlayCD = PlayCD;
 
+    gs.MouseSpeed   = msSpeed;
+    gs.MouseScaleX  = msScaleX;
+    gs.MouseScaleY  = msScaleY;
+    gs.MouseInvert  = msInvert;
+    gs.WeaponSwitch = WeapSwit;
+    gs.SwapYinyang  = SwapYiny;
+    gs.UseNinjaHack = UseNinHk;
+    gs.UseCarHack   = UseCarHk;
+    gs.AutoRun      = AutoRun2;
+    gs.AutoAim      = AutoAim2;
+    gs.Crosshair    = Usexhair;
+
+    if (save_num == 10)
+    {
+        strcpy(LevelSong, LastMusic);
+        cdatrack = CurrentTrack;
+    }
+
+    if (!SW_SHAREWARE && PlayCD)
+    {
+       if (LoadSavedGame >= 0 || cdatrack != CurrentTrack)
+       {
+          CDAudio_Stop();
+          CDAudio_Init();
+          if (LoadSavedGame < 99)
+          {
+              CDAudio_Play(cdatrack, TRUE);
+              if (CDAudio_Playing())
+                  initprintf("  - Playing Track = %d\n", cdatrack);
+              else
+              {
+                 gs.PlayCD = 0;
+                 if (gs.MusicOn)
+                 {
+                    InitMusic();
+                    PlayMusic(LevelSong);
+                }
+             }
+          }
+       }
+    }
+    else
+    if (gs.MusicOn)
+    {
+          if (LevelSong[0] == 0)
+              StopSong();
+          PlayMusic(LevelSong);
+    }
+
+    if (gs.Ambient)
+        StartAmbientSound();
+    FX_SetVolume(gs.SoundVolume);
+
+    if (!SW_SHAREWARE && gs.PlayCD)
+        CDAudio_SetVolume(gs.MusicVolume);
+    else
+        MUSIC_SetVolume(gs.MusicVolume);
+
     return(0);
 }
 
 VOID ScreenSave(MFILE fout)
-    {
+{
     long num;
     num = MWRITE((void*)waloff[SAVE_SCREEN_TILE], SAVE_SCREEN_XSIZE * SAVE_SCREEN_YSIZE, 1, fout);
     ASSERT(num == 1);
-    }
+}
 
 VOID ScreenLoad(MFILE fin)
-    {
+{
     long num;
 
     setviewtotile(SAVE_SCREEN_TILE, SAVE_SCREEN_YSIZE, SAVE_SCREEN_XSIZE);
@@ -1396,4 +1436,4 @@ VOID ScreenLoad(MFILE fin)
     num = MREAD((void*)waloff[SAVE_SCREEN_TILE], SAVE_SCREEN_XSIZE * SAVE_SCREEN_YSIZE, 1, fin);
 
     setviewback();
-    }
+}

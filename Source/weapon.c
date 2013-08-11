@@ -406,8 +406,8 @@ STATE s_WaterSmoke[] =
     };
 
 #define UZI_SPARK_REPEAT 24
-#define UZI_SMOKE_REPEAT 24
-#define UZI_SMOKE_RATE 16
+#define UZI_SMOKE_REPEAT 24 // Was 32
+#define UZI_SMOKE_RATE 16 // Was 9
 STATE s_UziSmoke[] =
     {
     {UZI_SMOKE + 0, UZI_SMOKE_RATE, DoUziSmoke, &s_UziSmoke[1]},
@@ -418,7 +418,7 @@ STATE s_UziSmoke[] =
     };
 
 #define SHOTGUN_SMOKE_RATE 16
-#define SHOTGUN_SMOKE_REPEAT 18
+#define SHOTGUN_SMOKE_REPEAT 18 // Was 32
 #define SHOTGUN_SMOKE UZI_SMOKE+1
 ANIMATOR DoShotgunSmoke;
 STATE s_ShotgunSmoke[] =
@@ -4959,9 +4959,8 @@ DoBreakFlames(short SpriteNum)
     return (0);
     }
 
-int
-SetSuicide(short SpriteNum)
-    {
+int SetSuicide(short SpriteNum)
+{
     #if 1
     SPRITEp sp = &sprite[SpriteNum];
     USERp u = User[SpriteNum];
@@ -4977,7 +4976,7 @@ SetSuicide(short SpriteNum)
     changespritestat(SpriteNum, STAT_SUICIDE);
     #endif
     return(0);
-    }
+}
 
 int
 DoActorScale(short SpriteNum)

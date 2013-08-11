@@ -12,7 +12,7 @@
 #include "cache1d.h"
 #include "editor.h"
 
-#define VERSION "rev.331" //"20040115JF"
+#define VERSION "rev.321" //"20040115JF"
 
 #include "baselayer.h"
 #ifdef RENDERTYPEWIN

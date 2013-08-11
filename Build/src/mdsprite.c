@@ -1,5 +1,7 @@
 //------------------------------------- MD2/MD3 LIBRARY BEGINS -------------------------------------
 
+// Added head.numskins = 1 to fix MD2 load failure
+
 #ifdef __POWERPC__
 #define SHIFTMOD32(a) ((a)&31)
 #else

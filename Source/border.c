@@ -113,21 +113,38 @@ pSpawnFullScreenSpriteBox(PLAYERp pp, short id, short pic, short pri, long x, lo
 VOID SetCrosshair(VOID)
 {
     long wdx,wdy,x,y;
+    PLAYERp pp = Player + myconnectindex;
 
     wdx = ((windowx2-windowx1)/2);
     wdy = ((windowy2-windowy1)/2);
     x = windowx1 + wdx;
     y = windowy1 + wdy;
 
-    if (gs.Crosshair == 2)
+    if (pp->CurWpn == pp->Wpn[WPN_GRENADE])
     {
-       CrosshairX = x / (xdim/320.0) * 1.0084;
-       CrosshairY = y / (ydim/200.0) * 1.0127;
+        if (gs.Crosshair == 2)
+        {
+           CrosshairX = x / (xdim/320.0) * 1.0000;
+           CrosshairY = y / (ydim/200.0) * 1.0127;
+        }
+        else
+        {
+           CrosshairX = x / (xdim/320.0) * 0.9850;
+           CrosshairY = y / (ydim/200.0) * 1.0000;
+        }
     }
     else
     {
-        CrosshairX = x / (xdim/320.0) * 1.0000;
-        CrosshairY = y / (ydim/200.0) * 1.0000;
+        if (gs.Crosshair == 2)
+        {
+           CrosshairX = x / (xdim/320.0) * 0.9900;
+           CrosshairY = y / (ydim/200.0) * 1.0127;
+        }
+        else
+        {
+            CrosshairX = x / (xdim/320.0) * 0.9800;
+            CrosshairY = y / (ydim/200.0) * 1.0000;
+        }
     }
 
     // rotatesprite takes FIXED point number

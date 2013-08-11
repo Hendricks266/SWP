@@ -2087,7 +2087,8 @@ int setvideomode(int x, int y, int c, int fs)
 	for (i=0;i<NUM_INPUTS;i++) if (inp[i]) AcquireInputDevices(1,i);
 	modechange=1;
 	videomodereset = 0;
-	OSD_ResizeDisplay(xres,yres);
+	if (is_vista > 0)
+	    OSD_ResizeDisplay(xres,yres);
 	//baselayer_onvideomodechange(c>8);
 
 	return 0;
@@ -2229,8 +2230,11 @@ void getvalidmodes(void)
 	HRESULT result;
 
 #if defined(USE_OPENGL) && defined(POLYMOST)
-	if (desktopbpp > 8) cdepths[1] = desktopbpp;
-	else cdepths[1] = 0;
+	if (desktopbpp > 8)
+	    cdepths[1] = desktopbpp;
+	else
+	if (is_vista > 0)
+	    cdepths[1] = 0;
 #endif
 
 	if (modeschecked) return;
@@ -2948,8 +2952,11 @@ static int SetupDirectDraw(int width, int height)
 
 	// attach a palette to the primary surface
 	initprintf("  - Creating palette\n");
-    for (i=0; i<256; i++)
-        curpalettefaded[i].f = PC_NOCOLLAPSE;
+	if (is_vista > 0)
+	{
+        for (i=0; i<256; i++)
+            curpalettefaded[i].f = PC_NOCOLLAPSE;
+    }
 	result = IDirectDraw_CreatePalette(lpDD, DDPCAPS_8BIT | DDPCAPS_ALLOW256, (PALETTEENTRY*)curpalette, &lpDDPalette, NULL);
 	if (result != DD_OK)
 	{

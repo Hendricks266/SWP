@@ -53,7 +53,7 @@ Prepared for public release: 03/28/2005 - Charlie Wiederhold, 3D Realms
 
 extern char isShareware, useDarts;
 #define SW_SHAREWARE (isShareware)
-#define SwpVer "4.3.1"
+#define SwpVer "4.3.2"
 #define SwpRev "331.128"
 
 // Turn warning off for unreferenced variables.
@@ -1024,7 +1024,7 @@ typedef struct
 #define MAX_LEVELS_SW 4
 #define MAX_LEVELS (isShareware ? MAX_LEVELS_SW : MAX_LEVELS_REG)
 
-extern BYTE RedBookSong[40];                                         // woved from game.c
+extern BYTE RedBookSong[40];                                         // wmoved from game.c
 extern short QuickLoadNum, LastSaveNum;
 
 typedef struct
@@ -1038,7 +1038,7 @@ char *ParTime;
 
 extern LEVEL_INFO LevelInfo[MAX_LEVELS_REG+2];
 
-extern int   ThemeTrack[6];
+extern int   ThemeTrack[6];                                          // w
 extern char *ThemeSongs[6];                                          //
 extern BOOL PlayMusic(char *Musicname);                              //
 
@@ -1303,7 +1303,7 @@ struct PLAYERstruct
     short Reverb;                   // Player's current reverb setting
     short Heads;                    // Number of Accursed Heads orbiting player
     long PlayerVersion;
-    BOOL Underwater;                // Is player underwater?         wxuw
+    BOOL Underwater;                // Is player underwater?
     };
 
 extern PLAYER Player[MAX_SW_PLAYERS_REG+1];

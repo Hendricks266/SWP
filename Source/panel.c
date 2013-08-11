@@ -805,7 +805,6 @@ BOOL PlayerUpdateKeys(PLAYERp pp)
 VOID PlayerUpdateTimeLimit(PLAYERp pp)
 {
     USERp u = User[pp->PlayerSprite];
-    short x,y;
     long seconds;
 
     if (Prediction)
@@ -830,7 +829,7 @@ VOID PlayerUpdateTimeLimit(PLAYERp pp)
     seconds = gNet.TimeLimitClock/120;
     sprintf(ds,"%03ld:%02ld",seconds/60, seconds%60);
     if (gs.BorderNum == BORDER_MINI_BAR && gs.MiniHudTyp < 2)
-        DisplaySummaryString(pp, 4, 193, 0, 0, ds);
+        DisplaySummaryString(pp, 292, 188, 0, 0, ds);
     else
         DisplaySummaryString(pp, PANEL_KEYS_BOX_X+1, PANEL_BOX_Y+6, 0, 0, ds);
 }

@@ -16,6 +16,8 @@
 // Added Multi monster default = normal
 // Changed iBright int etc to short
 // Added start auto saved game
+// Added -by detection to bypass menu / press(x)
+// Added MenuTrack
 //
 
 #ifndef RENDERTYPEWIN
@@ -92,6 +94,8 @@ char  GameFolder[80];
 char  LastMapsFolder[80];
 char  LastMusicFolder[80];
 char  LastGameFolder[80];
+
+short MenuTrack = 0;
 
 char  MenuMap[80];
 char  MenuMusic[80];
@@ -482,6 +486,7 @@ static void PopulateForm(int pgs)
 
         LoadMusicFiles(MusicFolder);
         MenuMusic[0] = 0;
+        MenuTrack = 0;
 
 		Bsprintf(SaveLabel, "Default Game");
 		ListSavedGames();
@@ -620,12 +625,22 @@ static void ResetForm(int pgs)
 {
 	HWND hwnd;
 
+    if (pgs == 97)
+    {
+	    hwnd = GetDlgItem(pages[TAB_GAME], IDMUSIC);
+	    ListBox_SetCurSel(hwnd, -1);
+        MenuMusic[0] = 0;
+        MenuTrack = 0;
+        EnableWindow(GetDlgItem(pages[TAB_GAME], IDMUSIC), 0);
+    }
+
     if (pgs == 98 || pgs == 99)
     {
         hwnd = GetDlgItem(pages[TAB_GAME], IDGMAPS);
         if (pgs == 99)
 	        ListBox_ResetContent(hwnd);
 	    ListBox_SetCurSel(hwnd, -1);
+
 	    MenuMap[0] = 0;
 	    GameMap[0] = 0;
 	    iLevelNum = -1;
@@ -807,6 +822,7 @@ static INT_PTR CALLBACK MediaPageProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LP
 					 return TRUE;
 				case IDPLAYCD:
 					 cdplay = IsDlgButtonChecked(hwndDlg, IDPLAYCD) == BST_CHECKED;
+                     LoadMusicFiles(MusicFolder);
 					 return TRUE;
 				case IDSTEREO:
 					 settings.stereo = IsDlgButtonChecked(hwndDlg, IDSTEREO) == BST_CHECKED;
@@ -878,6 +894,7 @@ static INT_PTR CALLBACK GamePageProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPA
                        SetSaves(0);
                        GetMapNames(MenuGame);
                        mapvis = 0;
+                       EnableWindow(GetDlgItem(pages[TAB_GAME], IDMUSIC), 1);
                     }
 					return TRUE;
 				}
@@ -892,6 +909,7 @@ static INT_PTR CALLBACK GamePageProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPA
 					   dolower(&GameMap);                            // 100303
 					   iLevelNum = i;  // incase default maps
 					   resetsave(0);
+					   EnableWindow(GetDlgItem(pages[TAB_GAME], IDMUSIC), 1);
 					   }
 					return TRUE;
 				}
@@ -920,6 +938,7 @@ static INT_PTR CALLBACK GamePageProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPA
 					    strcpy(MapsFolder, sFolder1);
 					    SetSaves(1);
 					    mapvis = 1;
+					    EnableWindow(GetDlgItem(pages[TAB_GAME], IDMUSIC), 1);
 					}
 					return TRUE;
 				}
@@ -948,14 +967,24 @@ static INT_PTR CALLBACK GamePageProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPA
 					i = ListBox_GetCurSel((HWND)lParam);
 					if (i != CB_ERR)
 					{
-					    ListBox_GetText((HWND)lParam, i, MenuMusic);
-					    if (i == 0)
+					    if (cdplay)
+					    {
+					        MenuTrack = i+3;
 					        MenuMusic[0] = 0;
+					    }
+					    else
+					    {
+					        ListBox_GetText((HWND)lParam, i, MenuMusic);
+					        if (i == 0)
+					            MenuMusic[0] = 0;
+					        MenuTrack = 0;
+					    }
 					}
 					return TRUE;
 				}
 				case IDSDATA:
 				{
+				    ResetForm(97);
 					ResetForm(98);
 					i = ListBox_GetCurSel((HWND)lParam);
 					if (i != CB_ERR)
@@ -1358,7 +1387,10 @@ static INT_PTR CALLBACK startup_dlgproc(HWND hwndDlg, UINT uMsg, WPARAM wParam, 
 			             ResetForm(1<<TAB_MEDA);
 			         else
 			         if (iPage == TAB_GAME)
+			         {
 			             ResetForm(1<<TAB_GAME);
+			             EnableWindow(GetDlgItem(pages[TAB_GAME], IDMUSIC), 1);
+			         }
 			         else
 			         if (iPage == TAB_MULT)
 			             ResetForm(1<<TAB_MULT);
@@ -1398,6 +1430,9 @@ int startwin_open(void)
     cmdbuf = strdup(GetCommandLine());
 
     if (Bstrncasecmp(cmdbuf, "Swp.exe -z", 10) == 0)
+        return 0;
+
+    if (Bstrncasecmp(cmdbuf, "Swp.exe -by", 11) == 0)
         return 0;
 
 	if (startupdlg)
@@ -1589,7 +1624,7 @@ int startwin_run(void)
     if (LastMap[0] != 0)
     {
         dolower(&LastMap);
-        initprintf("Last Played Map   = %s\n", LastMap);
+        initprintf("Last Played Map  = %s\n", LastMap);
     }
 	GetSavedGames();                                                 // 100125
 
@@ -1844,6 +1879,12 @@ void LoadMusicFiles(char *mpath)
     HWND hwnd;
     char mbuf[128];
 
+    if (cdplay)
+    {
+        LoadTracks();
+        return;
+    }
+
     hwnd = GetDlgItem(pages[TAB_GAME], IDMUSIC);
 	ListBox_ResetContent(hwnd);
 
@@ -1864,6 +1905,25 @@ void LoadMusicFiles(char *mpath)
           dolower(&mbuf);
           ListBox_AddString(hwnd, mbuf);
           findfiles = findfiles->next;
+    }
+    ListBox_InsertString(hwnd, 0, "No Music");
+    ListBox_SetCurSel(hwnd, -1);
+    free(mbuf);
+}
+
+void LoadTracks()
+{
+    HWND hwnd;
+    char mbuf[128];
+    int i;
+
+    hwnd = GetDlgItem(pages[TAB_GAME], IDMUSIC);
+	ListBox_ResetContent(hwnd);
+
+    for (i=0; i<11; i++)
+    {
+         Bsprintf(mbuf,"Track %d", i+4);
+         ListBox_AddString(hwnd, mbuf);
     }
     ListBox_InsertString(hwnd, 0, "No Music");
     ListBox_SetCurSel(hwnd, -1);
@@ -1891,7 +1951,7 @@ void ListSavedGames(void)                                            // 100130
 	Edit_SetText(GetDlgItem(pages[TAB_GAME], IDLBSAV), SaveLabel);
 }
 
-void LoadGameDes(short sv_num, char *desc)
+void LoadGameDes(short sv_num, char *desc)                           // 100130
 {
     int i;
     long fl = 0;
@@ -1916,7 +1976,7 @@ void LoadGameDes(short sv_num, char *desc)
     fclose(fl);
 }
 
-void GetSavedGames(void)
+void GetSavedGames(void)                                             // 100130
 {
     char fn[80];
     long fil;
@@ -2018,7 +2078,7 @@ void Showhelp(short x)
     HWND hwnd;
     int i;
 
-	char lbuf[80][80] =
+	char lbuf[82][80] =
 	{
 	    " About SWP",
 	    "  ",
@@ -2067,7 +2127,7 @@ void Showhelp(short x)
         " -music [filename]\tLoad a musicfile",
         " -map [mapname]\tLoad a map",
         " -nocd<audio>\tNo CD Red Book Audio",
-        " -nohrp\t\tDo not load the HRP",
+        " -nohrp\t\tDo not load the HRP (must be 1st or 2nd command)",
         " -name [player]\tPlayer Name",
         " -s#\t\tSkill (1-4)",
         " -f#\t\tPacket Duplication - 2, 4, 8",
@@ -2087,15 +2147,19 @@ void Showhelp(short x)
         " -c[filename.cfg]\tUse filename.cfg instead of SwCustom.txt",
         " -game#\t\tLoad saved game (0-9)",
         " -setup\t\tForces Startup Menu Dialog to display",
+        " -by\t\tBypass startmenu at start and exit (must be 1st)",
         " ",
         " \t\t-----------------------------------",
         " ",
-        " Notable Changes after 4.3.0",
+        " Notable Changes after 4.3.2",
         " ",
-        " [Deselect Button]",
-        " This button now works only with the menu shown.",
-        " [Monster Setting]",
-        " Disabling Monsters in the Multiplay will also work in singleplay.",
+        " [Music]",
+        " Loading a Savedgame will not restart music if it is the same.",
+        " [Saved Games]",
+        " All previous mouse/player/game settings restored.",
+        " [Multiplay]",
+        " Apply button crash fixed.",
+        " Timelimit display neatened up.",
         " ",
         "~"
 	};
@@ -2308,4 +2372,5 @@ void resetmusic(void)
     hwnd = GetDlgItem(pages[TAB_GAME], IDMUSIC);
     ListBox_SetCurSel(hwnd, -1);
     MenuMusic[0] = 0;
+    MenuTrack = 0;
 }
