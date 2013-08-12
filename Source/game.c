@@ -4764,8 +4764,9 @@ long app_main(long argc, char *argv[])
 
     AlphaMessage();
 
-    initprintf("SWP - Version %s - Revision %s\n", SwpVer, SwpRev);
-    initprintf("By ProAsm - http://www.proasm.com\n");
+    initprintf("SWP - Version %s\n", SwpVer);
+    initprintf("By ProAsm - http://www.proasm.com/\n");
+    initprintf("Modified by Hendricks266 - http://hendricks266.duke4.net/\n");
 
     if (SW_SHAREWARE)
 	    initprintf("Detected shareware Grp\n");

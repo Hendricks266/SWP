@@ -2080,7 +2080,7 @@ void Showhelp(short x)
 	{
 	    " About SWP",
 	    "  ",
-        " This port is a modified version of Jonathon Fowlers Shadow Warrior port.",
+        " This port is a modified version of Jonathon Fowler's Shadow Warrior port.",
         " Although it is important to try and keep the game as original as",
         " possible it is often necessary to make changes to improve things",
         " which adds to the gameplay.",
@@ -2147,19 +2147,7 @@ void Showhelp(short x)
         " -setup\t\tForces Startup Menu Dialog to display",
         " -by\t\tBypass startmenu at start and exit (must be 1st)",
         " ",
-        " \t\t-----------------------------------",
-        " ",
-        " Notable Changes after 4.3.2",
-        " ",
-        " [Music]",
-        " Loading a Savedgame will not restart music if it is the same.",
-        " [Saved Games]",
-        " All previous mouse/player/game settings restored.",
-        " [Multiplay]",
-        " Apply button crash fixed.",
-        " Timelimit display neatened up.",
-        " ",
-        "~"
+        "~",
 	};
 
     if (x == 1)

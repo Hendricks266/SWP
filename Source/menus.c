@@ -1510,7 +1510,7 @@ BOOL MNU_OrderCustom(UserCall call, MenuItem * item)
 		"*NETWORKING, OTHER CODE",
 		" Ken \"Awesoken\" Silverman",
 		"-",
-		" Visit http://jonof.edgenetwork.org/jfsw/ for the",
+		" Visit http://www.jonof.id.au/jfsw for the",
 		" source code, latest news, and updates of this port.",
 		"-",
 		"-",
@@ -1518,9 +1518,9 @@ BOOL MNU_OrderCustom(UserCall call, MenuItem * item)
 		"-",
 		"-",
 		"-",
-		"-",
-		"-",
-		" SWP version "SwpVer" by ProAsm - http://www.proasm.com "
+		" SWP version "SwpVer"",
+        " by ProAsm - http://www.proasm.com/",
+        " Modified by Hendricks266 - http://hendricks266.duke4.net/",
 	};
 	short dimx, dimy;
 	int ycur = 54;
@@ -3496,7 +3496,7 @@ void MNU_DoButton(MenuItem_p item, BOOL draw)
             break;
 
         case btn_cacomp:
-            state = buttonsettings[btn_txcomp];
+            state = buttonsettings[btn_cacomp];
             glusetexcachecompression = state = buttonsettings[item->button];
             if (glusetexcachecompression != state)
                 glusetexcachecompression = state;
