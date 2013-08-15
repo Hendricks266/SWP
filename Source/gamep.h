@@ -921,9 +921,11 @@ void kloadhud(long *pic, long *bpl, long *xsiz, long *ysiz)
 	long leng = 964;
 
 	(*pic) = 0;
+/*
     buf = (char *)malloc(leng);
     if (!buf)
         return;
+*/
 
     buf = Pic2472;
 
@@ -932,17 +934,17 @@ void kloadhud(long *pic, long *bpl, long *xsiz, long *ysiz)
 	(*pic) = (long)malloc((*ysiz)*(*bpl));
 	if (!(*pic))
 	{
-	    free(buf);
+	    // free(buf);
 	    return;
 	}
 	if (kprender(buf,leng,*pic,*bpl,*xsiz,*ysiz,0,0) < 0)
 	{
-	    free(buf);
+	    // free(buf);
 	    free((void *)*pic);
 	    (*pic) = 0;
 	    return;
 	}
-	free(buf);
+	// free(buf);
 }
 
 void kloaduzi(long *pic, long *bpl, long *xsiz, long *ysiz)
@@ -951,9 +953,11 @@ void kloaduzi(long *pic, long *bpl, long *xsiz, long *ysiz)
 	long leng = 1292;
 
 	(*pic) = 0;
+/*
     buf = (char *)malloc(leng);
     if (!buf)
         return;
+*/
 
     buf = Pic1798;
 
@@ -962,17 +966,17 @@ void kloaduzi(long *pic, long *bpl, long *xsiz, long *ysiz)
 	(*pic) = (long)malloc((*ysiz)*(*bpl));
 	if (!(*pic))
 	{
-	    free(buf);
+	   // free(buf);
 	    return;
 	}
 	if (kprender(buf,leng,*pic,*bpl,*xsiz,*ysiz,0,0) < 0)
 	{
-	    free(buf);
+	    // free(buf);
 	    free((void *)*pic);
 	    (*pic) = 0;
 	    return;
 	}
-	free(buf);
+	// free(buf);
 }
 
 void kloadriot(long *pic, long *bpl, long *xsiz, long *ysiz)
@@ -981,9 +985,11 @@ void kloadriot(long *pic, long *bpl, long *xsiz, long *ysiz)
 	long leng = 1297;
 
 	(*pic) = 0;
+/*
     buf = (char *)malloc(leng);
     if (!buf)
         return;
+*/
 
     buf = Pic1821;
 
@@ -992,17 +998,17 @@ void kloadriot(long *pic, long *bpl, long *xsiz, long *ysiz)
 	(*pic) = (long)malloc((*ysiz)*(*bpl));
 	if (!(*pic))
 	{
-	    free(buf);
+	   // free(buf);
 	    return;
 	}
 	if (kprender(buf,leng,*pic,*bpl,*xsiz,*ysiz,0,0) < 0)
 	{
-	    free(buf);
+	   // free(buf);
 	    free((void *)*pic);
 	    (*pic) = 0;
 	    return;
 	}
-	free(buf);
+   // free(buf);
 }
 
 void CreatePics()
