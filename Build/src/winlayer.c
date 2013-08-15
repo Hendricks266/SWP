@@ -61,6 +61,12 @@
 // undefine to restrict windowed resolutions to conventional sizes
 #define ANY_WINDOWED_SIZE
 
+#if defined(_M_X64) || defined(__amd64__) || defined(__x86_64__)
+# define EBACKTRACEDLL "swpbacktrace1-64.dll"
+#else
+# define EBACKTRACEDLL "swpbacktrace1.dll"
+#endif
+
 int   _buildargc = 0;
 const char **_buildargv = NULL;
 static char *argvbuf = NULL;
@@ -381,6 +387,8 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR lpCmdLine, int nC
 			apptitle, MB_OK|MB_ICONSTOP);
 		return -1;
 	}
+
+    LoadLibraryA(EBACKTRACEDLL);
 
 	hdc = GetDC(NULL);
 	r = GetDeviceCaps(hdc, BITSPIXEL);

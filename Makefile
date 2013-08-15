@@ -151,6 +151,18 @@ EDITOROBJS=$(OBJ)/jnstub.$o \
 
 include $(EROOT)/Makefile.shared
 
+SWP ?= SWP$(EXESUFFIX)
+
+SWP_TARGET:=$(SWP)
+
+ifndef EBACKTRACEDLL
+    EBACKTRACEDLL = swpbacktrace1.dll
+    ifeq ($(findstring x86_64,$(COMPILERTARGET)),x86_64)
+        EBACKTRACEDLL = swpbacktrace1-64.dll
+    endif
+endif
+EBACKTRACEDLL_TARGET:=$(EBACKTRACEDLL)
+
 ifeq ($(PLATFORM),LINUX)
 	NASMFLAGS+= -f elf
 endif
@@ -199,13 +211,20 @@ alldarwin:
 	cd osx && xcodebuild -target All -buildstyle $(style)
 endif
 
-all: SWP$(EXESUFFIX)
+all: $(SWP_TARGET)
 
 all:
 	$(BUILD_FINISHED)
-	@ls -l SWP$(EXESUFFIX)
+ifneq (,$(SWP_TARGET))
+	@ls -l $(SWP)
+endif
 
-SWP$(EXESUFFIX): $(GAMEOBJS) $(EOBJ)/$(ENGINELIB)
+ebacktrace: $(EBACKTRACEDLL_TARGET)
+ifneq (,$(EBACKTRACEDLL_TARGET))
+	@ls -l $(EBACKTRACEDLL)
+endif
+
+$(SWP): $(GAMEOBJS) $(EOBJ)/$(ENGINELIB)
 	$(CC) $(CFLAGS) $(OURCFLAGS) -o $@ $^ $(LIBS) # -Wl,-Map=SWP.dat
 ifeq ($(RELEASE),1)
 	strip SWP$(EXESUFFIX)
@@ -224,6 +243,9 @@ $(EOBJ)/$(ENGINELIB): enginelib
 $(EOBJ)/$(EDITORLIB): editorlib
 
 # RULES
+$(EBACKTRACEDLL): backtrace/backtrace.c
+	$(CC) $(CFLAGS) $(OURCFLAGS) -O2 -shared -Wall -Wextra -I$(EINC) -o $@ $^ -lbfd -liberty -limagehlp
+
 $(OBJ)/%.$o: $(SRC)/%.nasm
 	nasm $(NASMFLAGS) $< -o $@
 $(OBJ)/%.$o: $(SRC)/jaudiolib/%.nasm
@@ -267,6 +289,6 @@ endif
 veryclean: clean
 ifeq ($(PLATFORM),DARWIN)
 else
-	-rm -f $(EOBJ)/* SWP$(EXESUFFIX) build$(EXESUFFIX) core*
+	-rm -f $(EOBJ)/* SWP$(EXESUFFIX) build$(EXESUFFIX) core* $(EBACKTRACEDLL)
 endif
 
