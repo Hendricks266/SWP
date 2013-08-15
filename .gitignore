@@ -3,3 +3,5 @@
 *.a
 *.lib
 /Makefile.user
+*.exe
+*.dll

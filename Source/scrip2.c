@@ -521,7 +521,7 @@ static int cm_transtok(const char *tok, const struct _tokset *set, const unsigne
 static LEVEL_INFO custommaps[MAX_LEVELS_REG];
 static char *customfortune[MAX_FORTUNES];
 static char *customkeymsg[MAX_KEYS];
-static CHARp customkeydoormsg[MAX_KEYS];
+static char *customkeydoormsg[MAX_KEYS];
 static char *custominventoryname[InvDecl_TOTAL];
 static char *customweaponname[2][MAX_WEAPONS];	// weapon, ammo
 char *CustomAnim[4];
@@ -669,7 +669,7 @@ int LoadCustomInfoFromScript(char *filename)
 						{
 							int n;
 							if (scriptfile_getnumber(script, &n)) break;
-							if (n >= 2);
+							if (n >= 2)
 							    RedBookSong[curmap] = n;
 							break;
 						}

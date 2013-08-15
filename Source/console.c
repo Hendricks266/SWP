@@ -107,7 +107,7 @@ void CON_DumpSoundList( void );
 
 typedef struct
 {
-    BYTEp command;              // Text string representing the command that calls this function
+    char *command;              // Text string representing the command that calls this function
     void (*function)(void);     // Function assigned to the command, take no parameters
 
 } CON_COMMAND, *CON_COMMANDp;
@@ -257,7 +257,7 @@ BOOL IsCommand(char *str)
 // Sends a message to the user quote array
 //
 
-void CON_Message(BYTEp message, ...)
+void CON_Message(char *message, ...)
 {
     va_list argptr;
 
@@ -273,7 +273,7 @@ void CON_Message(BYTEp message, ...)
 // Sends a message to the console quote array
 //
 
-void CON_ConMessage(BYTEp message, ...)
+void CON_ConMessage(char *message, ...)
 {
     va_list argptr;
 
@@ -288,7 +288,7 @@ void CON_ConMessage(BYTEp message, ...)
 //
 // Stores user arguments passed in on the command line for later inspection
 //
-void CON_StoreArg(BYTEp userarg)
+void CON_StoreArg(char *userarg)
 {
     if(con_argnum < MAX_USER_ARGS)
     {
@@ -301,7 +301,7 @@ void CON_StoreArg(BYTEp userarg)
 //
 // Checkes the user command array to see if user did in fact pass in a particular argument
 //
-BOOL CON_CheckParm(BYTEp userarg)
+BOOL CON_CheckParm(char *userarg)
 {
     SHORT i;
 
@@ -344,7 +344,7 @@ void CON_AddHistory(char *commandstr)
 //
 // Adds a command name to the command list and assigns the appropriate function pointer
 //
-BOOL CON_AddCommand(BYTEp command, /*BOOL*/void (*function)(void))
+BOOL CON_AddCommand(char *command, /*BOOL*/void (*function)(void))
 {
     if(command != NULL && function != NULL && numcommands < MAX_CONSOLE_COMMANDS)
     {

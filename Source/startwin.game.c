@@ -153,7 +153,7 @@ extern int32 NoHrp;
 extern int is_vista;
 
 extern char tempbuf[];
-extern char *svgame[40];
+extern char svgame[40];
 
 long TexCache=0, Tiles=1, Model=1, TexComp=0;
 
@@ -1750,7 +1750,7 @@ void GetMapNames(char *fname)
 
     fn = fopen(grpname,"rb");
 
-    if (fn)
+    if (fn != NULL)
     {
 	   for (i=0; i<1000; i++)  // 1000 possible entries max
 	   {
@@ -1952,13 +1952,13 @@ void ListSavedGames(void)                                            // 100130
 void LoadGameDes(short sv_num, char *desc)                           // 100130
 {
     int i;
-    long fl = 0;
+    FILE *fl;
     char sgame[80];
     char xbuf[40];
 
     sprintf(sgame,"%sgame%d.sav",svgame,sv_num);
     fl = fopen(sgame,"rb");
-    if (fl)
+    if (fl != NULL)
     {
         fseek(fl, -23, 2);
         fread((xbuf),(3),(1),(fl));
@@ -2175,8 +2175,8 @@ void Showhelp(short x)
 
 void tabhelp(void)
 {
-    char *s;
-    char *t;
+    char *s = "ERRRRRRRRRROR!";
+    char *t = "Ha ha.";
 
     if (iPage == TAB_MEDA)
     {

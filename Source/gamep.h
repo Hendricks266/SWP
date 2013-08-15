@@ -79,7 +79,7 @@ char custdeffile[80] = "";
 char custtxtfile[80] = "";
 char RTSCustom[128] = "";
 char fname[128];
-char *svgame[40];
+char svgame[40];
 char MapsPlayed[2000][40];
 char LastMusic[80];
 
@@ -831,7 +831,7 @@ VOID UpdateMiniBarWeapons(PLAYERp pp, short Weapnum)
     x  = 98;
     y = 184;
     if (useDarts)
-        rotatesprite(x+3 << 16, y << 16, 8000, 0, 2519, wp[1], wc[1], 10+16, 0, 0, xdim - 1, ydim - 1);
+        rotatesprite((x+3) << 16, y << 16, 8000, 0, 2519, wp[1], wc[1], 10+16, 0, 0, xdim - 1, ydim - 1);
     else
         rotatesprite(x << 16, y << 16, wsize[0], 0, weaps[0], wp[1], wc[1], 10+16, 0, 0, xdim - 1, ydim - 1);
     // Shotgun

@@ -128,6 +128,16 @@ Prepared for public release: 03/28/2005 - Charlie Wiederhold, 3D Realms
 
 #include "colormap.h"
 
+static int menucmp(const char* one, const char* two)
+{
+    if (one == NULL)
+        return -1;
+    if (two == NULL)
+        return -1;
+
+    return Bstrcmp(one, two);
+}
+
 //#define PLOCK_VERSION TRUE
 
 extern BOOL cdvalid, enabled;
@@ -142,7 +152,7 @@ BOOL SavePrompt = FALSE;
 extern int32 ScreenMode,ScreenWidth,ScreenHeight,ScreenBPP;
 extern BOOL bGrp;
 extern int vsync;
-extern char *svgame[40];
+extern char svgame[40];
 extern short bypass;
 
 BOOL  bGameQuit = FALSE;
@@ -1636,9 +1646,9 @@ BOOL MNU_StartGame(void)
        else
            Level = 1;
 
-       UserMapName[0] = NULL;
-       LevelSong[0]   = NULL;
-       CurrMapName[0] = NULL;
+       UserMapName[0] = 0;
+       LevelSong[0]   = 0;
+       CurrMapName[0] = 0;
 
        if (numplayers <= 1)
        {
@@ -2599,7 +2609,7 @@ static BOOL MNU_DrawLoadSave(short game_num)
     rotatesprite((SD_XSTART) << 16, (SD_YSTART) << 16, MZ, 0, pic_savedescr,
         0, 0, MenuDrawFlags | ROTATE_SPRITE_CORNER, 0, 0, xdim - 1, ydim - 1);
 
-    if (currentmenu->text == "^Load Game")
+    if (menucmp(currentmenu->text, "^Load Game") == 0)
         rotatesprite((SD_XSTART) << 16, (SD_YSTART + 13) << 16, MZ, 0, pic_savedescr,
         0, 0, MenuDrawFlags | ROTATE_SPRITE_CORNER, 0, 0, xdim - 1, ydim - 1);
 
@@ -2642,7 +2652,7 @@ BOOL MNU_LoadSaveMove(UserCall call, MenuItem_p item)
     if (game_num != LastSaveNum)
     {
         screen_tile = LoadGameFullHeader(game_num, SaveGameDescr[game_num],
-                      &SaveGameLevel, &SaveGameSkill, &SaveGameMap);
+                      &SaveGameLevel, &SaveGameSkill, SaveGameMap);
 
         sprintf(SaveGameInfo1, "Map: %s", SaveGameMap);
         sprintf(SaveGameInfo2, "Lev: %d  /  Skill: %d", SaveGameLevel, SaveGameSkill+1);
@@ -2754,7 +2764,7 @@ BOOL MNU_LoadSaveDraw(UserCall call, MenuItem_p item)
 
     // print game descriptions
     j = 10;
-    if (currentmenu->text == "^Load Game")
+    if (menucmp(currentmenu->text, "^Load Game") == 0)
         j = 11;
     for (i = 0; i < j; i++)
     {
@@ -3117,21 +3127,21 @@ void MNU_DoButton(MenuItem_p item, BOOL draw)
     sHint = " ";
     sRest = " ";
 
-    if (currentmenu->text == "^Video" || currentmenu->text == "^Sound")
+    if (menucmp(currentmenu->text, "^Video") == 0 || menucmp(currentmenu->text, "^Sound") == 0)
         iPos = 30;
     else
-    if (currentmenu->text == "^Screen")
+    if (menucmp(currentmenu->text, "^Screen") == 0)
     {
         iPos = 20;
     }
     else
-    if (currentmenu->text == "^Mouse")
+    if (menucmp(currentmenu->text, "^Mouse") == 0)
         iPos = 20;
     else
-    if (currentmenu->text == "^Game")
+    if (menucmp(currentmenu->text, "^Game") == 0)
         iPos = 80;
     else
-    if (currentmenu->text == "^Game 2")
+    if (menucmp(currentmenu->text, "^Game 2") == 0)
     {
        iPos = 75;
        iCurs = currentmenu->cursor;
@@ -3149,13 +3159,13 @@ void MNU_DoButton(MenuItem_p item, BOOL draw)
        }
     }
     else
-    if (currentmenu->text == "^Kid Mode")
+    if (menucmp(currentmenu->text, "^Kid Mode") == 0)
         iPos = 65;
     else
-    if (currentmenu->text == "^Peer2Peer")
+    if (menucmp(currentmenu->text, "^Peer2Peer") == 0)
         iPos = 20;
 
-    if (sHint != " " || sRest != " ")
+    if (menucmp(sHint, " ") != 0 || menucmp(sRest, " ") != 0)
     {
        MNU_MeasureSmallString(sHint, &w, &h);
        MNU_DrawSmallString(TEXT_XCENTER(w), SS_YSTART + 152, sHint,  1, 0);
@@ -3604,7 +3614,7 @@ char *monsterskills[] = {"No Monsters","Easy","Normal","Hard","Insane!"};
 
 void MNU_DoSlider(short dir, MenuItem_p item, BOOL draw)
 {
-    short offset, i, barwidth, iPos=0;
+    short offset, i = 0, barwidth, iPos=0;
     long x, y, knobx;
     short shade = MENU_SHADE_DEFAULT;
     char *extra_text=NULL;
@@ -3618,13 +3628,13 @@ void MNU_DoSlider(short dir, MenuItem_p item, BOOL draw)
         dir = 0;
     }
 
-    if (currentmenu->text == "^Video" || currentmenu->text == "^Sound")
+    if (menucmp(currentmenu->text, "^Video") == 0 || menucmp(currentmenu->text, "^Sound") == 0)
         iPos = 30;
     else
-    if (currentmenu->text == "^Screen")
+    if (menucmp(currentmenu->text, "^Screen") == 0)
         iPos = 20;
     else
-    if (currentmenu->text == "^Mouse")
+    if (menucmp(currentmenu->text, "^Mouse") == 0)
         iPos = 20;
 
     switch (item->slider)
@@ -4376,19 +4386,19 @@ static void MNU_DrawItemIcon(MenuItem * item)
     if  (gs.SwapYinyang)
          yin = pic_shuriken1;
 
-    if (currentmenu->text > 0 && sText != "^Episode" && sText != "^Skill" && sText != "^Options")
+    if (currentmenu->text > 0 && menucmp(sText, "^Episode") != 0 && menucmp(sText, "^Skill") != 0 && menucmp(sText, "^Options") != 0)
         scale = MZ - 32768;
     else
-    if (sText == "^Episode" || sText == "^Skill")
+    if (menucmp(sText, "^Episode") == 0 || menucmp(sText, "^Skill") == 0)
     {
         scale = MZ - 16384;
         y = y - 4;
         x = x - 5;
-        if (sText == "^Skill")
+        if (menucmp(sText, "^Skill") == 0)
             x = x - 4;
     }
     else
-    if (sText == "^Options")
+    if (menucmp(sText, "^Options") == 0)
         scale = MZ - 16384;
     else
         y = y + 3;
@@ -4408,7 +4418,7 @@ static void MNU_DrawItemIcon(MenuItem * item)
 
     x = x - 4;
 
-    if (currentmenu->text == "^Options")
+    if (menucmp(currentmenu->text, "^Options") == 0)
     {
         x = 60;
         y -= 5;
@@ -4419,7 +4429,7 @@ static void MNU_DrawItemIcon(MenuItem * item)
     SetRedrawScreen(&Player[myconnectindex]);
     //BorderRefreshClip(&Player[myconnectindex], x - 24, y - 24, x + 24, y + 24);
 
-    if (currentmenu->text == "^Options")
+    if (menucmp(currentmenu->text, "^Options") == 0)
     {
         char *sVers = "SWP - Version "SwpVer;
         MNU_MeasureString(sVers, &w, &h);
@@ -4512,7 +4522,7 @@ static void MNU_DrawMenuContents(void)
                 {
                     if (TEST(item->flags, mf_disabled))
                         MenuTextShade = MENU_SHADE_INACTIVE;
-                    if (currentmenu->text == "^Options" || currentmenu->text == "^Episode" || currentmenu->text == "^Skill")
+                    if (menucmp(currentmenu->text, "^Options") == 0 || menucmp(currentmenu->text, "^Episode") == 0 || menucmp(currentmenu->text, "^Skill") == 0)
                         MNU_DrawOptionString(item->x, item->y, item->text, MenuTextShade, 16);
                     else
                         MNU_DrawString(item->x, item->y, item->text, MenuTextShade, mPal);
@@ -5629,7 +5639,7 @@ BOOL MNU_HrpCheck(MenuItem *item)
 {
     if (NoHrp > 0)
         SET(item->flags, mf_disabled);
-    if (currentmenu->text == "^Screen")
+    if (menucmp(currentmenu->text, "^Screen") == 0)
         MNU_BitCheck(item);
     return (TRUE);
 }
@@ -5762,8 +5772,8 @@ BOOL MNU_StartMapGame(void)
     extern BOOL bMusic;
 
     bMusic = FALSE;
-    LevelSong[0]   = NULL;
-    CurrMapName[0] = NULL;
+    LevelSong[0]   = 0;
+    CurrMapName[0] = 0;
     ready2send = 0;
     Level = 0;
     if (strlen(MyMaps[MapCursor]) < 5)
@@ -6076,9 +6086,10 @@ BOOL MNU_GetMapInput(void)
 	if (CommEnabled)
 	{
         strcpy(UserMapName, MyMaps[MapCursor]);
-        CurrMapName[0] = NULL;
+        CurrMapName[0] = 0;
         Level = 0;
     }
+    return (TRUE);
 }
 
 BOOL MNU_SetMusic(void)

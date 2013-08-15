@@ -259,7 +259,7 @@ char * LoadAnm(short anim_num)     // 1st pass is cache from game.c
 {
     long handle;
     long length;
-    char *animbuf, *palptr;
+    char *animbuf = NULL, *palptr;
     long i,j,k;
 
     DSPRINTF(ds,"LoadAnm");
@@ -290,7 +290,7 @@ char * LoadAnm(short anim_num)     // 1st pass is cache from game.c
            handle = kopen4load(ANIMname[ANIMnum], 0);
            if (handle == -1)
               {
-              if (anim_num == 0 && ANIMname[ANIMnum] != "sw.anm")
+              if (anim_num == 0 && (Bstrncasecmp(ANIMname[ANIMnum], "sw.anm", 6) != 0))
                  {
                  strcpy(ANIMname[ANIMnum], "sw.anm");
                  handle = kopen4load(ANIMname[ANIMnum], 0);             // if custom not found do normal

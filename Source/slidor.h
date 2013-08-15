@@ -27,7 +27,7 @@ Prepared for public release: 03/28/2005 - Charlie Wiederhold, 3D Realms
 #ifndef _SLIDOR_PUBLIC
 #define _SLIDOR_PUBLIC
 
-extern CHARp KeyDoorMessage[];
+extern char *KeyDoorMessage[];
 short DoSlidorMatch(PLAYERp pp, short match, BOOL);
 BOOL TestSlidorMatchActive(short match);
 VOID InterpSectorSprites(short sectnum, BOOL state);

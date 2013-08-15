@@ -41,7 +41,7 @@ Prepared for public release: 03/28/2005 - Charlie Wiederhold, 3D Realms
 #include "weapon.h"
 
 
-extern CHARp KeyDoorMessage[];
+extern char *KeyDoorMessage[];
 short DoVatorMatch(PLAYERp pp, short match);
 BOOL TestVatorMatchActive(short match);
 VOID InterpSectorSprites(short sectnum, BOOL state);

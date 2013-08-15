@@ -138,7 +138,7 @@ VOID UpdateMiniBar(PLAYERp pp)
 
     if (UsingMenus && gs.BorderNum > BORDER_MINI_BAR)
     {
-        rotatesprite(x << 16, y+1 << 16, (1 << 16), 0, 2434, 0, 21, 10+16, 0, 0, xdim - 1, ydim - 1); // main hud
+        rotatesprite(x << 16, (y+1) << 16, (1 << 16), 0, 2434, 0, 21, 10+16, 0, 0, xdim - 1, ydim - 1); // main hud
         return;
     }
     else
@@ -206,7 +206,7 @@ VOID UpdateMiniBar(PLAYERp pp)
     }
     // display ammo icons
 
-    rotatesprite(ammox[i] << 16, ammoy[i]+3 << 16, ammosize[i], 0, ammotype[i], 6, 0,
+    rotatesprite(ammox[i] << 16, (ammoy[i]+3) << 16, ammosize[i], 0, ammotype[i], 6, 0,
                  ROTATE_SPRITE_SCREEN_CLIP | ROTATE_SPRITE_CORNER, 0, 0, xdim - 1, ydim - 1);
 
     if (UsingMenus)

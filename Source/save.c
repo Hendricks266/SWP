@@ -77,7 +77,7 @@ TO DO
 extern short CurrentTrack;
 extern char LastMusic[80];
 extern char SaveGameDescr[11][80];
-extern char *svgame[40];
+extern char svgame[40];
 extern char UserMapName[80];
 extern long lastUpdate;
 extern BYTE RedBookSong[40];

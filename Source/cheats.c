@@ -356,7 +356,7 @@ VOID SortKeyCheat(PLAYERp pp, char *sKey)
        CheatKeyType = "Red Key";
     }
 
-    if (sTemp != "")
+    if (Bstrncmp(sTemp, "", 1) != 0)
         KeysCheat(pp, sTemp);
 }
 

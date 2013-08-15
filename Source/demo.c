@@ -55,8 +55,8 @@ BOOL DemoEdit = FALSE;
 BOOL DemoMode = FALSE;
 BOOL DemoModeMenuState = FALSE;
 BOOL DemoOverride = FALSE;
-CHAR DemoFileName[16] = "demo.dmo";
-CHAR DemoLevelName[16] = "";
+char DemoFileName[16] = "demo.dmo";
+char DemoLevelName[16] = "";
 extern BOOL NewGame;
 
 // Demo sync stuff

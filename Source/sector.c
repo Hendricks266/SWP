@@ -73,7 +73,7 @@ int DoTrapReset(short match);
 int DoTrapMatch(short match);
 
 PLAYERp GlobPlayerP;
-extern CHARp KeyDoorMessage[];
+extern char *KeyDoorMessage[];
 #if 0
 char lavabakpic[(LAVASIZ + 2) * (LAVASIZ + 2)], lavainc[LAVASIZ];
 long lavanumdrops, lavanumframes;

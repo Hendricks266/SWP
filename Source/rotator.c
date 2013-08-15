@@ -39,7 +39,7 @@ Prepared for public release: 03/28/2005 - Charlie Wiederhold, 3D Realms
 #include "interp.h"
 #include "sprite.h"
 
-extern CHARp KeyDoorMessage[];
+extern char *KeyDoorMessage[];
 short DoRotatorMatch(PLAYERp pp, short match, BOOL);
 BOOL TestRotatorMatchActive(short match);
 VOID InterpSectorSprites(short sectnum, BOOL state);

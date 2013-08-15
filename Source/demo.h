@@ -30,8 +30,8 @@ extern BOOL DemoRecording;
 extern BOOL DemoEdit;
 extern BOOL DemoMode;
 extern BOOL DemoOverride;
-extern CHAR DemoFileName[16];
-extern CHAR DemoLevelName[16];
+extern char DemoFileName[16];
+extern char DemoLevelName[16];
 
 extern FILE *DemoSyncFile;
 extern BOOL DemoSyncTest;

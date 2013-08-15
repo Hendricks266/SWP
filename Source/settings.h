@@ -87,7 +87,7 @@ BYTE NetTimeLimit;  // Limit time of game
 BYTE NetColor;      // Chosen color for player
 
 BYTE ParentalLock;  // Parental Lock on/off
-BYTE Password[20];  // Parental Lock password
+char Password[20];  // Parental Lock password
 BOOL NetNuke;
 BOOL Voxels;
 BOOL Stats;

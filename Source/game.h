@@ -908,12 +908,12 @@ void addconquote(char *daquote);
 // Console
 //
 ///////////////////////////////////////////////////////////////////////////////////////////
-void CON_Message(BYTEp message, ...);
-void CON_ConMessage(BYTEp message, ...);
-void CON_StoreArg(BYTEp userarg);
-BOOL CON_CheckParm(BYTEp userarg);
+void CON_Message(char *message, ...);
+void CON_ConMessage(char *message, ...);
+void CON_StoreArg(char *userarg);
+BOOL CON_CheckParm(char *userarg);
 void CON_CommandHistory(signed char dir);
-BOOL CON_AddCommand(BYTEp command, /*BOOL*/void (*function)(void));
+BOOL CON_AddCommand(char *command, /*BOOL*/void (*function)(void));
 void CON_ProcessUserCommand( void );
 void CON_InitConsole( void );
 
@@ -1056,7 +1056,7 @@ extern char *ReadFortune[MAX_FORTUNES];
 
 #define MAX_KEYS 8
 extern char *KeyMsg[MAX_KEYS];
-extern CHARp KeyDoorMessage[MAX_KEYS];
+extern char *KeyDoorMessage[MAX_KEYS];
 
 typedef struct
     {
@@ -1079,8 +1079,8 @@ extern BOOL DemoRecording;
 extern BOOL DemoEdit;
 extern BOOL DemoMode;
 extern BOOL CameraTestMode;
-extern CHAR DemoFileName[16];
-extern CHAR DemoLevelName[16];
+extern char DemoFileName[16];
+extern char DemoLevelName[16];
 
 #define DEMO_BUFFER_MAX 2048
 extern SW_PACKET DemoBuffer[DEMO_BUFFER_MAX];
