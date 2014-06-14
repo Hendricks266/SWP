@@ -4863,7 +4863,7 @@ long app_main(long argc, char *argv[])
     if (MapsFolder[0] == 0)
         strcpy(MapsFolder, "maps/");
     if (RootFolder[0] == 0)
-        GetRootFolder(&RootFolder);
+        GetRootFolder(RootFolder);
 
     GetUserMaps();
     GetUserMusic();

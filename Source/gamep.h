@@ -46,7 +46,7 @@ VOID PutStringInfo2(PLAYERp pp, char *string);
 
 extern int is_vista;
 
-extern char PlayerNameArg[40] = "";
+extern char PlayerNameArg[40];
 extern char IPAddressArg[8][40];
 extern short TimeLimitTable[9];
 
@@ -96,7 +96,6 @@ extern BOOL  bMapmenu;
 
 //-------------------------- startup menu settings -------------------------
 
-const char **argvline;
 extern int cddevice;
 
 short iStart = 0;
@@ -206,7 +205,7 @@ BOOL PlayMusic(char *Musicname)
         return FALSE;
 
     strcpy(ubuf, Musicname);
-    dolower(&ubuf);
+    dolower(ubuf);
 
     if (strstr(ubuf, ".voc"))
         return FALSE;
@@ -370,8 +369,8 @@ mapskip:
 
 int checksearchpath(char *pth)
 {
-    unsigned char ph[128];
-    unsigned char px[128];
+    char ph[128];
+    char px[128];
     int i, j, k, x, z;
 
     z = -1;
@@ -605,8 +604,8 @@ long SetupUserMap()
     if (iMons == 0)  // no monsters
         strcpy(mt, " -monst");
     sprintf(ds, "Swp.exe -map %s%s -s%d %s%s", MapsFolder, MenuMap, iSkill, mp, mt);
-    argvline = strdup(ds);
-    i = SetCommandLine(argvline);
+
+    i = SetCommandLine(ds);
     return i;
 }
 
@@ -644,8 +643,8 @@ long SetupUserGame(short gnum)
            sprintf(mp," -map %s -s%d%s", GameMap, iSkill, mu);
        }
        sprintf(ds, "Swp.exe %s-g%s -h%s.def -c%s.cfg%s%s", gFol, MenuGame, sBuff, sBuff, mp, gn);
-       argvline = strdup(ds);
-       i = SetCommandLine(argvline);
+
+       i = SetCommandLine(ds);
        return i;
     }
     return 0;
@@ -659,8 +658,8 @@ long SetupUserSavedGame(short snum)
        return SetupUserGame(snum);
 
     sprintf(ds, "Swp.exe -game%d", snum);
-    argvline = strdup(ds);
-    i = SetCommandLine(argvline);
+
+    i = SetCommandLine(ds);
     return i;
 }
 
@@ -669,8 +668,8 @@ long SetupUserLevel(short lnum)
    long i;
 
    sprintf(ds, "Swp.exe -level%d -s%d", lnum, iSkill);
-   argvline = strdup(ds);
-   i = SetCommandLine(argvline);
+
+   i = SetCommandLine(ds);
    return i;
 }
 
@@ -743,8 +742,8 @@ long SetupMultiPlayer()
     else
         sprintf(ds, "Swp.exe %s /name %s -col %d /net %s /n1", mbuf, PlayerNameArg, iColr, IPAddress);
 
-    argvline = strdup(ds);
-    i = SetCommandLine(argvline);
+
+    i = SetCommandLine(ds);
     return i;
 }
 
@@ -1256,7 +1255,7 @@ void checkforsaves(char *pth)                                        // 100303
     strcpy(tmp, tempbuf);
     if (tmp[0] == 0)
         strcpy(tmp, tempbuf);
-    dolower(&tmp);
+    dolower(tmp);
     if (!bGrp)
         svgame[0] = 0;
     if (strstr(tmp, ".grp") || strstr(tmp, ".zip") || (strstr(tmp, ".map") && !bGrp))
@@ -1298,7 +1297,7 @@ void extractname(char *pth)
 
 void dolower(char *cpath)                                            // 100303
 {
-    int i;
+    size_t i;
     char sTemp[128];
     char ch;
 
@@ -1375,13 +1374,13 @@ void GetMapsPlayed(void)
     {
         Bsprintf(buf,"Map_%d",i);
         tmp[0] = 0;
-        SCRIPT_GetString(scH, "Maps Played", buf, &tmp);
+        SCRIPT_GetString(scH, "Maps Played", buf, tmp);
         if (strlen(tmp) < 4)
         {
             Mapnum = i;
             break;
         }
-        dolower(&tmp);
+        dolower(tmp);
         strcpy(MapsPlayed[i], tmp);
     }
     SCRIPT_Free (scH);

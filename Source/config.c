@@ -92,7 +92,7 @@ extern void WriteGameSetup(int32 scripthandle);
 char CommPlayerName[40];
 int32 NumberPlayers,CommPort,PortSpeed,IrqNumber,UartAddress;
 
-char PlayerNameArg[40];
+char PlayerNameArg[40] = "";
 char IPAddressArg[8][40];
 int  LastIpUsed;
 
@@ -646,13 +646,15 @@ int32 CONFIG_ReadSetup( void )
 
       SCRIPT_GetNumber( scripthandle, "Screen Setup", "GLFovscreen", &glfovscreen);
       SCRIPT_GetNumber( scripthandle, "Screen Setup", "GLWidescreen", &glwidescreen);
-      SCRIPT_GetNumber( scripthandle, "Screen Setup", "GLVSync", &vsync);
+      SCRIPT_GetNumber( scripthandle, "Screen Setup", "GLVSync", &dummy);
+      vsync = dummy;
 
       SCRIPT_GetNumber( scripthandle, "Screen Setup", "HighTiles", &usehightile);
       SCRIPT_GetNumber( scripthandle, "Screen Setup", "HighModels", &usemodels);
 
       SCRIPT_GetNumber( scripthandle, "Screen Setup", "Usegoodalpha", &usegoodalpha);
-      SCRIPT_GetNumber( scripthandle, "Screen Setup", "LcdMonitor",&LcdMon);
+      SCRIPT_GetNumber( scripthandle, "Screen Setup", "LcdMonitor",&dummy);
+      LcdMon = dummy;
 
       SCRIPT_GetNumber( scripthandle, "Sound Setup", "FXDevice",&FXDevice);
       SCRIPT_GetNumber( scripthandle, "Sound Setup", "MusicDevice",&MusicDevice);
@@ -715,12 +717,12 @@ int32 CONFIG_ReadSetup( void )
           loopfactor = 19.0;
 
       SCRIPT_GetString( scripthandle, "Network", "RTSName",RTSName);
-      SCRIPT_GetString( scripthandle, "Network", "PlayerName", &PlayerNameArg);
+      SCRIPT_GetString( scripthandle, "Network", "PlayerName", PlayerNameArg);
 
       for (i=0; i<8; i++)
           {
           Bsprintf(buf,"IPAddress_%ld",i+1);
-          SCRIPT_GetString( scripthandle, "Network", buf, &IPAddressArg[i]);
+          SCRIPT_GetString( scripthandle, "Network", buf, IPAddressArg[i]);
           }
 
       SCRIPT_GetNumber(scripthandle, "Network", "LastIpUsed", &dummy);
@@ -933,9 +935,9 @@ void GetLastPlayed(char *smap, int x)                                // 20100304
 	    return;
 
     if (x == 1)
-	    SCRIPT_GetString(scripthandle, "SwpOptions", "LastMap", &xbuf);
+	    SCRIPT_GetString(scripthandle, "SwpOptions", "LastMap", xbuf);
 	else
-	    SCRIPT_GetString(scripthandle, "SwpOptions", "LastGame", &xbuf);
+	    SCRIPT_GetString(scripthandle, "SwpOptions", "LastGame", xbuf);
 
 	if (strchr(xbuf,'.') != 0)
 	    strcpy(smap, xbuf);

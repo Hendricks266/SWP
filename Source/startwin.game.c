@@ -1616,13 +1616,13 @@ int startwin_run(void)
     LastGame[0] = 0;
     GetMapsPlayed();                                                 // 100128
 
-    GetLastPlayed(&LastGame, 0);                                     // 100201
+    GetLastPlayed(LastGame, 0);                                     // 100201
     if (LastGame[0] != 0)
     {
         dolower(LastGame);
         initprintf("Last Played Game = %s\n", LastGame);
     }
-    GetLastPlayed(&LastMap, 1);                                      // 100201
+    GetLastPlayed(LastMap, 1);                                      // 100201
     if (LastMap[0] != 0)
     {
         dolower(LastMap);
@@ -2004,7 +2004,7 @@ void GetSavedGames(void)                                             // 100130
             ch = tempbuf[j-5];
             j = ch-'0';
             sbuf[0] = 0;
-            LoadGameDes(j, &sbuf);
+            LoadGameDes(j, sbuf);
             if (strlen(sbuf) < 2)
                 strcpy(sbuf, tempbuf);
             dolower(sbuf);
