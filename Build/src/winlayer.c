@@ -57,6 +57,7 @@
 #include "build.h"
 #include "a.h"
 #include "osd.h"
+#include "cache1d.h"
 
 // undefine to restrict windowed resolutions to conventional sizes
 #define ANY_WINDOWED_SIZE
@@ -367,6 +368,8 @@ int DeleteAutosave(short iEnd, char *gsv)
 }
 
 #include <shellapi.h>
+
+int SetCommandLine(char *argvbufx);
 
 //
 // WinMain() -- main Windows entry point
@@ -2034,6 +2037,11 @@ int checkvideomode(int *x, int *y, int c, int fs, int forced)
 	return nearest;		// JBF 20031206: Returns the mode number
 }
 
+
+#if defined(USE_OPENGL) && defined(POLYMOST)
+void SetVSync(int sync);
+void InitVSync(void);
+#endif
 
 //
 // setvideomode() -- set the video mode

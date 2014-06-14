@@ -128,6 +128,10 @@ Prepared for public release: 03/28/2005 - Charlie Wiederhold, 3D Realms
 
 #include "colormap.h"
 
+#include "swp.h"
+
+VOID PutStringInfo2(PLAYERp pp, char *string);
+
 static int menucmp(const char* one, const char* two)
 {
     if (one == NULL)

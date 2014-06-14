@@ -62,6 +62,8 @@ Prepared for public release: 03/28/2005 - Charlie Wiederhold, 3D Realms
 #include "slidor.h"
 #include "player.h"
 
+#include "swp.h"
+
 
 BOOL FAF_Sector(short sectnum);
 BOOL MoveSkip4, MoveSkip2, MoveSkip8;

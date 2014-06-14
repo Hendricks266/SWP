@@ -57,6 +57,8 @@ Prepared for public release: 03/28/2005 - Charlie Wiederhold, 3D Realms
 #include "rts.h"
 #include "menus.h"
 
+#include "swp.h"
+
 extern USERp User[MAXSPRITES];
 void DumpSounds(void);
 

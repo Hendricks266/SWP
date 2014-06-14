@@ -39,6 +39,9 @@ Nuke      ->    0=Off 1=On
 */
 //-------------------------------------------------------------------------
 
+void KillString(PLAYERp pp, short y);
+VOID PutStringInfo2(PLAYERp pp, char *string);
+
 #define TITLE_PICW 2323
 
 extern int is_vista;

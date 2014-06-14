@@ -41,6 +41,8 @@ Prepared for public release: 03/28/2005 - Charlie Wiederhold, 3D Realms
 #include "sprite.h"
 #include "actor.h"
 
+#include "swp.h"
+
 extern long jump_grav;
 
 extern STATE s_DebrisNinja[];

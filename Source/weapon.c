@@ -52,6 +52,8 @@ Prepared for public release: 03/28/2005 - Charlie Wiederhold, 3D Realms
 #include "track.h"
 #include "player.h"
 
+#include "swp.h"
+
 //
 // Damage Amounts defined in damage.h
 //

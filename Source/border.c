@@ -41,6 +41,10 @@ Prepared for public release: 03/28/2005 - Charlie Wiederhold, 3D Realms
 #include "net.h"
 #include "text.h"
 
+#include "swp.h"
+
+VOID UpdateAltMiniHud(PLAYERp pp);
+
 #define BAR_HEIGHT 48
 #define XDIM 320
 #define YDIM 200

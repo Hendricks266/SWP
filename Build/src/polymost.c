@@ -4719,6 +4719,10 @@ static int gltextureanisotropy(const osdfuncparm_t *parm)
 }
 #endif
 
+#if defined(USE_OPENGL) && defined(POLYMOST)
+void SetVSync(int sync);
+#endif
+
 static int osdcmd_polymostvars(const osdfuncparm_t *parm)
 {
 	extern int vsync;
@@ -4786,12 +4790,14 @@ static int osdcmd_polymostvars(const osdfuncparm_t *parm)
 		else glnvmultisamplehint = (val != 0);
 		return OSDCMD_OK;
 	}
+#if defined(USE_OPENGL) && defined(POLYMOST)
     else if (!Bstrcasecmp(parm->name, "r_swapinterval"))
     {
         if (showval) { OSD_Printf("r_swapinterval is %d\n", vsync); }
         else SetVSync(val != 0);
         return OSDCMD_OK;
     }
+#endif
 #endif
 	return OSDCMD_SHOWHELP;
 }

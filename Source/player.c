@@ -72,6 +72,10 @@ Prepared for public release: 03/28/2005 - Charlie Wiederhold, 3D Realms
 #include "track.h"
 #include "interp.h"
 
+#include "swp.h"
+
+VOID PutStringInfo2(PLAYERp pp, char *string);
+
 
 #define SO_DRIVE_SOUND 2
 #define SO_IDLE_SOUND 1

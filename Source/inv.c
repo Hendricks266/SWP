@@ -48,6 +48,12 @@ Prepared for public release: 03/28/2005 - Charlie Wiederhold, 3D Realms
 #include "colormap.h"
 #include "player.h"
 
+#include "swp.h"
+
+VOID UpdateClassicHud(PLAYERp pp);
+VOID UpdateAltMiniHud(PLAYERp pp);
+VOID UpdateMiniBarWeapons(PLAYERp pp, short Weapnum);
+
 //#define SAVE_EXTERN
 //#include "_save.h"
 //#undef SAVE_EXTERN

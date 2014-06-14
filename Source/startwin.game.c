@@ -43,6 +43,8 @@
 
 #include "startwin.game.h"
 
+#include "swp.h"
+
 #define TAB_MEDA 0
 #define TAB_GAME 1
 #define TAB_MULT 2
@@ -876,7 +878,7 @@ static INT_PTR CALLBACK GamePageProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPA
                            GameFolder[0] = 0;
                        GetGameFiles(GameFolder);
                        resetgame();
-                       resetsave();
+                       resetsave(0); // 0 here is a guess
                        mapvis = 0;
                     }
 					return TRUE;
@@ -890,7 +892,7 @@ static INT_PTR CALLBACK GamePageProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPA
 					if (i != CB_ERR)
 					{
                        ListBox_GetText((HWND)lParam, i, MenuGame);
-                       dolower(&MenuGame);                           // 100303
+                       dolower(MenuGame);                           // 100303
                        SetSaves(0);
                        GetMapNames(MenuGame);
                        mapvis = 0;
@@ -906,7 +908,7 @@ static INT_PTR CALLBACK GamePageProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPA
 					if (i != CB_ERR)
 					   {
 					   ListBox_GetText((HWND)lParam, i, GameMap);
-					   dolower(&GameMap);                            // 100303
+					   dolower(GameMap);                            // 100303
 					   iLevelNum = i;  // incase default maps
 					   resetsave(0);
 					   EnableWindow(GetDlgItem(pages[TAB_GAME], IDMUSIC), 1);
@@ -955,7 +957,7 @@ static INT_PTR CALLBACK GamePageProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPA
 					if (i != CB_ERR)
 					{
                        ComboBox_GetLBText((HWND)lParam, i, MusicFolder);
-                       dolower(&MusicFolder);
+                       dolower(MusicFolder);
                        if (i == 0)
                            MusicFolder[0] = 0;
                        LoadMusicFiles(MusicFolder);
@@ -1617,13 +1619,13 @@ int startwin_run(void)
     GetLastPlayed(&LastGame, 0);                                     // 100201
     if (LastGame[0] != 0)
     {
-        dolower(&LastGame);
+        dolower(LastGame);
         initprintf("Last Played Game = %s\n", LastGame);
     }
     GetLastPlayed(&LastMap, 1);                                      // 100201
     if (LastMap[0] != 0)
     {
-        dolower(&LastMap);
+        dolower(LastMap);
         initprintf("Last Played Map  = %s\n", LastMap);
     }
 	GetSavedGames();                                                 // 100125
@@ -1766,7 +1768,7 @@ void GetMapNames(char *fname)
            }
            else
            {
-              dolower(&gbuf);
+              dolower(gbuf);
               j = strlen(gbuf)-4;
 		      if (Bstrncasecmp(gbuf+j, ".map", 4) == 0)
                   ListBox_AddString(hwnd, gbuf);
@@ -1800,7 +1802,7 @@ void GetGameFiles(char *gpath)
     while (findfiles)
     {
         Bsprintf(gbuf,"%s",findfiles->name);
-        dolower(&gbuf);
+        dolower(gbuf);
         if (strstr(gbuf, LastGame) && strlen(LastGame) > 4)
             j = x;
         if (strlen(gbuf) > 4)
@@ -1819,7 +1821,7 @@ void GetGameFiles(char *gpath)
     while (findfiles)
     {
         Bsprintf(gbuf,"%s",findfiles->name);
-        dolower(&gbuf);
+        dolower(gbuf);
         if (Bstrcasecmp(gbuf, LastGame) == 0)
             j = x;
         if (!strstr(gbuf, "_hrp"))
@@ -1856,7 +1858,7 @@ void GetMapFiles(char *mpath, short wb)
     while (findfiles)
     {
           Bsprintf(mbuf,"%s",findfiles->name);
-          dolower(&mbuf);
+          dolower(mbuf);
           if (Bstrcasecmp(mbuf, LastMap) == 0)                       // 100201
               j = i;
           if (CheckMapsPlayed(mbuf))                                 // 100128
@@ -1893,7 +1895,7 @@ void LoadMusicFiles(char *mpath)
     while (findfiles)
     {
           Bsprintf(mbuf,"%s",findfiles->name);
-          dolower(&mbuf);
+          dolower(mbuf);
           ListBox_AddString(hwnd, mbuf);
           findfiles = findfiles->next;
     }
@@ -1902,7 +1904,7 @@ void LoadMusicFiles(char *mpath)
     while (findfiles)
     {
           Bsprintf(mbuf,"%s",findfiles->name);
-          dolower(&mbuf);
+          dolower(mbuf);
           ListBox_AddString(hwnd, mbuf);
           findfiles = findfiles->next;
     }
@@ -2005,7 +2007,7 @@ void GetSavedGames(void)                                             // 100130
             LoadGameDes(j, &sbuf);
             if (strlen(sbuf) < 2)
                 strcpy(sbuf, tempbuf);
-            dolower(&sbuf);
+            dolower(sbuf);
             strcpy(UserSaves[x], sbuf);
             GameSaved[x] = j;
             x++;

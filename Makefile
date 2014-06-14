@@ -38,7 +38,8 @@ CC=gcc
 CXX=g++
 OURCFLAGS=$(debug) -W -Wall -Wimplicit -Wno-char-subscripts -Wno-unused \
 	-funsigned-char -fno-strict-aliasing -DNO_GCC_BUILTINS \
-	-I$(INC) -I$(EINC) -I$(SRC)/jmact -I$(SRC)/jaudiolib
+	-I$(INC) -I$(EINC) -I$(SRC)/jmact -I$(SRC)/jaudiolib \
+	-Werror-implicit-function-declaration
 OURCXXFLAGS=-fno-exceptions -fno-rtti
 LIBS=-lm
 

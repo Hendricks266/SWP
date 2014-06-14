@@ -408,6 +408,8 @@ Prepared for public release: 03/28/2005 - Charlie Wiederhold, 3D Realms
 
 #include "crc32.h"
 
+#include "swp.h"
+
 #if DEBUG
 #define BETA 0
 #endif
