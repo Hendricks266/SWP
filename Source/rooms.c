@@ -78,7 +78,7 @@ int COVERinsertsprite(short sectnum, short stat)
     sprite[spnum].xoffset = sprite[spnum].yoffset = 0;
     sprite[spnum].ang = 0;
     sprite[spnum].owner = -1;
-    sprite[spnum].xvel = sprite[spnum].yvel = sprite[spnum].yvel = 0;
+    sprite[spnum].xvel = sprite[spnum].yvel = 0;
     sprite[spnum].lotag = 0;
     sprite[spnum].hitag = 0;
     sprite[spnum].extra = 0;

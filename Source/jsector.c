@@ -817,7 +817,7 @@ JS_DrawMirrors(PLAYERp pp, long tx, long ty, long tz, short tpang, long tphoriz)
                                                 // angle else subtract
                                 {
                                 // Store current angle in TAG5
-                                SP_TAG5(sp) = NORM_ANGLE((SP_TAG5(sp) += 4));
+                                SP_TAG5(sp) = NORM_ANGLE((SP_TAG5(sp) + 4));
 
                                 // TAG6 = Turn radius
                                 if (klabs(GetDeltaAngle(SP_TAG5(sp), sp->ang)) >= SP_TAG6(sp))
@@ -829,7 +829,7 @@ JS_DrawMirrors(PLAYERp pp, long tx, long ty, long tz, short tpang, long tphoriz)
                             else
                                 {
                                 // Store current angle in TAG5
-                                SP_TAG5(sp) = NORM_ANGLE((SP_TAG5(sp) -= 4));
+                                SP_TAG5(sp) = NORM_ANGLE((SP_TAG5(sp) - 4));
 
                                 // TAG6 = Turn radius
                                 if (klabs(GetDeltaAngle(SP_TAG5(sp), sp->ang)) >= SP_TAG6(sp))

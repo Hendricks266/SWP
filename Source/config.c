@@ -363,7 +363,7 @@ void CONFIG_SetDefaults( void )
     }
 
     memset(JoystickDigitalFunctions, -1, sizeof(JoystickDigitalFunctions));
-    for (i=0; i < (int32)(sizeof(joystickanalogdefaults)/sizeof(char*)); i++)
+    for (i=0; i < MAXJOYAXES; i++)
     {
 	    JoystickAnalogueScale[i] = 65536;
 	    JoystickAnalogueDead[i] = 1000;
