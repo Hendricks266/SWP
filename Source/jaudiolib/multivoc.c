@@ -543,7 +543,7 @@ playbackstatus MV_GetNextVOCBlock
    int            lastblocktype;
    unsigned long  blocklength;
    unsigned long  samplespeed;
-   unsigned int   tc;
+   unsigned int   tc = 0;
    int            packtype;
    int            voicemode;
    int            done;

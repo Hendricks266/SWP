@@ -540,8 +540,8 @@ static int _MIDI_ServiceRoutine ( void )
    track *Track;
    int   tracknum;
    int   status;
-   int   c1;
-   int   c2;
+   int   c1 = 0;
+   int   c2 = 0;
    int   TimeSet = FALSE;
    
    if ( _MIDI_SongActive ) {
@@ -1350,8 +1350,8 @@ static int _MIDI_ProcessNextTick
    track *Track;
    int   tracknum;
    int   status;
-   int   c1;
-   int   c2;
+   int   c1 = 0;
+   int   c2 = 0;
    int   TimeSet = FALSE;
 
    Track = _MIDI_TrackPtr;

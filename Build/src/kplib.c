@@ -1942,7 +1942,7 @@ static long kgifrend(const char *kfilebuf, long kfilelength,
     long lzcols, dat, blocklen, bitcnt, xoff, transcol, backcol, *lptr;
     intptr_t yoff;
     char numbits, startnumbits, chunkind, ilacefirst;
-    const unsigned char *ptr, *cptr;
+    const unsigned char *ptr, *cptr = NULL;
 
     UNREFERENCED_PARAMETER(kfilelength);
 
@@ -2127,7 +2127,7 @@ static long ktgarend(const char *header, long fleng,
     long i, x, y, pi, xi, yi, x0, x1, y0, y1, xsiz, ysiz, rlestat, colbyte, pixbyte;
     intptr_t p;
 
-    const unsigned char *fptr, *cptr, *nptr;
+    const unsigned char *fptr, *cptr = NULL , *nptr;
 
     //Ugly and unreliable identification for .TGA!
     if ((fleng < 20) || (header[1]&0xfe)) return(-1);
@@ -2201,23 +2201,23 @@ static long ktgarend(const char *header, long fleng,
 //==============================  TARGA ends =================================
 //==============================  BMP begins =================================
 //TODO: handle BI_RLE8 and BI_RLE4 (compression types 1&2 respectively)
-//                        ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-//                        ³  0(2): "BM"   ³
-// ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿³ 10(4): rastoff³ ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-// ³headsiz=12 (OS/2 1.x)³³ 14(4): headsiz³ ³ All new formats: ³
+//                        ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ?
+//                        ? 0(2): "BM"   ?
+// ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿³ 10(4): rastoff?ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+// ?eadsiz=12 (OS/2 1.x)³³ 14(4): headsiz??All new formats: ?
 //ÚÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÁÁÄÄÄÄÄÄÄÄÄÄÄÄÄÂÄÁÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-//³ 18(2): xsiz                         ³ 18(4): xsiz                                  ³
-//³ 20(2): ysiz                         ³ 22(4): ysiz                                  ³
-//³ 22(2): planes (always 1)            ³ 26(2): planes (always 1)                     ³
-//³ 24(2): cdim (1,4,8,24)              ³ 28(2): cdim (1,4,8,16,24,32)                 ³
-//³ if (cdim < 16)                      ³ 30(4): compression (0,1,2,3!?,4)             ³
-//³    26(rastoff-14-headsiz): pal(bgr) ³ 34(4): (bitmap data size+3)&3                ³
-//³                                     ³ 46(4): N colors (0=2^cdim)                   ³
-//³                                     ³ if (cdim < 16)                               ³
-//³                                     ³    14+headsiz(rastoff-14-headsiz): pal(bgr0) ³
+//?18(2): xsiz                         ?18(4): xsiz                                  ?
+//?20(2): ysiz                         ?22(4): ysiz                                  ?
+//?22(2): planes (always 1)            ?26(2): planes (always 1)                     ?
+//?24(2): cdim (1,4,8,24)              ?28(2): cdim (1,4,8,16,24,32)                 ?
+//?if (cdim < 16)                      ?30(4): compression (0,1,2,3!?,4)             ?
+//?   26(rastoff-14-headsiz): pal(bgr) ?34(4): (bitmap data size+3)&3                ?
+//?                                    ?46(4): N colors (0=2^cdim)                   ?
+//?                                    ?if (cdim < 16)                               ?
+//?                                    ?   14+headsiz(rastoff-14-headsiz): pal(bgr0) ?
 //ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-//                      ³ rastoff(?): bitmap data ³
-//                      ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+//                      ?rastoff(?): bitmap data ?
+//                      ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ?
 static long kbmprend(const char *buf, long fleng,
                         intptr_t daframeplace, long dabytesperline, long daxres, long dayres,
                         long daglobxoffs, long daglobyoffs)
