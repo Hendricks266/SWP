@@ -5420,7 +5420,7 @@ void MNU_DrawOptionString(short x, short y, char *string, short shade, short pal
         c = toupper(c);
         ac = c - 'A' + 3706;
         if ((ac < 3706 || ac > 3741)  && c != asc_Space )
-            break;
+            continue;
 
         if (c > asc_Space && c < 127)
         {
