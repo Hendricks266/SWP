@@ -244,7 +244,7 @@ $(EOBJ)/$(EDITORLIB): editorlib
 
 # RULES
 $(EBACKTRACEDLL): backtrace/backtrace.c
-	$(CC) $(CFLAGS) $(OURCFLAGS) -O2 -shared -Wall -Wextra -I$(EINC) -o $@ $^ -lbfd -liberty -limagehlp
+	$(CC) $(CFLAGS) $(OURCFLAGS) -O2 -ggdb -shared -Wall -Wextra -static-libgcc -I$(EINC) -o $@ $^ -lbfd -liberty -limagehlp
 
 $(OBJ)/%.$o: $(SRC)/%.nasm
 	nasm $(NASMFLAGS) $< -o $@
