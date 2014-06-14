@@ -138,10 +138,10 @@ extern short iStereo;
 extern short iAmbient;
 extern short iTalk;
 
-extern BOOL cdplay;
-extern BOOL menudone;
-extern BOOL musicon;
-extern BOOL fxon;
+extern int cdplay;
+extern int menudone;
+extern int musicon;
+extern int fxon;
 
 extern int32 NumVoices;   // 16
 extern int32 NumBits;     // 8

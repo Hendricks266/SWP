@@ -105,10 +105,10 @@ short iAmbient;
 short iTalk;
 short Mapnum = 0;
 
-BOOL menudone;
-BOOL cdplay;
-BOOL musicon;
-BOOL fxon;
+int menudone;
+int cdplay;
+int musicon;
+int fxon;
 
 extern long ScreenMode, ScreenWidth, ScreenHeight, ScreenBPP;
 
