@@ -1,2 +1,2 @@
 @echo off
-make veryclean all %*
+make veryclean all RELEASE=0 %*

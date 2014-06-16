@@ -48,7 +48,7 @@ asm=nasm
 # debugging and release
 ifneq ($(RELEASE),0)
   # debugging disabled
-  debug=-fomit-frame-pointer -O2
+  debug=-fomit-frame-pointer -O2 -ggdb
 else
   # debugging enabled
   debug=-ggdb -O0 -DDEBUGGINGAIDS -DNOSDLPARACHUTE

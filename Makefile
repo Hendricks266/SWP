@@ -16,7 +16,7 @@ LINKED_GTK = 0
 RELEASE?=1
 
 # build locations
-SRC=source
+SRC=Source
 RSRC=rsrc
 OBJ=obj_win
 EROOT=Build
@@ -28,7 +28,7 @@ o=o
 
 ifneq (0,$(RELEASE))
   # debugging disabled
-  debug=-fomit-frame-pointer -O1
+  debug=-fomit-frame-pointer -O1 -ggdb
 else
   # debugging enabled
   debug=-ggdb -O0
@@ -153,8 +153,10 @@ EDITOROBJS=$(OBJ)/jnstub.$o \
 include $(EROOT)/Makefile.shared
 
 SWP ?= SWP$(EXESUFFIX)
+SWPBUILD ?= SWBuild$(EXESUFFIX)
 
 SWP_TARGET:=$(SWP)
+SWPBUILD_TARGET:=$(SWPBUILD)
 
 ifndef EBACKTRACEDLL
     EBACKTRACEDLL = swpbacktrace1.dll
@@ -212,12 +214,15 @@ alldarwin:
 	cd osx && xcodebuild -target All -buildstyle $(style)
 endif
 
-all: $(SWP_TARGET)
+all: $(SWP_TARGET) $(SWPBUILD_TARGET)
 
 all:
 	$(BUILD_FINISHED)
 ifneq (,$(SWP_TARGET))
 	@ls -l $(SWP)
+endif
+ifneq (,$(SWPBUILD_TARGET))
+	@ls -l $(SWPBUILD)
 endif
 
 ebacktrace: $(EBACKTRACEDLL_TARGET)
@@ -226,10 +231,10 @@ ifneq (,$(EBACKTRACEDLL_TARGET))
 endif
 
 $(SWP): $(GAMEOBJS) $(EOBJ)/$(ENGINELIB)
-	$(CC) $(CFLAGS) $(OURCFLAGS) -o $@ $^ $(LIBS) # -Wl,-Map=SWP.dat
-ifeq ($(RELEASE),1)
-	strip SWP$(EXESUFFIX)
-endif
+	$(CC) $(CFLAGS) $(OURCFLAGS) -o $@ $^ $(LIBS)
+
+$(SWPBUILD): $(EDITOROBJS) $(EOBJ)/$(EDITORLIB) $(EOBJ)/$(ENGINELIB)
+	$(CC) $(CFLAGS) $(OURCFLAGS) -o $@ $^ $(LIBS)
 
 include Makefile.deps
 
@@ -290,6 +295,6 @@ endif
 veryclean: clean
 ifeq ($(PLATFORM),DARWIN)
 else
-	-rm -f $(EOBJ)/* SWP$(EXESUFFIX) build$(EXESUFFIX) core* $(EBACKTRACEDLL)
+	-rm -f $(EOBJ)/* $(SWP) $(SWPBUILD) $(EBACKTRACEDLL)
 endif
 
