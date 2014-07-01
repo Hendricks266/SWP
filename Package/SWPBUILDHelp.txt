@@ -1,0 +1,3121 @@
+-----------------------------------------------------------------------------
+Table of Contents
+-----------------------------------------------------------------------------
+
+I. PART 1: Shadow Warrior BUILD Tutorial
+
+The BUILD Editor And Basic Level Editing:                       1
+        Two Editing Modes: 2D and 3D                            1.1
+        Level Basics: Sectors, Walls, Vertices, and Sprites     1.2
+                Sector, Wall, and Sprites Attributes            1.2.1
+        2D Editor Mode                                          1.3
+                2D Grid and Resizing the Grid                   1.3.1
+                2D Grid Locking Feature                         1.3.2
+                2D Zooming In and Out                           1.3.3
+        3D Editing                                              1.4
+
+Building A Basic Level:                                         2
+        Sectors and Walls                                       2.1
+        Build a Simple Sector                                   2.2
+                Start up BUILD                                  2.2.1
+                Make Your First Sector                          2.2.2
+                Backtracking in Line Draw Mode                  2.2.3
+        Single-sided and Double-sided Walls                     2.3
+        Placing the Player's Start Position (IMPORTANT)         2.4
+        Quitting BUILD and Saving, Loading, Renaming Levels     2.5
+
+Building A Better Level:                                        3
+        Modifying Wall, Floor, and Ceiling Textures             3.1
+                Selecting Textures                              3.1.1
+                Shading Textures                                3.1.2
+                Resizing Textures                               3.1.3
+                Panning Textures                                3.1.4
+                Relative Textures (Floors/Ceilings)             3.1.5
+                Parallax Floors and Ceilings                    3.1.6
+        Splitting and Removing Walls                            3.2
+        Resizing and Moving Sectors                             3.3
+        Altering Floor and Ceiling Heights...and Textures again 3.4
+        Splitting, Joining, Adding, and Deleting Sectors        3.5
+                Splitting Sectors                               3.5.1
+                Joining Sectors                                 3.5.2
+                Adding a Sector                                 3.5.3
+                        Adding an Independent Sector            3.5.3.1
+                        Adding an Extension Sector              3.5.3.2
+                        Adding a Sector in a Sector (island)    3.5.3.3
+                        Adding a Sector in a Sector (peninsula) 3.5.3.4
+                Deleting a Sector                               3.5.4
+        Incremental Backups of Your Level                       3.6
+
+Sprites:                                                        4
+        Adding Sprites                                          4.1
+                Adding Weapons and Goodies                      4.1.1
+                Adding Bad Guys                                 4.1.2
+                        Bad Guy Frames                          4.1.2.1
+        Modifying Sprites                                       4.2
+                Resizing and Shading Sprites                    4.2.1
+        Making Copies of Sprites                                4.3
+        Moving Sprites                                          4.4
+        Deleting Sprites                                        4.5
+        Flipping Sprites and Sprite Angles                      4.6
+
+Advanced Sector Stuff:                                          5
+        Cut-and-Pasting Sectors                                 5.1
+                Within the Same Level                           5.1.1
+                Between Different Levels                        5.1.2
+        Overlapping Sectors                                     5.2
+
+Miscelleanous:                                                  6
+        Sector's "First" Wall and Relative Floors/Ceilings      6.1
+        Slopes                                                  6.2
+        Multi-Player/Co-Op Start Points                         6.3
+        Multi-Play Weapons                                      6.4
+        Okay, What Next?                                        6.5
+
+II. PART 2: Shadow Warrior BUILD Reference
+
+Description of 2 Dimensional mode (sector editing mode):        7
+        Grid                                                    7.1
+        Mouse Cursor                                            7.2
+        Player Position                                         7.3
+        Vertices                                                7.4
+        Lines/Walls                                             7.5
+        Sectors                                                 7.6
+        Sprites                                                 7.7
+        Signs                                                   7.8
+        Colors                                                  7.9
+
+Editing in 2 Dimensional Mode (Sector Editing Mode)             8
+        Control in 2D Mode                                      8.1
+                Mouse Control                                   8.1.1
+                Keyboard Control                                8.1.2
+        Keyboard Commands for 2D Mode                           8.2
+                Esc Menu                                        8.2.1
+                Basic 2D Editing Commands                       8.2.2
+                Line and Sector Drawing Commands in 2D Mode     8.2.3
+                Sprite Editing Commands in 2D Mode              8.2.4
+                Group Selection Commands in 2D Mode             8.2.5
+                Advanced 2D Mode Editor Functions               8.2.6
+
+Description of 3 Dimensional mode (game view editing mode)      9
+        Cursor                                                  9.1
+        Frame Rate Counter                                      9.2
+        Floors/Ceilings                                         9.3
+        Walls                                                   9.4
+        Sprites                                                 9.5
+
+3 Dimensional mode (game view editing mode):                    10
+        Control in 2D Mode                                      10.1
+                Mouse Control                                   10.1.1
+                Keyboard Control                                10.1.2
+        Keyboard Commands for 3D Mode                           10.2
+                Basic 3D Mode Editing Functions                 10.2.1
+                Texture Editing in 3D Mode                      10.2.2
+                Sprite Editing in 3D Mode                       10.2.3
+                Shade,Visibility and Palette Editing in 3D Mode 10.2.4
+                Copy and Paste Functions in 3D Mode             10.2.5
+                Tagging, and Advanced 3D Mode Functions         10.2.6
+
+Shadow Warrior Map Authoring Template:                          11
+
+-----------------------------------------------------------------------------
+I. PART 1: Shadow Warrior BUILD Tutorial
+-----------------------------------------------------------------------------
+
+----------------------------------------------
+1.      The BUILD Editor & Basic Level Editing
+----------------------------------------------
+
+This section gives detailed info on several ways to edit levels in BUILD.
+If you would like to see an index of everything you can do in BUILD, please
+see "PART 2: Shadow Warrior BUILD Reference."
+
+
+1.1     Two Editing Modes: 2D and 3D
+
+There are two modes with which to make your levels: 2D and 3D. 2D mode is a
+2 dimensional view of your level and making a level in this mode is like
+drawing on grid paper. 3D mode is 3 dimensional and is similar to the game
+itself (switches, doors, some light effects, etc. don't work like in
+the game).
+
+Switching between the two modes is done with the Enter key on the numeric
+pad (*not* the Enter key near all the regular keys).  When in 2D mode, you're
+current position within the level is indicated by the white arrow.  The brown
+arrow, if you can see it, is the player's starting position when the game
+begins (this is explained later).
+
+NOTE: Your current location (white arrow) must be within a valid sector
+to enter 3D mode.
+
+
+1.2     Level Basics: Sectors, Walls, Vertices, and Sprites
+
+Your level will be made of a few basic elements: sectors, walls, vertices,
+and sprites.  Sectors are like rooms and hallways and outside areas.  Sectors
+are made up of a floor, a ceiling, and walls.  Walls are just that - wall
+space between the floor and the ceiling of a sector.  The two points on
+either side of the wall, as seen in 2D mode (seen as corners in 3D mode), are
+its vertices.
+
+Sprites are used for bad guys, goodies, sector effectors, etc..  They can
+also be made to lay flat on walls, floors, and ceilings.  These flattened
+sprites can be used for switches, blood splats, and decorations.
+
+        1.2.1   Sector, Wall, and Sprites Attributes
+
+        You can see the attributes (shade, tags, tile number, etc.) of
+        sectors in 2D mode by pointing at them and hitting the TAB key.
+        You can do the same for walls and sprites with the Alt-TAB keys.
+        (NOTE: Alt-TAB is by default a Windows 95 system key. If you are
+        using BUILD in an MS-DOS box under Windows 95, you may wish to
+        uncheck the Alt-TAB key in your MS-DOS box properties.)
+        Since walls can be double-sided, make sure you point on the exact
+        side of the wall before hitting Alt-TAB.
+
+1.3     2D Editor Mode
+
+2D mode editing is used to lay out the basic level.  It provides you with
+a top view of your level and shows your level's walls and sprites on a grid.
+It is very similar to a blueprint and most of a level's preliminary work is
+done in this mode.
+
+When editing in 2D mode, use the left mouse button to grab things (vertices,
+sprites) and move them around the map.  Use the right mouse button to move
+your current position around the map.
+
+You'll notice, in 2D mode, that the closest sprite, the closest vertex,
+and the closest wall to the white arrow will blink.  This indicates that
+these particular objects will be acted upon by you.  This will be more
+important later when you start using high and low tags, and hit scan/
+blocking.  For now, though, you need to know that the blinking vertex is
+the one you'll grab if the mouse's left button is used.
+
+        1.3.1   2D Grid and Resizing the Grid
+
+        There are seven gradations to the 2D mode's grid.  The first six will
+        actually display a grid of six varying sizes and a seventh with no
+        grid at all.  The six grid sizes give you varying control and
+        accuracy on sector wall and sprite placement.  Detailed work on very
+        small spaces or tight sprite locations can be done at the sixth,
+        finest grid size, while more grand, room-sized leveling can be done
+        with the larger grid sizes.  The seventh, gridless display is usually
+        only used to capture screen shots of levels for printing and
+        planning.
+
+        1.3.2   2D Grid Locking Feature
+
+        When drawing walls or placing sprites in 2D mode, you'll notice that
+        the wall's vertices, and the sprites, are placed exactly on grid
+        cross lines. This is very useful because almost everything you BUILD
+        will be rectilinear (square-shaped).  You will also want to keep
+        areas symmetrical and proportioned with respect to sector sizes for
+        rooms, doors, windows, etc..
+
+        We don't recommend turning Grid Lock Mode off until you feel
+        comfortable with BUILD and level designing.  When you want to make
+        crazy shapes with your sectors, or place sprites so precisely that
+        they need to be off the grid system, then use the "G" key to enable
+        and disable the Grid Lock feature.
+
+        1.3.3   2D Zooming In and Out
+
+        You can zoom in and out within the 2D mode by using the "A" key to
+        zoom in, and the "Z" key for zooming out.  These two keys, along with
+        grid resizing, can greatly help when trying to develop differently
+        sized areas of your maps.
+
+1.4     3D Editing
+
+The 3D mode of editing is used to do most of your level's designing. This
+mode resembles the actual game and therefore is more intuitive.  You
+will do your tile selections, shading, floor/ceiling elevations, etc. in
+3D mode.
+
+Holding the left mouse key after pointing at a sprite, wall, floor, or
+ceiling in 3D mode will hold it as selected, even if the sprite moves beyond
+the mouse's crosshair during an editing operation.
+
+There three ways to control your altitude in 3D mode: Game Mode, Height
+Lock Mode, and Float Mode.  Game Mode is just like the game; you will be
+affected by gravity.  Height Lock Mode will let you move around the level
+with no gravity and always at the same height above the current floor.  Float
+Mode will let you hover without gravity and your height will not be effected
+by the floor's height below.
+
+You can switch between these modes by hitting the CapsLock key.  You can
+change your altitude by hitting the "A" and "Z" keys.
+
+
+------------------------------
+2.      Building A Basic Level
+------------------------------
+
+2.1     Sectors and Walls
+
+A sector is the simplest and most fundamental of structures in your level.
+It is made of walls, a floor, and a ceiling.  You can control everything
+about each sector including its size and shape, the height of its floor and
+ceiling, the textures of its walls, and its shading and visibility.
+
+
+2.2     Build a Simple Sector
+
+        2.2.1  Start up BUILD
+
+        At the DOS prompt and within your Shadow Warrior directory, type the
+        following:  YOU MUST BE IN THE DIRECTORY BUILD IS IN TO DO THIS!
+
+        BUILD <map name>
+
+        If it's a new level, you'll start in 2D mode with an empty grid.  If
+        the level already exists, then you'll start in 3D mode at the
+        player's start point.
+
+
+        2.2.2   Make Your First Sector
+
+        If you're not already there, go to 2D mode (numeric pad "ENTER" key).
+        Make a square sector by pointing the mouse at a starting point for
+        the first wall of the sector and hit the SPACE bar.  You are now in
+        Line Drawing Mode and you will notice that a white line is now
+        following your mouse movements.
+
+        Drag the mouse to a second point where you want the first wall to end
+        and hit the SPACE bar again.  Continue in this fashion until a square
+        is made with last point's position being exactly where the first
+        point was put.  Line Drawing Mode will automatically stop when the
+        last point is connected to the first and your first sector is now
+        complete!  ...it's a milestone, so enjoy it ;)
+
+        Go ahead and check out your new sector by placing the mouse's white
+        arrow inside the new sector and hit the numeric ENTER key.  That's
+        it, your new sector.  Check the size of the 3D view and compare it to
+        the 2D view so you can get a feel for the grid size in 2D relative to
+        the actual area it creates.
+
+        The size of the sector can be changed (bigger, smaller) in 2D mode by
+        grabbing the vertices with the left mouse button and dragging them.
+        You can select more than one vertex by first positioning the mouse
+        pointer and holding the right SHIFT key and moving the mouse. This
+        will create a purple "rubber band" with which to select multiple
+        vertices and sprites. Release the SHIFT key and the surrounded items
+        will flash, indicating that they have been selected. Point to any
+        of the flashing items and hold the left mouse button, then move the
+        mouse. All of the selected sprites and vertices will move together.
+        Press the Right SHIFT key again to un-select these items.
+
+        The walls will be a bright gray stone tile if the map is a new one.
+        The walls will be the last defaulted wall if the map is not new.
+        We'll change the textures later, right now it's back to 2D mode
+        (numeric ENTER key)...
+
+        2.2.3   Backtracking in Line Draw Mode
+
+        If you make a mistake while in Line Draw Mode and want to backtrack
+        a line or more, then simply hit the Backspace key.  You'll see the
+        last placed point erased and the line it made removed.  You can
+        completely undo all your lines and cancel Line Draw Mode by
+        backspacing all the way back to the first point.
+
+
+2.3     Single-sided and Double-sided Walls
+
+You'll notice, upon returning to 2D mode, that your sector is made of
+white lines.  These white lines are single-sided walls.  A single-sided wall
+only has player space on one side; the other side is "null" and can never be
+occupied by the player or anything else.  Your new sector has player space on
+the inside, but not on the outside.
+
+Double-sided walls are red in 2D mode and they have player space on both
+sides.  Double-sided lines always separate two sectors.  We'll add more
+sectors to our one-sector level in a bit.
+
+
+2.4     Placing the Player's Start Position (IMPORTANT)
+
+It is important to make sure that the player's start position, indicated
+by a brown arrow in 2D mode, is within a sector (user space).  The game will
+not run properly if it tries to start the player in null space.
+
+Place the player's start position by putting the mouse, and the white
+arrow, where you want and hit "Scroll Lock".  The brown arrow will now be
+there (you'll have to move the mouse a bit to see it).  The player's starting
+direction will be the same as the brown arrow's.
+
+
+2.5     Quitting BUILD and Saving, Loading, Renaming Levels
+
+It's ALWAYS a good idea to test your level in stages as it grows.  Don't
+try to take on too much in any one editing session.  Let's stop here and load
+your new level into the game.  Even this simple level will make you utter
+"Cooool, I built this!" when you see it in the game.
+
+Exit BUILD by hitting the "Esc" key in 2D mode.  You can do a couple of
+things here.   We want to quit with the "Q" key and save our level by hitting
+the "Y" key when it asks.
+
+You can also simply save your level to disk with the "S" key and return
+immediately to BUILD.  We recommend that you do this often as you build more
+complicated levels.  You will often want to backtrack away from an idea and
+reloading a previous version of your level is much easier than undoing the
+idea.
+
+Although you don't need to now, in the future you will want to load in
+different levels during a single BUILD session.  This can be done by hitting
+the "L" key and selecting the level from the list.
+
+Finally, you can rename your level by hitting the "A" key and providing
+the new name.
+
+
+-------------------------------
+3.      Building A Better Level
+-------------------------------
+
+Let's make our single-sectored, ugly-textured level a little better.  We
+can start adding rooms and splitting sectors but, first, let's fix those
+textures.
+
+3.1     Modifying Wall, Floor, and Ceiling Textures
+
+        3.1.1   Selecting Textures
+
+        Go to 3D mode and point at a wall in your sector.  Hit the "V" key
+        and a screen will appear with textures.  If this is your first level,
+        then only that gray stone texture will be showing.  This first screen
+        of textures are all the ones that have been used in the current
+        level. Hit the "V" key again and the screen will fill with the
+        complete texture set.
+
+        Look for a texture that's cool and one that fits the level's motif.
+        You can peruse the textures with the arrow keys and PgUp/PgDn keys.
+        You can also go directly to a texture if you know its number.  Hit
+        the "G" key and enter the tile number.  This will be more helpful
+        later when you know where everything is.
+
+        Do the same for the other walls; or, if the same texture is to used
+        on all four walls (do this for now), simply point at the first wall
+        (3D mode), hit the TAB key, point at other walls, and hit the ENTER
+        key on each.
+
+        Select a texture for the ceiling and floor by first pointing to each
+        in 3D and then hitting the "V" key just as you did with the walls.
+        Again, the first screen will be the ceiling/floor textures already
+        used in this level and, by hitting the "V" key a second time, you
+        can get to all the textures.
+
+        Floor and ceiling texture sizes *must* be a factor of 8 pixels in
+        size to look right.  Most floor and ceiling textures are 64x64 or
+        128x128 pixels in size.  You'll notice a weird effect after selecting
+        a texture that's not proportioned correctly.
+
+        3.1.2   Shading Textures
+
+        Walls, ceilings, and floors can be shaded individually by pointing at
+        each and hitting the numeric pad's "-" and "+" keys in 3D mode.
+        Shading a level can take tons of time and it is crucial to any good
+        level to have good shading.  Don't spend too much time with it right
+        now; you can fine-tune the level later. ;)
+
+        3.1.3   Resizing Textures
+
+        The size of a texture can be changed (X and Y repeats for walls,
+        "expansion" and "compression" for floors and ceilings).  Like
+        shading, you shouldn't do much more than play with this feature for
+        now.
+
+        To change the size of wall textures, point at each in 3D mode and hit
+        the numeric pad's 2, 4, 6, and 8.  You can see the texture expand and
+        shrink.  If you want to go back to the default repeat value, point at
+        the wall and hit the "/" key.  This will reset most of the wall's
+        attributes to their defaults.
+
+        The effect of the numeric pad's "2", "4", "6", and "8" keys can be
+        incremented by a factor of four by holding the numeric pad's "5" key
+        down while hitting these keys.
+
+        To change the size of floor and ceiling textures, point at each and
+        hit the "E" key.  Floors and ceilings only have two sizes: "expanded"
+        and "compressed" (the numeric pad's keys will not function).
+
+        3.1.4   Panning Textures
+
+        Textures can be panned by pointing at the them in 3D mode and hitting
+        the Shift key and the numeric pad's "2", "4", "6", and "8".  You'll
+        see the texture shifting along in the direction of the numeric key.
+        Similar to texture sizing, you can hold the numeric pad's "5" key
+        down while hitting these keys to resize texture in increments of
+        four.
+
+        You shouldn't need to play with this feature too much for now and we
+        really only mention it early in case you've accidentally hit the
+        numeric pad without the "Shift" key (resizing texture) and wondered
+        what the heck happened to the texture.
+
+        3.1.5   Relative Textures (Floors/Ceilings)
+
+        A floor's/ceiling's texture can be oriented relative to a specific
+        wall. This can get a little confusing and we suggest you put it off
+        until later.
+
+        When you've finished this section, go ahead and make a triangular
+        sector and play with the floor's relative alignment by pointing at
+        the floor near one of the walls (in 3D mode) and hitting the
+        Alt-F keys.  Go over to another wall and hit Alt-F again.
+        ...cool, eh?
+
+        3.1.6   Parallax Floors and Ceilings
+
+        To make a ceiling texture look like an arching sky, point at it in 3D
+        mode and hit the "P" key. Most textures won't look good when set to
+        parallaxing;  it's best to use the textures intended for parallaxing.
+        Floors can also be parallaxed for a weird effect. Parallax skies never
+        look quite right in the BUILD editor. You have to run the game to see
+        the parallax sky working correctly. Shadow Warrior also provides ways
+        to alter the behavior of parallax skies, but that will be addressed
+        elsewhere.
+
+        Things can get a little tricky once a ceiling or floor has been set
+        to parallaxing.  When you start adding more sectors to your level,
+        especially ones that involve parallaxed ceilings/floors, some walls
+        will disappear or look weird in 3D mode.  It's hard to explain in
+        text here, but you'll see what we mean and you'll see what to do to
+        muscle your way through.
+
+        3.1.7   Orienting Walls to the Floor or Ceiling
+
+        Walls will either be oriented to the sector's floor or its ceiling.
+        You can change the wall's orientation by pointing at it and hitting
+        the "O" key. The orientation of the wall determines whether the
+        wall's tile moves with the floor or the ceiling.  To play with this,
+        simply point at a floor in your map and watch the wall as you raise
+        and lower the floor with the PgUp/PgDn keys.  Now point at the wall
+        and hit the "O" key.  Change the floor's elevation again and watch
+        the wall.  Notice that the wall tile moved with the floor in one case
+        and didn't in the other.  This will be more important when you start
+        using moving sectors.
+
+
+3.2     Splitting and Removing Walls
+
+You can split a wall into two, smaller walls (for texture changes, shading,
+etc.) in 2D mode.  To split an existing wall into two walls, point at the
+desired location along the wall and hit the Insert key.  A new vertex will be
+added along the wall.
+
+A split in a wall can be removed by dragging the undesired vertex to one of
+its neighbor vertices with the mouse's left button.  This will remove the
+vertex and thus make a single wall of the original two.
+
+
+3.3     Resizing and Moving Sectors
+
+Remember, you can resize the sectors of your level in 2D mode and the left
+mouse button.  Also, you can grab more than one vertex when doing this.
+Position the white arrow above and to the left of the desired group of
+vertices.  Hold the Right-Shift key down and you'll see a purple box grow and
+shrink as you move the mouse.  Make a box big enough to surround all of the
+desired vertices and release the Right-Shift key.  The selected vertices will
+all blink now and you can move them all by moving one.  To un-select the
+vertices, simply hit the Right-Shift key again.  Multiple sprites can be
+selected and moved like this, too.
+
+You can move entire sector groups by Right-Shifting them, but be careful to
+notice that this moves the sector(s) by the vertices.  If not all vertices
+are selected, then some of the sectors can get deformed and twisted.
+
+If you want to move sectors without regard to their vertices, then you can
+can them with the Right-Alt key.  A box similar to the Right-Shift selection
+one will appear.  This box will be green.
+
+You will have to play with the two selection features, Right-Shift and
+Right-Alt, to get a feel for their differences.  Save this for later.
+
+
+3.4     Altering Floor and Ceiling Heights ...and Textures again
+
+You can raise and lower floors and ceilings by pointing at each, in 3D
+mode, and hitting the PgUp/PgDn keys.  You can also, now, change the texture
+of the different floors and ceilings with the "V" key.
+
+
+3.5     Splitting, Joining, Adding, and Deleting Sectors
+
+We're now ready to split, add, and delete sectors.  From here you will be
+able to add rooms, windows, doors, whatever to your level.  Most of this
+designing will be in 2D mode and keep Grid Locking "ON".
+
+        3.5.1   Splitting Sectors
+
+        Let's split our single-sectored level into a two-sectored room.
+        Add a vertex to two of the opposing walls in the sector; that is,
+        split two of the walls.  Point at either of these two new
+        vertices and hit the Space bar. You are in Line Drawing mode and
+        should point the mouse at the other new vertex and hit Space bar.
+        Your original sector is now split into two.  Go into 3D mode for
+        a moment and play with the two different floors and ceilings.
+
+        3.5.2   Joining Sectors
+
+        You can join the two new sectors back into their original single
+        sector by pointing at one of the sectors in 2D mode and hitting
+        the "J" key. At this point you can cancel the join operation only
+        by going into 3D mode. If you do want to join two sectors, point
+        to the second sector and hit the "J" key again.
+
+        3.5.3   Adding a Sector
+
+        In effect, we added a sector when we split the original sector just
+        before.  There are a few more ways that we can add sectors to our
+        level.  We can create a new, stand-alone sector independent of an
+        existing one, we can add a new sector along the outside of an
+        existing one, and we can make a sector inside an existing one.
+
+                3.5.3.1   Adding an Independent Sector
+
+                To add a new, independent sector to your level, simply follow
+                the stages that you did above.  You can decide to connect
+                independent sectors later, if you wish.
+
+                3.5.3.2   Adding an Extension Sector
+
+                You can add a new extension to your level by starting Line
+                Drawing at one of the vertices in 2D mode.  Draw three lines,
+                outside the original sector, with the third ending at the
+                vertex on the original sector such that a square is made by
+                the three new lines and one of the lines in the original
+                sector. Notice the line between the two vertices of the first
+                sector has turned red indicating that it now separates two
+                sectors.  The original single-room sector is now bigger and
+                made of two sectors.
+
+                3.5.3.3   Adding a Sector within a Sector (island)
+
+                Draw a sector within an existing sector the same way you did
+                with the original sector.  When the four walls are connected
+                and the inner sector is established, it will be made of
+                single-sided (white) walls.  This means that the space inside
+                the new sector is null and the original sector is now
+                doughnut-shaped.
+
+                If you want to make an actual sector-in-a-sector, then
+                position the mouse cursor inside the inner sector and hit
+                Alt-S.  This will change the inner sector into valid
+                player space.
+
+                3.5.3.4   Adding a Sector within a Sector (peninsula)
+
+                You will probably need to insert connection points for the
+                new sector. Add the new sector by starting at one of the
+                newly inserted vertices and drawing 3 lines inside the
+                original sector, ending at the other newly added vertex.
+                This new sector will automatically be made of double-sided
+                lines and the new sector will be a valid sector.
+
+        3.5.4   Deleting a Sector
+
+        You can delete a sector, in 2D mode, by placing the white arrow in
+        it and hitting the Ctrl-Delete keys.  Be careful!  There is no
+        "undo" feature in BUILD, so its usually a good idea to do a quick
+        Esc-and-Save before deleting sectors.
+
+
+3.6     Incremental Backups of Your Level
+
+As your level gets bigger and more complicated, I highly recommend that
+you quit and save it in it's growing versions as you go.  That is, use the
+"Save (A)s" feature to give your map incremental filenames. For instance,
+while working on the Bath House map, I saved my working copies as BATH1.MAP,
+BATH2.MAP, and so on. The final version I renamed $BATH.MAP. It's a good idea
+to make progressive, incremental backup copies of a level at least once an
+hour.  With these backup copies, not only can you backtrack to previous
+versions of a level if an idea goes bad, but you can also try different
+variations of the same level.
+
+You should play with sectors now and get a good feel for their basic
+layout.  Try adding rooms and hallways.  Change some floor and ceiling
+heights.  Play with the textures.  Next we'll start adding sprites (weapons,
+goodies, bad guys, etc.) and you can actually "play" your level.
+
+
+----------
+4. Sprites
+----------
+
+Sprites are used for bad guys, weapons, ammo, goodies, switches, and
+decoration.  You probably noticed while you were looking for wall textures
+before, that the art work for these things were there, too.  When you start
+adding sprites, take a look around within the textures again; there are lots
+of sprites and they're often good for inspiring ideas for the level.
+
+In 2D mode, sprites will appear as little dots with a tail.  If the sprite
+has a name assigned to it, such as "shotgun", this will be displayed if you
+are zoomed in enough.  The tail of the sprite tells you its orientation.  The
+sprite will point in the direction of the tail when it's initiated by the
+game.
+
+
+4.1     Adding Sprites
+
+You will usually use 2D mode for sprite placement because it's more
+accurate and seems more convenient with a top view.  Go to 2D mode, point at
+a place for the sprite and hit the "S" key.  The "S" key will work in 3D mode
+in the same way - point at the spot on the floor or ceiling where you want
+the sprite and hit "S".
+
+Go to 3D mode and look at the sprite.  If this is a new map, or at least
+one without any sprites, you won't see it. This is a mysterious quirk of
+Shadow Warrior BUILD. Return to 3D mode and press "ESC" to bring up the ESC
+menu. Press "Q" to quit, and press "Y" when prompted to save. Once in DOS,
+run BUILD again and reload your level. Now, when you enter 3D mode, you'll
+be able to see your sprite. It will appear as the default gray stone texture.
+You can select the right texture for the sprite in the same way that you
+selected wall textures.
+
+Point at sprite hit the "V" key.  The first screen are the sprites already
+used in current map and hitting the "V" key again will show all the textures.
+Use the arrow keys and PgUp/PgDn to move around the textures and hit Enter
+when you see the one you want.
+
+You can leave the sprite on the floor or move it up and down with the
+PgUp/PgDn keys in 3D mode.  Ctrl-PgUp and Ctrl-PgDn, while pointing at the
+sprite, will put the sprite directly on the ceiling or floor, respectively.
+
+
+        4.1.1   Adding Weapons and Goodies
+
+        You'll find all of the weapons, ammo, and goodies starting at texture
+        1765. Select one of these.
+
+        4.1.2   Adding Bad Guys
+
+        The bad guys are scattered arbitrarily throughout the textures set.
+        You'll notice, when you find them, that all of the poses of each
+        character is there.  When placing a bad guy, you'll usually be using
+        his first walking frame. If you use the wrong frame, then the actor
+        won't animate when you run the game.
+
+                4.1.2.1   Bad Guy Frames
+
+                You will usually select the first sprite texture (called a
+                "frame" because these frames are used to animate the bad guy
+                within the game) for the bad guy. This is not always the
+                case, however. Here is a quick reference list of the correct
+                frames to use for bad guys in Shadow Warrior:
+
+                Tile # / Actor
+                800    - Hornet
+                817    - Bouncing Betty
+                820    - Accursed Head
+                1210   - Sumo Boss
+                1300   - Serpent Boss
+                1400   - Coolie
+                1441   - Coolie Ghost
+                1469   - Green Guardian
+                1580   - Little Ripper
+                3780   - Fish
+                4096   - Evil Ninja
+                4162   - Crouching Evil Ninja
+                4320   - Big Ripper
+                5162   - Female Warrior
+                5426   - Zilla Boss
+
+
+4.2     Modifying Sprites
+
+        4.2.1   Resizing and Shading Sprites
+
+        The size of the sprite can be changed by pointing at it in 3D mode
+        and hitting the "2", "4", "6", and "8" keys on the numeric pad just
+        the way you did to resize wall textures.  You will probably want to
+        resize most of the sprites to what looks good to you, but beware,
+        always be consistent and keep all similar sprites the same size
+        throughout the level.
+
+        You can also shade the sprite in 3D mode with the "-" and "+" keys on
+        the numeric pad.  It's usually a good idea to keep the shade setting
+        at zero and let the sector's shade take control during the game,
+        except in certain special cases, like a light sprite or fire.
+
+
+4.3     Making Copies of Sprites
+
+If you want to make exact copies of a sprite, you can point at it in 3D mode,
+hit the TAB key and now, each time you hit the "S" key to add a sprite, it
+will generate a copy (size, shading, and all).
+
+
+4.4     Moving Sprites
+
+Sprites can be moved around the level in 2D mode by pointing at the sprite
+and holding the left mouse button down.  Remember that more than one sprite
+can be selected with the Right-Shift key.
+
+
+4.5     Deleting Sprites
+
+Sprites can be deleted in either 2D or 3D mode by pointing at it and
+hitting the Delete key.
+
+
+4.6     Flipping Sprites and Sprite Angles
+
+You can flip the sprite's texture in 3D mode by pointing at it and hitting
+the "F" key.
+
+
+------------------------
+5. Advanced Sector Stuff
+------------------------
+
+As you start trying more difficult level designing, keep in mind that many
+of the things you want to do are already done in other levels.  You should
+load some of our levels into BUILD and see how we did things.  There are tons
+of tricks and neat things in BUILD, and we can't mention most of them here.
+
+
+5.1     Cut-and-Pasting Sectors
+
+You can cut-and-paste a sector or group of sectors.  This can save you
+lots of time when making multiple copies of doors, elevators, and other
+sector gizmos.  You can also grab sections of other levels and copy them into
+your current level.
+
+        5.1.1   Within the Same Level
+
+        Sector-select (Right-Alt key in 2D mode) the group of sectors that
+        you want to copy.  While the desired sectors are blinking green,
+        point the mouse within the group and hold the left button down.
+        (Be careful not to move the group while holding the mouse button
+        down.)  Hit the Insert key and the group of sectors will be copied.
+        Keep the left mouse button depressed and move the new group of
+        sectors to their new location.  When the new group is relocated,
+        hit the Right-Alt key again to un-select the group.
+
+        Notice that everything was copied: sprites, walls, tags, everything.
+        You may have to re-assign switch tags and check weapons and goodies.
+
+        5.1.2   Between Different Levels
+
+        You can also copy sectors from one level to another.  Grab and copy
+        the group of sectors the same way as described above (Right-Alt
+        select group in 2D mode, hit Insert key while holding left mouse
+        button down over sector group).  While the new, copied sector group
+        is still blinking green, hit the Escape key and load in the second
+        level.  When it is loaded into BUILD, the copied sector group will
+        be overlaid and you can re-position it.
+
+        It's always a good idea to do a quick Escape/Save after copying a
+        group of sectors into another level.  After copying and positioning
+        the group, un-select it (Right-Alt) and save the level.
+
+
+5.2     Overlapping Sectors
+
+BUILD will let you overlap sectors and you can do some really cool things
+by doing so. Overlapping is one of the more powerful abilities of the BUILD
+engine, allowing multiple floors over floors. Two extreme examples in
+Shadow Warrior are Bath House and Water Torture, although you'll find minor
+uses of overlapping sectors in almost every map. Two restrictions are:
+
+1) You can never see 2 overlapping floors/ceilings in 3d mode. The sectors
+   can be cut to get around this.
+2) Overlapping sectors can never share a double-sided (red) wall
+
+
+----------------
+6. Miscelleanous
+----------------
+
+6.1     Sector's "First" Wall and Relative Floors/Ceilings.
+
+The wall between the first two points of a sector is the sector's first
+wall.  You can select the sector's first wall by pointing at the floor or
+ceiling, in 3D mode, just in front of the desired wall and hitting the Alt-F
+keys.  More times than not, you will not need to re-assign sector first
+walls.
+
+If you want to align the floor/ceiling textures along a specific wall,
+usually to make the pattern in the texture match the direction of the wall,
+you can make the floor/ceiling texture "relative".  To toggle between
+relatively aligned textures and normally aligned textures, point at the floor
+or ceiling in 3D mode and hit the "R" key.
+
+You may also want to make floors/ceilings relative when you start playing
+with moving sectors.
+
+
+6.2     Slopes
+
+You can slope a floor or ceiling by pointing to it with the cursor in 3D mode
+and pressing the "[" or "]" keys.
+
+You can make a slope align perfectly with the next sector's floor or ceiling
+by using the Alt-[ and Alt-] keys.
+
+
+6.3     Multi-Player/Co-Op Start Points.
+
+Refer to ST1.TXT for more information regarding how to place multiplayer
+and co-op start points in Shadow Warrior BUILD.
+
+For multiplay, spread the starting positions around the level in good
+places where none of the players will have an advantage over the others (near
+a good weapon, etc.).  For co-op, place all the player starts right near the
+single-play start position (brown arrow in 2D mode) so that the co-op team
+will be together at the start of the game.
+
+NOTE: Never forget to place a multiplayer and co-op start point for player
+zero. In Shadow Warrior, this is very important, and a network game may go
+out of sync if you forget.
+
+
+6.4     Multi-Play Weapons
+
+Most weapons and items, as well as switches and a few other things, can be
+made to appear only in WangBang. To do this, go into 2D mode and point to the
+sprite you wish to make multiplayer-only. Press F8, then select "2".
+The sprite's sign will now read "MULTI." If you later decide to make the
+sprite appear in solo and co-op play, repeat this process and the "MULTI"
+flag will be turned off.
+
+
+6.5     Okay, What Next?
+
+That's it for this tutorial, which hopefully acquainted you with a few of
+BUILD'S most basic features. Now you might want to peruse the second part
+of this document, which is a complete reference guide to the BUILD editor's
+functions, and contains some information not covered in the tutorial. From
+there you might want to take a look at EXAMPLE.MAP, which contains simple
+demonstrations of almost all of Shadow Warrior's map functionality. Also be
+sure to look at ST1.TXT, which is a reference to all of Shadow Warrior's
+extensive sector effector library, and TAGS.TXT, which is another
+reference, to Shadow Warrior's sector and wall tags. Good luck!
+
+
+-----------------------------------------------------------------------------
+II. PART 2: Shadow Warrior BUILD Reference
+-----------------------------------------------------------------------------
+
+-------------------------------------------------
+7.      2 Dimensional Mode (Sector Editing Mode):
+-------------------------------------------------
+
+Shadow Warrior's BUILD is comprised of two basic editing modes: 2 dimensional
+and 3 dimensional.  These modes are also sometimes referred to as sector
+editing mode, and game view mode.
+
+2d mode is one half of the total editor.  It is necessary to use 2d mode in
+the construction of any map as it is 2d mode that is used to draw and modify
+physical sectors. The screen in 2d mode displays the edit area (looks like a
+grid), the command line (where menu's appear and where you'd type input when
+needed, just to the right of the message: BUILD, By Ken Silverman), the
+information area (displays pertinent information about selected objects),
+and the statistics bar (includes cursor position and angle, and resource
+information like used and total available sectors, walls and sprites). The
+edit area is where most of your work in 2d mode is done.  On the 2d mode
+edit area you will see the following:
+
+7.1      Grid: This is the graph-like series of lines that overlay the edit
+area. The intersection points of these lines are the points on the grid that
+the cursor will lock to when placing or moving objects like sprites and
+vertices.
+
+7.2     Mouse Cursor: This is indicated by a red or white cross in the edit
+area and can be moved with the mouse.
+
+7.3     Player Position: This is from where your view would be in 3d mode. It
+appears as a white arrow which points in the direction the view will face in
+3d mode.
+
+7.4     Vertices: These are the endpoints of lines and the corners of
+sectors. They are represented by small green boxes.
+
+7.5     Lines/walls: Lines define walls and divisions between sectors. A
+white line is a one sided wall that has valid player space on only one side,
+while a red line is a two sided wall that has valid player space on both
+sides.
+
+7.6     Sectors: An area enclosed by white or red lines (or a combination of
+both) is a sector.  A sector can be made up of any number of lines/walls and
+can take on any geometric shape.
+
+7.7     Sprites: Sprites are objects in the game. They are represented by
+colored dots with a long tail. The tail points in the direction the Sprite is
+facing (default: north).
+
+7.8     Signs: Signs appear within sectors, along lines/walls, and over
+sprites whenever those objects have been tagged with a palette, HiTag or
+LoTag greater than zero.
+
+7.9     Colors: There are color codes that are useful in determining the type
+of effect that has been placed on the objects found in 2d mode.  These color
+codes vary depending on the object. Generally, a pink object (wall or sprite)
+is a solid (impassable, blockable) object, and a double thickness pink/blue
+line is also attributed as having "HitScan." A red cursor appears when grid
+locking is on, and a white one appears when grid locking is off.  A white
+line is a one sided wall, while red lines have two sides.  Note: While a line
+is pink, it will not also indicate visually in red as being a two sided wall
+as it is assumed that only two sided walls can be made to be blockable.
+
+
+-----------------------------------------------------------
+8.      Editing in 2 Dimensional Mode (Sector Editing Mode)
+-----------------------------------------------------------
+
+Below are all the functional keys for 2 Dimensional Mode in Shadow Warrior's
+BUILD.
+
+
+8.1     Control in 2D Mode
+
+        8.1.1   Mouse: Movement of the mouse will position the cursor in the
+        edit area window.
+
+        Left button Click: Used to select an object.
+
+        Left button Click and drag: Used to manipulate a vertex or sprite.
+        Dragging the mouse with the left click held will move the nearest
+        object with the mouse cursor.
+
+        Right button Click: Used to place the Player Position Cursor.
+
+        Right button Click and drag: Used to move the Player Position Cursor
+        as you move the mouse.
+
+        8.1.2   Keyboard Control: The following keys will also move the
+        Player Cursor.
+
+        Arrow Keys: Used to rotate and move the Player Position Cursor (white
+        arrow).
+
+        Left Alt: Used with arrow keys to strafe the Player Position Cursor
+        left or right. [Note: The default key in BSETUP for strafing is
+        Right-CTRL]
+
+        Left Shift: Used to increase the movement speed of the Player
+        Position Cursor. Hold left-shift while using the arrow keys for
+        movement faster movement.
+
+        A: Used to zoom in on the map (higher detail, less view area).
+
+        Z: Used to zoom out on the map (lower detail, more view area).
+
+
+8.2     Keyboard Commands for 2D Mode
+
+Most commands are initiated with the keyboard. The following is a list of
+commands available in 2d mode. Note: a command that starts with "Num" is
+only activated with the numeric keypad.
+
+        8.2.1   Esc Menu
+
+        Esc: Gives you the file menu with the following commands: New, Load,
+        Save, Save as, and Quit.
+
+                (N)ew: Starts a new map (asks for confirmation).
+
+                (L)oad: Loads a map from the list of all maps found in edit
+                directory. Loading a new map will not give you an automatic
+                opportunity to save current work as in most applications.
+
+                (S)ave: Saves whatever map you're working on as its current
+                title. Un-named maps will be saved as "NEWBOARD.MAP".
+
+                Save (A)s: Allows you to choose a file name for the map you
+                are working on and saves it as that filename. Note: Do not
+                include the .map filename extension with your file name
+                input.  The .map extension is automatically appended to the
+                filename when you hit Enter.  Also, using this feature to
+                save a map that already exists with that name will
+                automatically overwrite the file without a warning.
+
+                (Q)uit: Will allow you to escape to the operating system. An
+                option of saving your work is given after you confirm your
+                desire to exit BUILD.
+
+
+        8.2.2   Basic 2D Editing Commands
+
+        NumEnter: Toggles mode from 2d to 3d.
+
+        Scroll Lock: Used to set the starting position for the Shadow Warrior
+        in game mode. A brown arrow (similar to player position cursor) is
+        left wherever the player position cursor was placed.
+
+        G: Used to cycle through the various grid resolutions.  There are six
+        different settings from no grid to 16x. The default size is 4x and
+        each size is exponential (twice the next size in area).
+
+        L: Used to toggle "grid locking". When grid locking is on the mouse
+        cursor is red and all objects will snap to grid points. When grid
+        locking is off the mouse cursor is white and all objects will float
+        free (true placement).
+
+        B: Sets "Blocking" on walls and sprites under the mouse cursor.
+        The object will now appear pink.
+
+        Shift B: Sets one-way blocking on walls.  Will only block the wall
+        from one direction (side on which the blocking bit was set).
+
+        Ctrl H: Sets "Hitscan" on wall and sprites under the mouse cursor.
+        The object will glow, and lines will be double thickness.
+
+        Tab: Use this key to display the attributes of a sector. Attributes
+        appear in the information window.
+
+        Alt-Tab: Used to see the attributes of sprites and walls. NOTE: By
+        default this is a Windows 95 system key. If you are running BUILD in
+        a Windows 95 MS-DOS box, Alt-Tab will return you to the desktop. To
+        avoid this, uncheck the Alt-Tab option in your MS-DOS box properties.
+
+        Enter: Displays "Highlighted line pointers checked" Will check
+        pointers under cursor.
+
+        Lt Shift Lt Ctrl Enter: Checks and Fixes all pointers in map. Usually
+        fixes mis-referenced lines and sectors. In very large maps you will
+        find yourself needing to do this now and then.
+
+
+        8.2.3   Line and Sector Drawing Commands in 2D Mode
+
+        Space: Used to place vertices when drawing sectors. The space bar
+        will always create a new vertex unless the mouse is directly over an
+        existing vertex when it is pressed.  There are other conditions that
+        will prevent a newly placed vertex from sharing or linking with an
+        existing vertex including but not limited to non-grid locking mode,
+        and trying to build a sector in sector that meets the outer sector
+        at only one (starting) vertex.
+
+        Backspace: Use the backspace when drawing new sectors (spacebar) to
+        remove the last vertex you placed.  You can use multiple backspace
+        keypresses to completely undo the sector creation.
+
+        Insert: Inserts a new point along an already existing line when the
+        mouse cursor has highlighted the line. Also can be used to copy or
+        duplicate a group of sectors that have been selected with the "Right
+        Alt" key. Also can be used to copy or duplicate a group of sprites
+        that have been selected with the "Right Shift" key.
+
+        Rt Ctrl Delete: Used to delete sectors. Recommend saving map before
+        attempting sector deletes. Can also be used to delete an entire group
+        of sectors selected with the "Right Alt" key.
+
+        J: Used to join two sectors. Press J once over first sector and a
+        second time over the second sector you wish to join. Note: This
+        function is the best (cleanest) way to delete "red" sectors when you
+        wish to keep the sector area as valid player space. If you
+        accidentally hit J once, and want to cancel the join operation,
+        change to 3D editing mode and back again hitting the NumEnter key.
+
+        Alt S: Used inside a white walled sector to create valid player space
+        on both. sides. This command will turn the walls of a newly placed
+        sector in a sector with red lines.
+
+        C: Change a line into a circle. After first press move the mouse to
+        choose the size of the circle, use -/+ to change the number of
+        vertices around the circle. Press "C" again to cancel the selection
+        or use spacebar to change the map by adding the indicated curved
+        line.
+
+        Alt F: Use Alt-F to set the "first wall" of a sector. The
+        "first wall" is used in determining the pivot point (hinge) for
+        angled floors and ceilings in 3D Mode. Also, the floor and ceiling
+        textures align themselves from the "first wall" if "relative
+        alignment" mode is on (press R on floor/ceiling in 3D Mode).
+
+        T: Use inside of a sector to add a "LoTag" (Tag 2) to that sector.
+        You will then input your LoTag value in the "Command Line" window
+        (center of screen).  Use this command again if you wish to change
+        your LoTag value.
+
+        Alt T: Use to add a "LoTag" (Tag 2) to a wall. Use the mouse to
+        highlight the wall you desire to change the "LoTag" for. When
+        highlighting walls, make sure a sprite isn't also highlighted to
+        adjust wall tag. Move cursor to one end of wall. Also note: Walls
+        can be tagged on each side of line.
+
+        H: Used inside of a sector to add a "HiTag" (Tag 1) to that sector.
+
+        Alt H: Used to affect "HiTag" (Tag 1) for walls.
+
+
+        8.2.4   Sprite Editing Commands in 2D Mode.
+
+        S: Creates a sprite at the mouse cursor position.
+
+        Delete: Used to delete sprites.
+
+        < and >: Changes the angle of a sprite. Use the mouse cursor to
+        highlight the sprite first.
+
+        Shift < or >: Changes the angles of sprites in smaller increments.
+
+        Alt T: Use to add a "LoTag" to a sprite. Use the mouse to highlight
+        the sprite you desire to change the "LoTag" of.
+
+        Alt H: Used to affect "HiTag" for sprites.
+
+        ' 1 - 0: Will allow you to adjust the 1-10 tag number for the
+        highlighted sprite. NOTE: Tag 4 is also the sprites angle.
+
+        Shift ' 1 - 5: Allows you to adjust the 11-15 tag number for the
+        highlighted sprite.
+
+        ; 1 - 0: Used to adjust the boolean tag 1-10 for the
+        highlighted sprite.
+
+        Shift ; 1: Used to adjust the boolean tag 11 for the highlighted
+        sprite.
+
+        ' V: Toggles verbose sign information attached to tagged sprites.
+        There are several different levels of verbosity.
+
+        ' K: Toggles through the 4 skill levels for actors.
+
+
+        8.2.5   Group Selection Commands in 2D Mode
+
+        Right Shift: Hold this key as you drag the mouse (left click and
+        hold) to select a group of vertices and sprites for movement. Selected
+        objects will blink.  You may then move all of the selected objects as
+        one by clicking and dragging any of the highlighted objects.
+
+        Insert: Will paste copies of any sprites selected with Right Shift.
+
+        Right Alt: Another group selection tool that can be used for
+        duplicating sectors, or moving them around. Used exactly like "Right
+        Shift". When objects are selected in this way the selected objects
+        are indicated with sectors filled in with green flashing lines. Left
+        click and dragging the mouse over a group of Right Alt selected
+        sectors will allow you to move the sectors by moving the mouse.
+        Note: Right Alt selected sectors will remain in their place in the
+        map area if new maps are created or loaded from the Esc Menu. By this
+        method sectors and sprites can be copied from one map to another.
+
+        Rt Ctrl Delete: Deletes all sectors selected with Right Alt.
+
+        Rt Ctrl Insert: Copies all sectors (and sprites) selected with the
+        Right Alt function. Holding the Left Mouse Button over the Group
+        Selected sectors before they are copied will allow you to move the
+        newly created sectors anywhere in the map area.
+
+        < and >: Rotates all sectors selected with Right Alt.
+
+        Lt Shift < and >: Rotates all sectors selected with Right Alt in
+        tiny increments.
+
+
+        8.2.6 Advanced 2D Mode Editor Functions
+
+        ' M: Provides menu: 1) Plax Set, 2) Plax Adjust, 3) Shade Adjust,
+        4) Visibility. Used for adjusting global settings for parallax
+        floors/ceilings.
+
+        F5: Displays next available tag and sprite information. Useful when
+        populating. Some of the items tallied are no longer meaningful.
+
+        F6: Context sensitive help. Displays information about object under
+        cursor. If cursor is over an ST1 Sprite, specialized help menus
+        describe special effect functions. This help will usually be the same
+        documentation found in ST1.TXT. Sometimes particular tag will have
+        multiple pages of help, in which case you will be prompted to press
+        a key to see the next page, or the Q key to cancel context sensitive
+        help.
+
+        F7: Used to scroll through F8 search results.
+
+        F8: Brings up menu for use with sprites:
+        1) Skill level: Sets minimum skill level in which an actor will
+           appear (0-3).
+        2) Multiplayer item: Sets a switch, crack, lock, or item to only
+           appear in WangBang.
+        3) Find Sprite: Activates sprite search function. (See below)
+        4) Debug: Programmer's use only.
+
+        If option 3 is selected the following menu appears. Select the
+        criteria by which to search.
+        1) PicNum: Searches for matching Sprites by tile number when set to
+           "True."
+        2) HiTag: Searches for matching HiTag numbers when set to "True."
+        3) LoTag: Searches for matching LoTag numbers when set to "True."
+        At least one of the above options must be set to "True" to
+        activate search. Once the search is initiated, hit F7 to cycle
+        through each sprite that matches the search criteria.
+
+
+----------------------------------------------------
+9.      3 Dimensional mode (game view editing mode):
+----------------------------------------------------
+
+3D Mode gives you a view of the world you're editing as if you were actually
+playing the game. This mode differs from the game, however, in that there is
+no status bar, and you cannot interact with the world in game terms. You can
+interact with the world in editing terms, however, as it is in this mode that
+you will shape your world vertically. It is also in this mode that you will
+select art and light levels for structure surfaces (sectors and walls) and
+sprites (objects, monsters, etc).
+
+In this view you'll find (in addition to whatever is in your world) a couple
+of important things. The first is your editing cursor. It appears as a white
+cross and is moved with the mouse. Also, in the upper left hand corner,
+you'll see a number counter. This is the frame rate counter which constantly
+updates the number of frames per second(fps) you're getting as you move
+through your world in 3D Mode. FPS represent how many times per second the
+screen is redrawn.
+
+9.1     Cursor: This white cross floats about your screen as you move the
+mouse and will serve as the main pointer to select surfaces and sprites to
+affect in this mode. To choose an object or surface to modify, you may simply
+move the mouse cursor over that object or surface and perform the function
+you wish to apply.
+
+9.2     Frame Rate Counter: This displays the current "frames per second."
+The more complex the area within your view, the lower the frame rate will
+become.  Frame rate is very important to game play, so try to keep your frame
+rate as high as possible when editing.
+
+9.3     Floors/Ceilings: The top and bottom surfaces in 3D Mode are called
+ceilings and floors, they carry a texture (tile), shade, and control
+visibility for their sector. Floors and Ceilings are the 3D Equivalent of
+sector areas.
+
+9.4     Walls: Wall surfaces are the 3D Mode equivalent of lines. They
+carry texture (tile) and shade information and may be tagged for special
+functions.
+
+9.5     Sprites: Objects in 3D Mode are sprites. They can be rotated flat
+against walls or floors and ceilings, or they may remain as "rotating"
+sprites. Sprites also will carry tag information for special events. Sprites
+carry art (tile), shade and size information.
+
+
+-----------------------------------------------------
+10.      3 Dimensional mode (game view editing mode):
+-----------------------------------------------------
+
+Below are all the functional keys for 3D Mode in Shadow Warrior's BUILD.
+
+10.1     Control in 3D Mode
+
+        10.1.1   Mouse
+        Movement of the mouse will position the cursor within the 3D view.
+
+        Lft Click/Drag: Will "hold" the selection even if the mouse is moved
+        from the surface or object.  An object or surface that has been
+        "held" may be edited with almost any of the functions in 3D Mode even
+        if the object or surface is no longer under the cursor.
+
+        10.1.2   Keyboard Controls
+        The following keys will affect the player view and move the "camera"
+        through the world in 3D Mode.
+
+        Arrow Keys: Will move the view forward and back, and rotate left and
+        right.
+
+        Left Alt: Used with arrow keys to strafe the view left or right.
+        NOTE: The default key in BSETUP for strafing is Right-CTRL.
+
+        Left Shift: Used to increase the movement speed of the view. Hold
+        left shift while using the arrow keys for movement faster movement.
+
+        A: Used to adjust the vertical position of the camera upwards
+        according to what view mode is currently active (See: Caps Lock,
+        below).
+
+        Z: Used to adjust the vertical position of the camera upwards
+        according to what view mode is currently active (See: Caps Lock,
+        below).
+
+        Caps Lock: Changes vertical view mode. Setting are: Normal (A and Z
+        will cause view to "jump" and "crouch"), Floating (A and Z will
+        smoothly float view up or down), and Incremental (A and Z will
+        adjust view by increments up or down).
+
+        Lft Ctrl A: Will tilt the view upwards, as in looking up without
+        changing vertical position.
+
+        Lft Ctrl Z: Tilts the view down, as if you were looking down
+        without changing vertical position.
+
+
+10.2    Keyboard Commands for 3D Mode
+
+Most commands are initiated with the keyboard. The following is a list of
+commands available in 3D Mode. Note: a command that starts with "Num" is only
+activated with the numeric keypad.
+
+        10.2.1 Basic 3D Mode Editing Functions
+
+        NumEnter: Toggles back into 2D Mode.
+
+        Page Up: Moves the selected object or surface (floor or ceiling only)
+        up one unit.
+
+        Page Down: Moves the selected object or surface (floor/ceiling only)
+        down one unit.
+
+        [ and ]: Slopes the selected floor or ceiling surface along the
+        "first wall." (see above)
+
+        Lt Shift [ and ]: Slopes selected floors and ceilings in smaller
+        increments.
+
+        Lt Alt [ and ]: Aligns a sloped surface exactly to the height of the
+        next surface in the direction the camera is facing.
+
+        /: Resets default settings. If the cursor is pointing to a floor or
+        ceiling, it flattens slope, and resets the pan of texture. If the
+        cursor is pointing to a wall, it resets the pan and stretch of the
+        wall texture. If the cursor is pointing to a sprite, it resets the
+        stretching of the sprite.
+
+        V: Texture/art selection. The first press will bring up a tile menu
+        showing all textures currently within map on like surfaces to what
+        the cursor was pointing to. In other words, if you press V while the
+        cursor is pointing at a wall, you will see a list of all the other
+        wall textures used in the map. V can be used to select textures for
+        four different surface types: walls, floor/ceilings, sprites, and
+        masked walls. The number under each tile is the number of times it
+        appears in your map on that type of surface. Pressing V again while
+        in this menu will bring up a texture/art tile menu showing every
+        available piece of art.
+
+        G: (Tile Mode) Pressing "G" while in the tile view menu will allow
+        you to input a "goto" number. This will jump the cursor to a selected
+        tile number in the art file.
+
+        B: Sets the blocking bit to the object/surface under the cursor. If
+        set to a red line, the player will not be permitted to cross that
+        line.
+
+        Shift B: Sets a one way blocking wall.
+
+        H: Sets the hitscan bit to the object/surface under the cursor.
+
+        M: Creates a masking wall across the selected sector line.
+
+        Shift M: Creates a one way masking wall across the selected sector
+        line.
+
+        T: Sets the masking wall or sprite to a translucency level. Toggles
+        from normal to slightly translucent to very translucent and back to
+        normal again.
+
+        1: Creates a one way wall over the selected sector line. Non-blocking
+        one way walls may still be passed through.
+
+        2: Separates the texture information for above and below walls.
+        Allows mapper to define different textures for walls above and
+        below nearby floor and ceiling heights.
+
+
+        10.2.2   Texture Editing in 3D Mode
+
+        Shift 2,4,6,8(num): Used to pan a texture across a selected surface.
+
+        F: Flips texture or sprite (8 possible rotations for floors/ceilings,
+        4 for walls and sprites).
+
+        /: Resets texture to default settings (slope, pan and repeat values).
+
+        V: Initiates Tile Menu Mode (described above).
+
+
+        10.4.2.1 Floors and Ceilings
+
+        E: Expands or Unexpands the size of size of floor and ceiling
+        tiles.
+
+        R: Sets relative alignment on or off.
+
+        Alt-F: Rotates the "first wall" in 3D Mode for relative alignment
+        and sloping purposes. The wall the view is pointing at (not the
+        cursor) will become the first wall for that sector.
+
+        P: Sets parallax sky.
+
+        10.4.2.2 Walls
+
+        2,4,6,8 (num): Adjusts repeat values for wall textures. Effect is of
+        changing the apparent size of each pixel in the art, or "stretching"
+        the texture.
+
+        5(num): Holding this key while using the repeat value adjust keys
+        will align adjustments in multiples of 8 pixels.
+
+        O: Sets the orientation of the wall texture. Walls are oriented
+        from either the floor line or the ceiling line.
+
+        . or >: Will attempt to automatically align all like tiles to the
+        right of the selected tile.
+
+
+        10.2.3   Sprite Editing in 3D Mode
+
+        2,4,6,8 (num): Adjusts size of sprites.
+
+        5 (num): Holding this key will lock sprite size adjustments to
+        multiples of 4 pixels.
+
+        Ctrl Page Up: Instantly moves sprite against ceiling.
+
+        Ctrl Page Down: Instantly moves sprite against floor
+
+        ' X: Toggles Voxels (3D sprites) on or off.
+
+        ' Z: Toggles Voxel rotation on or off.
+
+        ' M: Toggles Sprites visible or invisible. Toggles through three
+        modes: All Sprites Visible, Actors and ST1s Invisible, and No Sprites
+        Visible.
+
+        R: Rotates sprite. Toggles through three modes: Normal, Flat
+        Vertical, and Flat Horizontal.
+
+        O: Pushes a vertically rotated sprite against nearest wall behind it.
+        Sprite will move in the opposite direction it is pointing until it
+        runs into a wall. The sprite will slightly reorient itself to an
+        angle perpendicular to the wall.
+
+        < and >: Changes the angle a sprite is facing.
+
+        Shift < and >: Changes the angle of the sprite in tiny increments.
+
+        T: Toggles translucency levels of sprite.
+
+        ' A: Toggles Sprite Autosizing on and off.
+
+
+        10.2.4   Shade, Visibility, and Palette Editing in 3D Mode
+
+        +/- (num): Adjusts shade of selected surface or object by one.
+
+        ' S: Allows numerical input of shade value on selected object or
+        surface. Range is -128 to 128.
+
+        ' + or ' -(num): Shades floor or ceiling but offsets sprites in
+        sector to balance.
+
+        Alt +/- (num): Adjusts visibility of sector by 16 units.
+
+        ' V: Allows numerical input of visibility value on selected sector.
+
+        ' P: Used to select palette number for selected surface/object.
+
+	Shadow Warrior Palette Number Reference:
+        0  Default (no palette adjustment)
+        1  Fog (White) Haze
+        4  Dark Gray
+        5  Heat (Red) Haze
+        7  Gray Swap - Brown
+        9  Water (Blue) Haze
+        11 Green
+        13 Blue
+        14 Red
+        16 Blue Swap - Tan
+        17 Blue Swap - Gray
+        18 Blue Swap - Purple
+        19 Blue Swap - Cool Red
+        20 Blue Swap - Yellow
+        21 Blue Swap - Olive
+        22 Blue Swap - Green
+        24 Blue Swap - Orange/Brown
+        25 Blue Swap - Warm Red
+        26 Blue Swap - Dark Gray
+        27 Blue Swap - Avocado
+        28 Blue Swap - Deep Blue
+        29 Blue Swap - Bright Orange
+        32 Night Vision
+
+
+        10.2.5   Copy, Paste and Group Editing Functions in 3D Mode
+
+        Tab: Will copy the tile information (to memory) below the cursor.
+        This includes tags, palette, shade, visibility, tile number, pan,
+        alignment, parallax, repeat and just about every other conceivable
+        setting a surface or sprite can have. Use of the "copied"
+        information is detailed in the commands below.
+
+        Enter: Pastes "Tab Selected" information to current surface or
+        sprite.
+
+        Alt C: Pastes "Tab Selected" art to all similar (Sprite, wall, floor,
+        ceiling, etc.) surfaces that match surface cursor is over.
+
+        Shift Enter: Copies "Tab Selected" shade, palette, and visibility
+        information, but nothing else, to the surface currently under the
+        cursor.
+
+        The following functions are used with in 3D mode with sectors,
+        sprites and areas selected with Right Alt in 2D Mode.
+
+        +/-(num): Adjusts the shade of all selected areas by one.
+
+        Alt +/-(num): Adjusts the visibility of all selected areas by 16.
+
+        ' C: Copies a "Tab Selected" tile (art only) to all tiles within
+        selected group (Right Alt in 2D) that match currently selected
+        surface.
+        If no group is selected (Right Alt in 2D Mode), copy will be
+        global.
+
+        ' P: Copies "Tab Selected" palette information to every surface
+        selected with Right Alt in 2D Mode.
+
+
+        10.2.6   Tagging, and Advanced 3D Mode Functions
+
+        ' T: Allows numerical setting of "LoTag" value (Tag 2) on walls,
+        sectors or sprites.
+
+        ' H: Allows numerical setting of "HiTag" value (Tag 1) on walls,
+        sectors, or sprites.
+
+        ' 1-0: Used to manually set tag numbers of walls, sectors, and
+        sprites from within 3D Mode.  Works for tags 1-10. Walls only use
+        tags 1-4, and sectors only use tags 1-6. You will probably never need
+        to use any tags for walls or sectors besides hi- and lo- tags.
+
+        Shift ' 1-5: Used to manually set higher tag numbers 11-15 on
+        sprites.
+
+        ; 1-0: Allows you to enter Boolean 1-10 tag values for sprites.
+
+        Shift ; 1: Allows you to enter a Boolean tag 11 value for sprites.
+
+        F11: Adjusts gamma correction brighter by one unit. There are 16
+        settings for gamma correction level. After the brightest level,
+        gamma is reset to lowest (default) level with one more key press
+        of F11.
+
+        3: Toggles Room over Room draw on and off. NOTE: Click and hold for
+        3D Mode editing is disabled while this function is toggled on.
+        WARNING: It is generally a bad idea to go into 2D mode
+        and create sectors while Room over Room draw is turned on. Also, when
+        you return to 3D edit mode, click and hold will still be disabled,
+        even though Room over Room draw is turned off. Turn Room over Room
+        draw on and off again to return to normal.
+
+        4: Moves view position through Room over Room mirror divider
+        when Room over Room is toggled on, and view is within a Room over
+        Room sector.
+
+//===========================================================================
+
+---------------------------
+1.      Digital Sound Index
+---------------------------
+
+This section is arranged in four columns. The first column is the actual
+filename of the sound .VOC as it appears in the .GRP file. The second
+column lists an identifying label that the programmers used, but we left
+it in the list to help you identify the sound more easily. The third
+column is the actual sound entry number. This is the number you use in
+TAG4, TAG5, or TAG6 of the SOUND_SPOT (hitag 134) ST1. You can also use this
+number in the lotag of a wall that is hitagged TAG_WALL_PLAY_SOUND
+(walltag 900). Do NOT use these numbers with AMBIENT_SOUND (hitag 1002)
+ST1's! It won't work properly. Sound numbers to use with AMBIENT_SOUND are
+listed in the second part of this document. The fourth and final column might
+contain a descriptive comment.
+
+NOTE: A lot of these sounds are not used in the game. Some that I am not
+      sure were used I marked with a (?). If you can't find a .VOC file
+      listed here in the .GRP file, then feel free to use your own custom
+      sound by copying it into the game directory using the same
+      filename. You can then use that entry's sound number to hear your
+      custom sound in the game.
+
++--------------+-----------------------+-------+-----------------+
+|FILENAME      |IDENTITY               |ENTRY  |COMMENTS         |
++--------------+-----------------------+-------+-----------------+
+
+"NULL.VOC"      DIGI_NULL               0       Don't change this
+
+"SWRDSTR1.VOC"  DIGI_SWORDSWOOSH        1       Sword
+
+"THROW.VOC"     DIGI_STAR               2       Shuriken sounds
+"STRCLNK.VOC"   DIGI_STARCLINK          3
+"STRWIZ.VOC"    DIGI_STARWIZ            4
+
+"UZIFIRE1.VOC"  DIGI_UZIFIRE            5       Uzi sounds
+"RICH1.VOC"     DIGI_RICHOCHET1         6
+"RICH2.VOC"     DIGI_RICHOCHET2         7
+"RMVCLIP.VOC"   DIGI_REMOVECLIP         8
+"RPLCLIP.VOC"   DIGI_REPLACECLIP        9
+
+"SHELL.VOC"     DIGI_SHELL              10      Spent shell
+
+"RIOTFIR1.VOC"  DIGI_RIOTFIRE           11      Riot shotgun sounds
+"SHOTGUN.VOC"   DIGI_RIOTFIRE2          12
+"RIOTRLD.VOC"   DIGI_RIOTRELOAD         13
+"EXPMED.VOC"    DIGI_BOLTEXPLODE        14
+"RIOTWIZ.VOC"   DIGI_BOLTWIZ            15
+
+"40MMFIR2.VOC"  DIGI_30MMFIRE           16      Grenade launcher
+"RIOTRLD.VOC"   DIGI_30MMRELOAD         17
+"40MMEXP2.VOC"  DIGI_30MMEXPLODE        18
+"RIOTWIZ.VOC"   DIGI_30MMWIZ            19
+
+"GHFIR1.VOC"    DIGI_HEADFIRE           20      Guardian head
+"GHWIZ.VOC"     DIGI_HEADSHOTWIZ        21
+"EXPSML.VOC"    DIGI_HEADSHOTHIT        22
+
+"THROW.VOC"     DIGI_MINETHROW          23      Sticky mines
+"PHITGRND.VOC"  DIGI_MINEBOUNCE         24
+"EXPLRG.VOC"    DIGI_MINEBLOW           25
+"STSCAN2.VOC"   DIGI_MINEBEEP           26
+
+"HBLOOP1.VOC"   DIGI_HEARTBEAT          27      Heart attack
+"HSQUEEZ1.VOC"  DIGI_HEARTFIRE          28
+"HRTWIZ.VOC"    DIGI_HEARTWIZ           29
+
+"RIOTFIR1.VOC"  DIGI_MISSLFIRE          30      Missile launcher
+"EXPMED.VOC"    DIGI_MISSLEXP           31
+
+"RFWIZ.VOC"     DIGI_RFWIZ              32      Ring of Fire
+
+"NAPFIRE.VOC"   DIGI_NAPFIRE            33      Napalm
+"NAPTWIZ.VOC"   DIGI_NAPWIZ             34
+"NAPPUFF.VOC"   DIGI_NAPPUFF            35
+
+"MMFIRE.VOC"    DIGI_MIRVFIRE           36      Magic mirv spell
+"MMWIZ.VOC"     DIGI_MIRVWIZ            37
+
+"SPRLFIRE.VOC"  DIGI_SPIRALFIRE         38      Spiral spell (?)
+"SPRLWIZ.VOC"   DIGI_SPIRALWIZ          39
+
+"MAGIC1.VOC"    DIGI_MAGIC1             40      General magic sounds
+"MAGIC2.VOC"    DIGI_MAGIC2             41
+"MAGIC3.VOC"    DIGI_MAGIC3             42
+"MAGIC4.VOC"    DIGI_MAGIC4             43
+"MAGIC5.VOC"    DIGI_MAGIC5             44
+"MAGIC6.VOC"    DIGI_MAGIC6             45
+"MAGIC7.VOC"    DIGI_MAGIC7             46
+
+"SWSPELL.VOC"   DIGI_SWCLOAKUNCLOAK     47      Cloaking bomb
+
+"DHVOMIT.VOC"   DIGI_DHVOMIT            48      Vomiting dead head
+"DHCLUNK.VOC"   DIGI_DHCLUNK            49
+"DHSQSH.VOC"    DIGI_DHSQUISH           50
+
+"LAVAHIT.VOC"   DIGI_PROJECTILELAVAHIT  51      Weapon fire hits lava
+"STSPL01.VOC"   DIGI_PROJECTILEWATERHIT 52      or water
+
+"KEY.VOC"       DIGI_KEY                53      Pick up item sounds
+"ITEM5A.VOC"    DIGI_ITEM               54
+"ITEMBIG2.VOC"  DIGI_BIGITEM            55
+
+"BODY9.VOC"     DIGI_BODYFALL1          56      Pain and death sounds
+"PHITGRND.VOC"  DIGI_HITGROUND          57
+"BODY2.VOC"     DIGI_BODYSQUISH1        58
+"BURN1.VOC"     DIGI_BODYBURN           59
+"BURNSCRM.VOC"  DIGI_BODYBURNSCREAM     60
+"BODY3.VOC"     DIGI_BODYCRUSHED1       61
+"BODY4.VOC"     DIGI_BODYHACKED1        62
+"BURN2.VOC"     DIGI_BODYSINGED         63
+"DROWN1.VOC"    DIGI_DROWN              64
+"SCREAM1.VOC"   DIGI_SCREAM1            65
+"SCREAM2.VOC"   DIGI_SCREAM2            66
+"SCREAM3.VOC"   DIGI_SCREAM3            67
+"HIT1.VOC"      DIGI_HIT1               68
+"ELECTRC1.VOC"  DIGI_ELECTRICUTE1       69
+"SWDIE02.VOC"   DIGI_REMOVEME           70
+"IMPALE1.VOC"   DIGI_IMPALED            71
+"OOF1.VOC"      DIGI_OOF1               72
+
+"BODY1.VOC"     DIGI_ACTORBODYFALL1     73      Player sounds that actors
+"HITGRND.VOC"   DIGI_ACTORHITGROUND     74      also use
+
+"COLEXP.VOC"    DIGI_COOLIEEXPLODE      75      Coolie
+"COLSCRM.VOC"   DIGI_COOLIESCREAM       76
+"COLALRT.VOC"   DIGI_COOLIEALERT        77
+"COLAMB.VOC"    DIGI_COOLIEAMBIENT      78
+"COLPAIN.VOC"   DIGI_COOLIEPAIN         79
+
+"CGMAT.VOC"     DIGI_CGMATERIALIZE      80      Coolie Ghost
+"CGALRT.VOC"    DIGI_CGALERT            81
+"CGWHACK.VOC"   DIGI_CGTHIGHBONE        82
+"CGAMB.VOC"     DIGI_CGAMBIENT          83
+"CGPAIN.VOC"    DIGI_CGPAIN             84
+"CGSHOOT.VOC"   DIGI_CGMAGIC            85
+"CGHIT.VOC"     DIGI_CGMAGICHIT         86
+"CGSCRM.VOC"    DIGI_CGSCREAM           87
+
+"NINAMB.VOC"    DIGI_NINJAAMBIENT       88      Evil Ninja
+"NINSTAR.VOC"   DIGI_NINJASTAR          89
+"NINPAIN.VOC"   DIGI_NINJAPAIN          90
+"NINSCRM.VOC"   DIGI_NINJASCREAM        91
+"NINALRT.VOC"   DIGI_NINJAALERT         92
+"NINSHOOT.VOC"  DIGI_NINJAUZIATTACK     93
+"RIOTFIR1.VOC"  DIGI_NINJARIOTATTACK    94
+
+"RIPAMB.VOC"    DIGI_RIPPERAMBIENT      95      Ripper
+"RIPALRT.VOC"   DIGI_RIPPERALERT        96
+"RIPATCK.VOC"   DIGI_RIPPERATTACK       97
+"RIPPAIN.VOC"   DIGI_RIPPERPAIN         98
+"RIPSCRM.VOC"   DIGI_RIPPERSCREAM       99
+"RIPHRT.VOC"    DIGI_RIPPERHEARTOUT     100
+
+"GRDAMB.VOC"    DIGI_GRDAMBIENT         101     Guardian
+"GRDALRT.VOC"   DIGI_GRDALERT           102
+"GRDPAIN.VOC"   DIGI_GRDPAIN            103
+"GRDSCRM.VOC"   DIGI_GRDSCREAM          104
+"GRDFIR.VOC"    DIGI_GRDFIREBALL        105
+"GRDAXE.VOC"    DIGI_GRDSWINGAXE        106
+"GRDAXHT.VOC"   DIGI_GRDAXEHIT          107
+
+"SPAMB.VOC"     DIGI_SPAMBIENT          108     Skeletor Priest (?)
+"SPALRT.VOC"    DIGI_SPALERT            109
+"SPPAIN.VOC"    DIGI_SPPAIN             110
+"SPSCRM.VOC"    DIGI_SPSCREAM           111
+"SPBLADE.VOC"   DIGI_SPBLADE            112
+"SPELEC.VOC"    DIGI_SPELEC             113
+"SPTLPRT.VOC"   DIGI_SPTELEPORT         114
+
+"AHAMB.VOC"     DIGI_AHAMBIENT          115     Accursed Head
+"AHSCRM.VOC"    DIGI_AHSCREAM           116
+"AHEXP.VOC"     DIGI_AHEXPLODE          117
+"AHSHWSH.VOC"   DIGI_AHSWOOSH           118
+
+"HBUZZ.VOC"     DIGI_HORNETBUZZ         119      Hornet
+"HSTING.VOC"    DIGI_HORNETSTING        120
+"HPAIN.VOC"     DIGI_HORNETPAIN         121
+"HDEATH.VOC"    DIGI_HORNETDEATH        122
+
+"SGAMB.VOC"     DIGI_SERPAMBIENT        123      Serpent Boss
+"SGALRT.VOC"    DIGI_SERPALERT          124
+"SGPAIN.VOC"    DIGI_SERPPAIN           125
+"SGSCRM.VOC"    DIGI_SERPSCREAM         126
+"SGDETH.VOC"    DIGI_SERPDEATHEXPLODE   127
+"SGSWORD.VOC"   DIGI_SERPSWORDATTACK    128
+"SGMAGIC.VOC"   DIGI_SERPMAGICLAUNCH    129
+"SGHEADS.VOC"   DIGI_SERPSUMMONHEADS    130
+"SGTAUNT.VOC"   DIGI_SERPTAUNTYOU       131
+
+"LVAMB.VOC"     DIGI_LAVABOSSAMBIENT    132      Lava Boss (?)
+"LVSWIM.VOC"    DIGI_LAVABOSSSWIM       133
+"LVRISE.VOC"    DIGI_LAVABOSSRISE       134
+"LVALRT.VOC"    DIGI_LAVABOSSALERT      135
+"LVFLAME.VOC"   DIGI_LAVABOSSFLAME      136
+"LVMETEOR.VOC"  DIGI_LAVABOSSMETEOR     137
+"LVMETEXP.VOC"  DIGI_LAVABOSSMETEXP     138
+"LVPAIN.VOC"    DIGI_LAVABOSSPAIN       139
+"LVSIZZLE.VOC"  DIGI_LAVABOSSSIZZLE     140
+"LVEXPL.VOC"    DIGI_LAVABOSSEXPLODE    141
+
+"BTSTRT.VOC"    DIGI_BOATSTART          142      Motor Boat
+"BTRUN01.VOC"   DIGI_BOATRUN            143
+"BTSTOP.VOC"    DIGI_BOATSTOP           144
+"BTFIRE.VOC"    DIGI_BOATFIRE           145
+
+"TNKSTRT.VOC"   DIGI_TANKSTART          146      Army Tank
+"TNKRUN.VOC"    DIGI_TANKRUN            147
+"TNKSTOP.VOC"   DIGI_TANKSTOP           148
+"TNKIDLE.VOC"   DIGI_TANKIDLE           149
+"TNKFIRE.VOC"   DIGI_TANKFIRE           150
+
+"TRUKRUN.VOC"   DIGI_TRUKRUN            151      Army Truck (?)
+"TRUKIDLE.VOC"  DIGI_TRUKIDLE           152
+
+"SUBRUN.VOC"    DIGI_SUBRUN             153      Submarine (?)
+"SUBIDLE.VOC"   DIGI_SUBIDLE            154
+"SUBDOOR.VOC"   DIGI_SUBDOOR            155
+
+"BMBFLY.VOC"    DIGI_BOMBRFLYING        156      Bomber Plane (?)
+"BMBDROP.VOC"   DIGI_BOMBRDROPBOMB      157
+
+"BUBBLE.VOC"    DIGI_BUBBLES            158      Bubbles
+
+"CHAIN.VOC"     DIGI_CHAIN              159      (?)
+
+"CHNDOOR.VOC"   DIGI_CHAINDOOR          160      Chain door
+
+"CRCKT2.VOC"    DIGI_CRICKETS           161      Crickets
+
+"DRWOODO.VOC"   DIGI_WOODDOOROPEN       162      Door sounds
+"DRMETO.VOC"    DIGI_METALDOOROPEN      164
+"DRMETC.VOC"    DIGI_METALDOORCLOSE     165
+"DRSLDO.VOC"    DIGI_SLIDEDOOROPEN      166
+"DRSLDC.VOC"    DIGI_SLIDEDOORCLOSE     167
+"DRSTNO.VOC"    DIGI_STONEDOOROPEN      168
+"DRSTNC.VOC"    DIGI_STONEDOORCLOSE     169
+"DRSQKO.VOC"    DIGI_SQUEAKYDOOROPEN    170
+"DRSQKC.VOC"    DIGI_SQUEAKYDOORCLOSE   171
+
+"DRILL.VOC"     DIGI_DRILL              172      Giant drill
+
+"CAVE1.VOC"     DIGI_CAVEDRIP1          173      Water dripping in cave
+"CAVE2.VOC"     DIGI_CAVEDRIP2          174
+"DRIP.VOC"      DIGI_DRIP               175
+
+"WTRFAL1.VOC"   DIGI_WATERFALL1         176      Waterfall sound
+"WTRFAL2.VOC"   DIGI_WATERFALL2         177      (?)
+
+"WTRFLW1.VOC"   DIGI_WATERFLOW1         178      Water flowing
+"WTRFLW2.VOC"   DIGI_WATERFLOW2         179      (?)
+
+"ELEV1.VOC"     DIGI_ELEVATOR           180      Elevator sound
+
+"EXPSML.VOC"    DIGI_SMALLEXP           181      Explosion sounds
+"EXPMED.VOC"    DIGI_MEDIUMEXP          182
+"EXPLRG.VOC"    DIGI_LARGEEXP           183
+"BIGEXP.VOC"    DIGI_HUGEEXP            184
+
+"FIRE1.VOC"     DIGI_FIRE1              185      Crackling fire
+"FIRE2.VOC"     DIGI_FIRE2              186      Powerful fire
+
+"FBALL1.VOC"    DIGI_FIREBALL1          187      Fireball trap
+"FIREBALL1.VOC" DIGI_FIREBALL2          188
+
+"GEAR1.VOC"     DIGI_GEAR1              189      Gear turning
+
+"GONG.VOC"      DIGI_GONG               190      Gong
+
+"LAVAFLW1.VOC"  DIGI_LAVAFLOW1          191      Lava flowing ambience
+
+"MACHN1.VOC"    DIGI_MACHINE1           192      Generic machine (?)
+
+"MUD1.VOC"      DIGI_MUBBUBBLES1        193      Mud or lava bubbles
+
+"QUAKE1.VOC"    DIGI_EARTHQUAKE         194      Earthquake sound
+
+"SEWER1.VOC"    DIGI_SEWERFLOW1         195      Sewer noise (?)
+
+"SPLASH1.VOC"   DIGI_SPLASH1            196      Generic splash
+
+"STEAM1.VOC"    DIGI_STEAM1             197      Steam
+"VOLSTM1.VOC"   DIGI_VOLCANOSTEAM1      198      Volcanic Steam (?)
+
+"STMPR.VOC"     DIGI_STOMPER            199      (?)
+
+"SWAMP1.VOC"    DIGI_SWAMP              200      Swamp ambience
+
+"SWITCH1.VOC"   DIGI_REGULARSWITCH      201      Switch sounds
+"SWITCH2.VOC"   DIGI_BIGSWITCH          202
+"SWITCH3.VOC"   DIGI_STONESWITCH        203
+"SWITCH4.VOC"   DIGI_GLASSSWITCH        204
+"SWITCH5.VOC"   DIGI_HUGESWITCH         205
+
+"THUNDR.VOC"    DIGI_THUNDER            206      Thunder ambience
+
+"TELPORT.VOC"   DIGI_TELEPORT           207      Teleporter
+
+"UNDRWTR.VOC"   DIGI_UNDERWATER         208      Underwater ambience
+
+"UNLOCK.VOC"    DIGI_UNLOCK             209      Key unlock
+
+"VALVE.VOC"     DIGI_SQUEAKYVALVE       210
+
+"VOID1.VOC"     DIGI_VOID1              211      Various weird ambience
+"VOID2.VOC"     DIGI_VOID2              212
+"VOID3.VOC"     DIGI_VOID3              213
+"VOID4.VOC"     DIGI_VOID4              214
+"VOID5.VOC"     DIGI_VOID5              215
+
+"ERUPT.VOC"     DIGI_ERUPTION           216      Eruption ambience
+
+"VOLPRJCT.VOC"  DIGI_VOLCANOPROJECTILE  217     (?)
+
+"WIND1.VOC"     DIGI_LIGHTWIND          218      Wind ambience
+"WIND2.VOC"     DIGI_STRONGWIND         219
+
+"WOODBRK.VOC"   DIGI_BREAKINGWOOD       220      Breakage sounds (?)
+"STONEBRK.VOC"  DIGI_BREAKSTONES        221
+
+"ENGROOM1.VOC"  DIGI_ENGROOM1           222      Various engine ambience
+"ENGROOM2.VOC"  DIGI_ENGROOM2           223
+"ENGROOM3.VOC"  DIGI_ENGROOM3           224
+"ENGROOM4.VOC"  DIGI_ENGROOM4           225
+"ENGROOM5.VOC"  DIGI_ENGROOM5           226
+
+"GLASS3.VOC"    DIGI_BREAKGLASS         227      Breaking glass
+
+"MUSSTING.VOC"  DIGI_MUSSTING           228      Musical stinger (?)
+
+"HELI.VOC"      DIGI_HELI               229      Helicopter (?)
+
+"BIGHART.VOC"   DIGI_BIGHART            230      Heart ambience (?)
+
+"WIND4.VOC"     DIGI_WIND4              231      More wind
+
+"SPOOKY1.VOC"   DIGI_SPOOKY1            232      Spooky sound (?)
+
+"DRILL1.VOC"    DIGI_DRILL1             233      Another drill (?)
+
+"JET.VOC"       DIGI_JET                234      Jet ambience
+
+"DRUMCHNT.VOC"  DIGI_DRUMCHANT          235      Drum chanting
+
+"FLY.VOC"       DIGI_BUZZZ              236      Chopstick sounds
+"UZICLK.VOC"    DIGI_CHOP_CLICK         237
+
+"STICKY2R.VOC"  DIGI_SWORD_UP           238      Weapon up sounds
+"UZI1R.VOC"     DIGI_UZI_UP             239
+"SHOTG1R.VOC"   DIGI_SHOTGUN_UP         240
+"BOLT1R.VOC"    DIGI_ROCKET_UP          241
+"BOLT1R.VOC"    DIGI_GRENADE_UP         242
+"BOLT1R.VOC"    DIGI_RAIL_UP            243
+"STICKY1R.VOC"  DIGI_MINE_UP            244
+
+NULL            DIGI_FIRSTPLAYERVOICE   245      Don't change this
+"BADMAN04.VOC"  DIGI_TAUNTAI1           246      Various player
+"COMEGET2.VOC"  DIGI_TAUNTAI2           247      taunts when killing
+"GHOP07.VOC"    DIGI_TAUNTAI3           248      bad guys
+"GOODDAY4.VOC"  DIGI_TAUNTAI4           249
+"KILLU05.VOC"   DIGI_TAUNTAI5           250
+"NATURAL4.VOC"  DIGI_TAUNTAI6           251
+
+"NOHONOR6.VOC"  DIGI_TAUNTAI7           252
+"SAYON09.VOC"   DIGI_TAUNTAI8           253
+"TAKSAN1.VOC"   DIGI_TAUNTAI9           254
+"SNATCH01.VOC"  DIGI_TAUNTAI10          255
+
+"CHOTO7.VOC"    DIGI_PLAYERPAIN1        256      Player pain sounds
+"SWPAIN05.VOC"  DIGI_PLAYERPAIN2        257
+"SWPAIN03.VOC"  DIGI_PLAYERPAIN3        258
+"SWPAIN07.VOC"  DIGI_PLAYERPAIN4        259
+"SWPAIN22.VOC"  DIGI_PLAYERPAIN5        260
+
+"SWYELL03.VOC"  DIGI_PLAYERYELL1        261      Player yelling
+"SWYELL05.VOC"  DIGI_PLAYERYELL2        262
+"SWYELL06.VOC"  DIGI_PLAYERYELL3        263
+
+"GRUNT06.VOC"   DIGI_SEARCHWALL         264      Grunt searching wall
+
+"NOWAY1.VOC"    DIGI_NOURINAL           265      "No way  water cold"
+
+"SWDIE02.VOC"   DIGI_FALLSCREAM         266      Player scream
+"AHSO5.VOC"     DIGI_GOTITEM1           267      "Ahh  so"
+NULL            DIGI_LASTPLAYERVOICE    268      Don't change this
+
+"HSHOT1.VOC"    DIGI_RAILFIRE           269      Rail gun sounds
+"RAIL2.VOC"     DIGI_RAILREADY          270
+"RAILUP09.VOC"  DIGI_RAILPWRUP          271
+
+"HBOMB2.VOC"    DIGI_NUCLEAREXP         272      Nuke sounds
+"STANDBY.VOC"   DIGI_NUKESTDBY          273
+"CDOWN.VOC"     DIGI_NUKECDOWN          274
+"SYSREAD.VOC"   DIGI_NUKEREADY          275
+
+"HISS1.VOC"     DIGI_CHEMGAS            276      ChemBomb
+"CHBNCE1.VOC"   DIGI_CHEMBOUNCE         277
+"THROW.VOC"     DIGI_THROW              278
+"PULL.VOC"      DIGI_PULL               279
+
+"STSCAN2.VOC"   DIGI_MINEARM            280      Other weapon/item sounds
+"HBDOWN1.VOC"   DIGI_HEARTDOWN          281
+"TOOLUSE1.VOC"  DIGI_TOOLBOX            282
+"GASPOP.VOC"    DIGI_GASPOP             283
+"40MMBNCE.VOC"  DIGI_40MMBNCE           284
+
+"BURGALRM.VOC"  DIGI_BURGLARALARM       285      Various
+"CARALRM2.VOC"  DIGI_CARALARM           286
+"CAOFF1.VOC"    DIGI_CARALARMOFF        287
+"TACK1.VOC"     DIGI_CALTROPS           288
+"NVON3.VOC"     DIGI_NIGHTON            289
+"NVOFF2.VOC"    DIGI_NIGHTOFF           290
+"SGSH01.VOC"    DIGI_SHOTSHELLSPENT     291
+"SKID3.VOC"     DIGI_BUSSKID            292
+"CRASH4.VOC"    DIGI_BUSCRASH           293
+"BUS1.VOC"      DIGI_BUSENGINE          294
+"BIMP01.VOC"    DIGI_ARMORHIT           295
+
+"ASIREN1.VOC"   DIGI_ASIREN1            296      Traffic ambience
+"FIRETRK1.VOC"  DIGI_FIRETRK1           297
+"TRAFFIC1.VOC"  DIGI_TRAFFIC1           298
+"TRAFFIC2.VOC"  DIGI_TRAFFIC2           299
+"TRAFFIC3.VOC"  DIGI_TRAFFIC3           300
+"TRAFFIC4.VOC"  DIGI_TRAFFIC4           301
+"TRAFFIC5.VOC"  DIGI_TRAFFIC5           302
+"TRAFFIC6.VOC"  DIGI_TRAFFIC6           303
+"HELI1.VOC"     DIGI_HELI1              304
+"JET1.VOC"      DIGI_JET1               305
+"MOTO1.VOC"     DIGI_MOTO1              306
+"MOTO2.VOC"     DIGI_MOTO2              307
+"NEON1.VOC"     DIGI_NEON1              308
+"SUBWAY1.VOC"   DIGI_SUBWAY             309
+"TRAINS01.VOC"  DIGI_TRAIN1             310
+
+"COIN.VOC"      DIGI_COINS              311
+"SWRDSMK1.VOC"  DIGI_SWORDCLANK         312
+
+"RIP2AMB.VOC"   DIGI_RIPPER2AMBIENT     313      Big Ripper
+"RIP2ALRT.VOC"  DIGI_RIPPER2ALERT       314
+"RIP2ATCK.VOC"  DIGI_RIPPER2ATTACK      315
+"RIP2PAIN.VOC"  DIGI_RIPPER2PAIN        316
+"RIP2SCRM.VOC"  DIGI_RIPPER2SCREAM      317
+"RIP2HRT.VOC"   DIGI_RIPPER2HEARTOUT    318
+
+"M60.VOC"       DIGI_M60                319      Enemy M60 fire
+
+"SUMSCRM.VOC"   DIGI_SUMOSCREAM         320      Sumo Boss sounds
+"SUMALRT.VOC"   DIGI_SUMOALERT          321
+"SUMAMB.VOC"    DIGI_SUMOAMBIENT        322
+"SUMPAIN.VOC"   DIGI_SUMOPAIN           323
+
+"RAMLOCK.VOC"   DIGI_RAMUNLOCK          324      Unlocking sounds
+"CARDLOCK.VOC"  DIGI_CARDUNLOCK         325
+
+"ACS10.VOC"     DIGI_ANCIENTSECRET      326      More player voices
+"AMDRIV01.VOC"  DIGI_AMERICANDRIVER     327
+"BABOON03.VOC"  DIGI_DRIVELIKEBABOON    328
+"BBURN04.VOC"   DIGI_BURNBABY           329
+"BIGWPN01.VOC"  DIGI_LIKEBIGWEAPONS     330
+"CBUNG01.VOC"   DIGI_COWABUNGA          331
+"CHARAD09.VOC"  DIGI_NOCHARADE          332
+"DTIME.VOC"     DIGI_TIMETODIE          333
+"EAT02.VOC"     DIGI_EATTHIS            334
+"FCRACK01.VOC"  DIGI_FIRECRACKERUPASS   335
+"HCOW03.VOC"    DIGI_HOLYCOW            336
+"HCOW06.VOC"    DIGI_HOLYPEICESOFCOW    337
+"HSHIT03.VOC"   DIGI_HOLYSHIT           338
+"HSHIT04.VOC"   DIGI_HOLYPEICESOFSHIT   339
+"IHOPE01.VOC"   DIGI_PAYINGATTENTION    340
+"ILIKE01.VOC"   DIGI_EVERYBODYDEAD      341
+"KUNGFU06.VOC"  DIGI_KUNGFU             342
+"LMOVE01.VOC"   DIGI_HOWYOULIKEMOVE     343
+"LWANG05.VOC"   DIGI_NOMESSWITHWANG     344
+"RAW01.VOC"     DIGI_RAWREVENGE         345
+"STUPID01.VOC"  DIGI_YOULOOKSTUPID      346
+"TDICK02.VOC"   DIGI_TINYDICK           347
+"TOURN01.VOC"   DIGI_NOTOURNAMENT       348
+"WWANG11.VOC"   DIGI_WHOWANTSWANG       349
+"YAK02.VOC"     DIGI_MOVELIKEYAK        350
+"REFLEX08.VOC"  DIGI_ALLINREFLEXES      351
+"EVADE01.VOC"   DIGI_EVADEFOREVER       352
+"MFLY03.VOC"    DIGI_MRFLY              353
+"SHISEI03.VOC"  DIGI_SHISEISI           354
+"FWORKS01.VOC"  DIGI_LIKEFIREWORKS      355
+"HIRO03.VOC"    DIGI_LIKEHIROSHIMA      356
+"NAGA06.VOC"    DIGI_LIKENAGASAKI       357
+"PEARL03.VOC"   DIGI_LIKEPEARL          358
+"IAM01.VOC"     DIGI_IAMSHADOW          359
+"LIKNUK01.VOC"  DIGI_ILIKENUKES         360
+"LIKSRD01.VOC"  DIGI_ILIKESWORD         361
+"LIKSHK02.VOC"  DIGI_ILIKESHURIKEN      362
+"LUCK06.VOC"    DIGI_BADLUCK            363
+"MCHAN01.VOC"   DIGI_NOMOVIEMRCHAN      364
+"RCHAN13.VOC"   DIGI_REALLIFEMRCHAN     365
+"MUSIC03.VOC"   DIGI_NOLIKEMUSIC        366
+"NODIFF07.VOC"  DIGI_NODIFFERENCE       367
+"NOFEAR01.VOC"  DIGI_NOFEAR             368
+"NOPAIN.VOC"    DIGI_NOPAIN             369
+"REPMAN15.VOC"  DIGI_NOREPAIRMAN        370
+"SOB15.VOC"     DIGI_SONOFABITCH        371
+"WEAK03.VOC"    DIGI_PAINFORWEAK        372
+"SPEED04.VOC"   DIGI_GOSPEEDY           373
+"STIFF01.VOC"   DIGI_GETTINGSTIFF       374
+"TOMB05.VOC"    DIGI_TOMBRAIDER         375
+"TSTICK01.VOC"  DIGI_STICKYGOTU1        376
+"TSTICK05.VOC"  DIGI_STICKYGOTU2        377
+"TSTICK07.VOC"  DIGI_STICKYGOTU3        378
+"TSTICK10.VOC"  DIGI_STICKYGOTU4        379
+"TSWORD05.VOC"  DIGI_SWORDGOTU1         380
+"TSWORD08.VOC"  DIGI_SWORDGOTU2         381
+"TSWORD01.VOC"  DIGI_SWORDGOTU3         382
+"SWYELL22.VOC"  DIGI_HURTBAD1           383
+"SWYELL14.VOC"  DIGI_HURTBAD2           384
+"SWYELL23.VOC"  DIGI_HURTBAD3           385
+"SWYELL16.VOC"  DIGI_HURTBAD4           386
+"SWYELL13.VOC"  DIGI_HURTBAD5           387
+
+"TGSCRM.VOC"    DIGI_TOILETGIRLSCREAM   388      Girl on the toilet
+"TGALRT.VOC"    DIGI_TOILETGIRLALERT    389
+"TGAMB.VOC"     DIGI_TOILETGIRLAMBIENT  390
+"TGPAIN.VOC"    DIGI_TOILETGIRLPAIN     391
+"TGTNT1.VOC"    DIGI_TOILETGIRLTAUNT1   392
+"TGTNT2.VOC"    DIGI_TOILETGIRLTAUNT2   393
+
+"SUMOFART.VOC"  DIGI_SUMOFART           394      Sumo fart attack
+
+"GIBS04.VOC"    DIGI_GIBS1              395      Gib splats
+"GIBS05.VOC"    DIGI_GIBS2              396
+
+"BIRDS01.VOC"   DIGI_BIRDS1             397      Bird ambience
+"BIRDS02.VOC"   DIGI_BIRDS2             398
+"TOILET01.VOC"  DIGI_TOILET             399      Toilet flush
+"FLIDLE.VOC"    DIGI_FORKLIFTIDLE       400      Forklift driving
+"FLRUN01.VOC"   DIGI_FORKLIFTRUN        401
+"TOYCAR03.VOC"  DIGI_TOYCAR             402
+"PRESS03.VOC"   DIGI_UZIMATIC           403
+"COMPON01.VOC"  DIGI_COMPUTERPOWER      404
+"TURBON01.VOC"  DIGI_GENERATORON        405
+"TURBRN01.VOC"  DIGI_GENERATORRUN       406
+"BIGDRL03.VOC"  DIGI_BIGDRILL           407
+"FLUOR01.VOC"   DIGI_FLUORLIGHT         408
+"AMOEBA03.VOC"  DIGI_AMOEBA             409
+"BODY6.VOC"     DIGI_BODYFALL2          410
+"GIBS01.VOC"    DIGI_GIBS3              411
+"CHOK01.VOC"    DIGI_NINJACHOKE         412
+
+"TRAIN3.VOC"    DIGI_TRAIN3             413
+"TRAINR02.VOC"  DIGI_TRAINR02           414
+"TRAIN8.VOC"    DIGI_TRAIN8             415
+"TCLID01.VOC"   DIGI_TRASHLID           416
+
+"ACCU01.VOC"    DIGI_GETMEDKIT          417      Medkit player voices
+"AHH03.VOC"     DIGI_AHH                418
+
+"PALARM1.VOC"   DIGI_PALARM             419      Pachinko sounds
+"PFLIP4.VOC"    DIGI_PFLIP              420
+"PROLL1.VOC"    DIGI_PROLL1             421
+"PROLL2.VOC"    DIGI_PROLL2             422
+"PROLL3.VOC"    DIGI_PROLL3             423
+
+"RABATK1.VOC"   DIGI_BUNNYATTACK        424      Bunny sounds
+"RABDIE1.VOC"   DIGI_BUNNYDIE1          425
+"RABDIE2.VOC"   DIGI_BUNNYDIE2          426
+"RABDIE3.VOC"   DIGI_BUNNYDIE3          427
+"RABAMB.VOC"    DIGI_BUNNYAMBIENT       428
+
+"STONE2.VOC"    DIGI_STONESLIDE         429
+"NINCUT3.VOC"   DIGI_NINJAINHALF        430
+"RIPCHST1.VOC"  DIGI_RIPPER2CHEST       431
+
+"WHIPIN2.VOC"   DIGI_WHIPME             432      Whipping TV show
+"ENDLEV3.VOC"   DIGI_ENDLEV             433
+"MDALARM1.VOC"  DIGI_MDALARM            434      Metal detector
+
+"METALBRK.VOC"  DIGI_BREAKMETAL         435      Breakage sounds
+"DEBRIBRK.VOC"  DIGI_BREAKDEBRIS        436
+"MARBELS.VOC"   DIGI_BREAKMARBELS       437
+
+"BANZAI1.VOC"   DIGI_BANZAI             438      Player voices
+"HAHA19.VOC"    DIGI_HAHA1              439
+"HAHA11.VOC"    DIGI_HAHA2              440
+"HAHA15.VOC"    DIGI_HAHA3              441
+
+"TELEPT02.VOC"  DIGI_ITEM_SPAWN         442      Item respawns
+
+"JG1075.VOC"    DIGI_NOREPAIRMAN2       443      Player voices
+"JG1082.VOC"    DIGI_NOPOWER            444
+"JG1087.VOC"    DIGI_DOUBLEUZI          445
+"JG1088.VOC"    DIGI_NOTORDBUNNY        446
+"JG1103.VOC"    DIGI_CANBEONLYONE       447
+"JG2000.VOC"    DIGI_MIRROR1            448
+"JG2005.VOC"    DIGI_MIRROR2            449
+"JG2020.VOC"    DIGI_HITTINGWALLS       450
+"JG2032.VOC"    DIGI_GOTRAILGUN         451
+"JG2053.VOC"    DIGI_RABBITHUMP1        452
+"JG2054.VOC"    DIGI_RABBITHUMP2        453
+"JG2045.VOC"    DIGI_RABBITHUMP3        454
+"JG2087.VOC"    DIGI_RABBITHUMP4        455
+"JG2074.VOC"    DIGI_FAGRABBIT1         456
+"JG2075.VOC"    DIGI_FAGRABBIT2         457
+"JG2078.VOC"    DIGI_FAGRABBIT3         458
+"JG3005.VOC"    DIGI_STINKLIKEBABBOON   459
+"JG3017.VOC"    DIGI_WHATYOUEATBABY     460
+"JG3047.VOC"    DIGI_WHATDIEDUPTHERE    461
+"JG3022.VOC"    DIGI_YOUGOPOOPOO        462
+"JG6053.VOC"    DIGI_PULLMYFINGER       463
+"JG3059.VOC"    DIGI_SOAPYOUGOOD        464
+"JG4012.VOC"    DIGI_WASHWANG           465
+"JG3070.VOC"    DIGI_DROPSOAP           466
+"JG6051.VOC"    DIGI_REALTITS           467
+"JG4002.VOC"    DIGI_MSTRLEEP           468
+"JG4024.VOC"    DIGI_SEEKLEEPADVICE     469
+"JG5042.VOC"    DIGI_AVENGELEEPDEATH    470
+"JG5049A.VOC"   DIGI_LEEPGHOST          471
+
+"WDOOR02.VOC"   DIGI_DOOR1              472      More door sounds
+"MDOOR03.VOC"   DIGI_DOOR2              473
+"603981_1.VOC"  DIGI_DOOR3              474
+
+"FLAG03.VOC"    DIGI_FLAGWAVE           475      Flag ambience
+
+"JG7009.VOC"    DIGI_SURFACE            476
+"JG7001.VOC"    DIGI_GASHURT            477
+"JG2001.VOC"    DIGI_BONUS_GRAB         478
+
+"ACHCRY04.VOC"  DIGI_ANIMECRY           479      Girl sounds
+"ACHS010.VOC"   DIGI_ANIMESING1         480
+"ACHT1006.VOC"  DIGI_ANIMEMAD1          481
+"ACHS016.VOC"   DIGI_ANIMESING2         482
+"ACHT120A.VOC"  DIGI_ANIMEMAD2          483
+
+"TELEPT02.VOC"  DIGI_PLAYER_TELEPORT    484      Player teleporting
+"SLASH1.VOC"    DIGI_INTRO_SLASH        485
+
+"WARNING.VOC"   DIGI_WARNING            486
+"WHIRL1.VOC"    DIGI_INTRO_WHIRL        487
+
+"ACHF1003.VOC"  DIGI_TOILETGIRLFART1    488      Toilet girl sounds
+"ACHF1002.VOC"  DIGI_TOILETGIRLFART2    489
+"ACHF1016.VOC"  DIGI_TOILETGIRLFART3    490
+
+"CHIMES4.VOC"   DIGI_WINDCHIMES         491      Wind Chime ambience
+
+"JGB023.VOC"    DIGI_MADATCARPET        492      Player voices
+"JGB020.VOC"    DIGI_JUMPONCARPET       493
+"JGB080.VOC"    DIGI_USEBROKENVEHICLE   494
+"JGB106.VOC"    DIGI_STEPONCALTROPS     495
+"JGB130.VOC"    DIGI_WANGSEESERP        496
+"JGSB4.VOC"     DIGI_SERPTAUNTWANG      497
+"JGB166.VOC"    DIGI_WANGTAUNTSERP1     498
+"JGB156.VOC"    DIGI_WANGTAUNTSERP2     499
+"JGB193.VOC"    DIGI_WANGORDER1         500
+"JGB202.VOC"    DIGI_WANGORDER2         501
+"JGB340A.VOC"   DIGI_WANGDROWNING       502
+
+"JGEN06.VOC"    DIGI_ZILLAREGARDS       503
+"MSG9.VOC"      DIGI_PMESSAGE           504
+
+"UGLY1A.VOC"    DIGI_SHAREND_UGLY1      505      First episode ending
+"UGLY1B.VOC"    DIGI_SHAREND_UGLY2      506
+"TELEPT07.VOC"  DIGI_SHAREND_TELEPORT   507
+
+"GOROSW1.VOC"   DIGI_HOTHEADSWITCH      508      Change head weapon mode
+"BTCREAK2.VOC"  DIGI_BOATCREAK          509      New boat sounds
+"BTRUN05.VOC"   DIGI_BOATRUN2           510
+"BTIDLE4.VOC"   DIGI_BOATIDLE           511
+"SHIPBELL.VOC"  DIGI_SHIPBELL           512
+"SHIPHRN1.VOC"  DIGI_FOGHORN            513
+
+"EXP3.VOC"      DIGI_CANNON             514      Cannon firing
+
+"JG41001.VOC"   DIGI_JG41001            515      Player voices
+"JG41012.VOC"   DIGI_JG41012            516      Most of these will be
+"JG41018.VOC"   DIGI_JG41018            517      the map specific stuff
+"JG41028.VOC"   DIGI_JG41028            518
+"JG41048.VOC"   DIGI_JG41048            519
+"JG41052.VOC"   DIGI_JG41052            520
+"JG41058.VOC"   DIGI_JG41058            521
+"JG41060.VOC"   DIGI_JG41060            522
+"JG41075.VOC"   DIGI_JG41075            523
+"JG42004.VOC"   DIGI_JG42004            524
+"JG42019.VOC"   DIGI_JG42019            525
+"JG42021.VOC"   DIGI_JG42021            526
+"JG42028.VOC"   DIGI_JG42028            527
+"JG42033.VOC"   DIGI_JG42033            528
+"JG42034.VOC"   DIGI_JG42034            529
+"JG42050.VOC"   DIGI_JG42050            530
+"JG42056.VOC"   DIGI_JG42056            531
+"JG42061.VOC"   DIGI_JG42061            532
+"JG43004.VOC"   DIGI_JG43004            533
+"JG43015.VOC"   DIGI_JG43015            534
+"JG43019.VOC"   DIGI_JG43019            535
+"JG43021.VOC"   DIGI_JG43021            536
+"JG44011.VOC"   DIGI_JG44011            537
+"JG44014.VOC"   DIGI_JG44014            538
+"JG44027.VOC"   DIGI_JG44027            539
+"JG44038.VOC"   DIGI_JG44038            540
+"JG44039.VOC"   DIGI_JG44039            541
+"JG44048.VOC"   DIGI_JG44048            542
+"JG44052.VOC"   DIGI_JG44052            543
+"JG45014.VOC"   DIGI_JG45014            544
+"JG44068.VOC"   DIGI_JG44068            545
+"JG45010.VOC"   DIGI_JG45010            546
+"JG45018.VOC"   DIGI_JG45018            547
+"JG45030.VOC"   DIGI_JG45030            548
+"JG45033.VOC"   DIGI_JG45033            549
+"JG45043.VOC"   DIGI_JG45043            550
+"JG45053.VOC"   DIGI_JG45053            551
+"JG45067.VOC"   DIGI_JG45067            552
+"JG46005.VOC"   DIGI_JG46005            553
+"JG46010.VOC"   DIGI_JG46010            554
+
+"LANI049.VOC"  DIGI_LANI049             555      Race Queen talks back
+"LANI051.VOC"  DIGI_LANI051             556
+"LANI052.VOC"  DIGI_LANI052             557
+"LANI054.VOC"  DIGI_LANI054             558
+
+"LANI060.VOC"  DIGI_LANI060             559      Sailor Girl talks back
+"LANI063.VOC"  DIGI_LANI063             560
+"LANI065.VOC"  DIGI_LANI065             561
+"LANI066.VOC"  DIGI_LANI066             562
+
+"LANI073.VOC"  DIGI_LANI073             563      Mechanic girl talks back
+"LANI075.VOC"  DIGI_LANI075             564
+"LANI077.VOC"  DIGI_LANI077             565
+"LANI079.VOC"  DIGI_LANI079             566
+
+"LANI089.VOC"  DIGI_LANI089             567      Old prune talks back
+"LANI091.VOC"  DIGI_LANI091             568
+"LANI093.VOC"  DIGI_LANI093             569
+"LANI095.VOC"  DIGI_LANI095             570
+
+"AD5.VOC"      DIGI_VENTWALK            571      Climb in a vent
+"AD6.VOC"      DIGI_CARWALK             572      Walk on a car
+"JET05.VOC"    DIGI_JETSOAR             573      Crashing jet
+"VC04.VOC"     DIGI_VACUUM              574      Driving a vacuum cleaner
+
+"LANI017.VOC"  DIGI_GIRLNINJAALERTT     575      Female Warrior sounds
+"LANI033.VOC"  DIGI_GIRLNINJASCREAM     576
+"LANI001.VOC"  DIGI_GIRLNINJAALERT      577
+
+"CACKLE.VOC"   DIGI_PRUNECACKLE         578      Old prune laughing
+"CACKLE2.VOC"  DIGI_PRUNECACKLE2        579
+"CACKLE3.VOC"  DIGI_PRUNECACKLE3        580
+
+"SUMO058.VOC"  DIGI_SUMOSTOMP           581      Sumo stomping
+
+"ELEV01.VOC"   DIGI_VATOR               582      Long elevator sound
+
+"JG9009.VOC"   DIGI_JG9009              583      Player voice
+
+"Z16004.VOC"   DIGI_Z16004              584      Zilla voices
+"Z16012.VOC"   DIGI_Z16012              585
+"Z16022.VOC"   DIGI_Z16022              586
+"Z16027.VOC"   DIGI_Z16027              587
+
+"JG93030.VOC"  DIGI_JG93030             588      Player voice
+"JG94002.VOC"  DIGI_JG94002             589
+
+"Z17010.VOC"   DIGI_Z17010              590      Zilla voices
+"Z17052.VOC"   DIGI_Z17052              591
+"Z17025.VOC"   DIGI_Z17025              592
+
+"ML25014.VOC"  DIGI_ML25014             593      Master Leep and
+"ML250101.VOC" DIGI_ML250101            594      more player voices
+"JG9022.VOC"   DIGI_JG9022              595
+"JG9032.VOC"   DIGI_JG9032              596
+"JG9038.VOC"   DIGI_JG9038              597
+"JG9055.VOC"   DIGI_JG9055              598
+"JG9060.VOC"   DIGI_JG9060              599
+"JG92055.VOC"  DIGI_JG92055             600
+"ML25032.VOC"  DIGI_ML25032             601
+"JG92036.VOC"  DIGI_JG92036             602
+"JG92042.VOC"  DIGI_JG92042             603
+"ML26001.VOC"  DIGI_ML26001             604
+"JG93000.VOC"  DIGI_JG93000             605
+"JG93011.VOC"  DIGI_JG93011             606
+"JG93018.VOC"  DIGI_JG93018             607
+"JG93023.VOC"  DIGI_JG93023             608
+"ML26008.VOC"  DIGI_ML26008             609
+"ML26011.VOC"  DIGI_ML26011             610
+"JG94007.VOC"  DIGI_JG94007             611
+"JG94024.VOC"  DIGI_JG94024             612
+"JG94039.VOC"  DIGI_JG94039             613
+"JG95012.VOC"  DIGI_JG95012             614
+
+
+---------------------------
+2.      Ambient Sound Index
+---------------------------
+
+Ambient sounds do not work the same as digital sounds. Rather than
+triggering them with a door or something, the game either constantly or
+intermittently plays the ambient sound in an area of the map. This is used
+for waterfalls, wind, or other environmental sound effects.
+
+This section is divided into two columns. The first column is an identifier
+that the programmers used to name the ambient sound. The second column is
+the sound entry number you need to use in TAG2 of the AMBIENT_SOUND
+(hitag 1002) ST1. Don't use these sound numbers with SOUND_SPOT (hitag 134)
+ST1's, or your sound won't work properly.
+
+All of these ambient sounds have an entry with a matching identifier in the
+digital sound index above.
+
+NOTE: Some of these ambient sounds were not used in the game. Feel free to
+      place your own custom ambient sounds in these slots.
+
++--------------------------------------+-------+
+|IDENTITY                              |ENTRY  |
++--------------------------------------+-------+
+
+DIGI_BUBBLES                            0
+DIGI_CRICKETS                           1
+DIGI_CAVEDRIP1                          2
+DIGI_CAVEDRIP2                          3
+DIGI_DRIP                               4
+DIGI_WATERFALL1                         5
+DIGI_WATERFALL2                         6
+DIGI_WATERFLOW1                         7
+DIGI_WATERFLOW2                         8
+DIGI_FIRE1                              9
+DIGI_FIRE2                              10
+DIGI_GONG                               11
+DIGI_LAVAFLOW1                          12
+DIGI_MUBBUBBLES1                        13
+DIGI_EARTHQUAKE                         14
+DIGI_SEWERFLOW1                         15
+DIGI_STEAM1                             16
+DIGI_VOLCANOSTEAM1                      17
+DIGI_SWAMP                              18
+DIGI_THUNDER                            19
+DIGI_UNDERWATER                         20
+DIGI_VOID1                              21
+DIGI_VOID2                              22
+DIGI_VOID3                              23
+DIGI_VOID4                              24
+DIGI_VOID5                              25
+DIGI_ERUPTION                           26
+DIGI_VOLCANOPROJECTILE                  27
+DIGI_LIGHTWIND                          28
+DIGI_STRONGWIND                         29
+DIGI_BREAKINGWOOD                       30
+DIGI_BREAKSTONES                        31
+DIGI_BOMBRFLYING                        40
+DIGI_BOMBRDROPBOMB                      41
+DIGI_DRILL                              42
+DIGI_GEAR1                              43
+DIGI_MACHINE1                           44
+DIGI_ENGROOM1                           45
+DIGI_ENGROOM2                           46
+DIGI_ENGROOM3                           47
+DIGI_ENGROOM4                           48
+DIGI_ENGROOM5                           49
+DIGI_HELI                               50
+DIGI_BIGHART                            51
+DIGI_WIND4                              52
+DIGI_SPOOKY1                            53
+DIGI_JET                                54
+DIGI_DRUMCHANT                          55
+DIGI_ASIREN1                            56
+DIGI_FIRETRK1                           57
+DIGI_TRAFFIC1                           58 Randomly picks traffic ambience
+DIGI_TRAFFIC2                           59
+DIGI_TRAFFIC3                           60
+DIGI_TRAFFIC4                           61
+DIGI_TRAFFIC5                           62
+DIGI_TRAFFIC6                           63
+DIGI_HELI1                              64
+DIGI_JET1                               65
+DIGI_MOTO1                              66
+DIGI_MOTO2                              67
+DIGI_NEON1                              68
+DIGI_SUBWAY                             69
+DIGI_TRAIN1                             70
+DIGI_BIRDS1                             71
+DIGI_BIRDS2                             72
+DIGI_AMOEBA                             73
+DIGI_TRAIN3                             74
+DIGI_TRAIN8                             75
+DIGI_WHIPME                             76
+DIGI_FLAGWAVE                           77
+DIGI_ANIMECRY                           78
+DIGI_WINDCHIMES                         79
+DIGI_BOATCREAK                          80
+DIGI_SHIPBELL                           81
+DIGI_FOGHORN                            82
+
+//===========================================================================
+
+------------------------------------------------
+Shadow Warrior Wall and Sector Tagging Reference
+Compiled And Edited By Keith Schuler
+(c) 1997 3D Realms Entertainment
+------------------------------------------------
+Contents
+--------
+
+Sector Tags                                             1
+        Sector Triggers                                 1.1
+                43. TAG_TRIGGER_MISSILE_TRAP
+                116. TAG_LEVEL_EXIT_SWITCH
+                206. TAG_SECTOR_TRIGGER_VATOR
+                210. TAG_LIGHT_TRIGGER
+                211. TAG_TRIGGER_EVERYTHING
+                212. TAG_TRIGGER_EVERYTHING_ONCE
+                216. TAG_SPAWN_ACTOR_TRIGGER
+                217. TAG_SECRET_AREA_TRIGGER
+                240. TAG_SPRING_BOARD
+        Sine wave floor or ceiling                      1.2
+                400. TAG_SINE_WAVE_FLOOR
+                420. TAG_SINE_WAVE_CEILING
+                440. TAG_SINE_WAVE_BOTH
+        Sector Object Tags                              1.3
+                501. TAG_OBJECT_CENTER
+
+Wall Tags                                               2
+        Sine wave wall effect                           2.1
+                300. TAG_WALL_SINE_Y_BEGIN
+                301. TAG_WALL_SINE_X_BEGIN
+                302. TAG_WALL_SINE_Y_END
+                303. TAG_WALL_SINE_X_END
+        Other Wall Tags                                 2.2
+                305. TAG_WALL_CLIMB
+                306. TV_CAMERA_SCREEN
+                307. TAG_WALL_BREAK
+                900. TAG_WALL_PLAY_SOUND
+        Sector Object Wall Tags                         2.3
+                500. TAG_WALL_LOOP_DONT_SPIN
+                501. TAG_WALL_LOOP_REVERSE_SPIN
+                502. TAG_WALL_LOOP_SPIN_2X
+                503. TAG_WALL_LOOP_SPIN_4X
+                504. TAG_WALL_LOOP_OUTER
+                507. TAG_WALL_LOOP_DONT_SCALE
+                508. TAG_WALL_LOOP_OUTER_SECONDARY
+                550. TAG_WALL_ALIGN_SLOPE_TO_POINT
+
+-----------------------------------------------------------------------------
+
+-------------------
+1.      Sector Tags
+-------------------
+
+Many things can be done in Shadow Warrior using sector tags. In general, the
+sector's lotag is used to identify the effect the sector will produce, while
+the hitag is used to supply supplemental information like a match tag or a
+track to follow.
+
+1.1     Sector Triggers:
+
+A "trigger" is the term in Shadow Warrior for a sector that triggers some
+match tag event when the player steps into it, much like a switch does. In
+Duke Nukem 3D, they were called "touchplates," but the general idea is the
+same. The sector triggers available are as follows:
+
+Lotag 43:       TAG_TRIGGER_MISSILE_TRAP
+                Hitag = Match
+
+Shoots a fireball from a FIREBALL_TRAP (hitag 43), BOLT_TRAP (hitag 44), or
+a SPEAR_TRAP (hitag 63) ST1 sprite with a lotag that matches the sector's
+hitag.
+
+Lotag 116:      TAG_LEVEL_EXIT_SWITCH
+                Hitag = Next level
+
+When the player steps into this sector, the level will end. The game will
+then proceed to the level listed in the sector hitag, provided the current
+level has the same filename as one of the levels that came with Shadow
+Warrior. For most external maps, a hitag of 0 should be sufficient.
+
+Lotag 206:      TAG_SECTOR_TRIGGER_VATOR
+                Hitag = Match
+
+Triggers a vator, spike, slidor, or rotator with a TAG2 that matches the
+hitag of this sector.
+
+Lotag 210:      TAG_LIGHT_TRIGGER
+                Hitag = Match
+
+Triggers all LIGHTING (hitag 108) ST1's with a TAG2 equal to the hitag of
+this sector when the player steps into it.
+
+Lotag 211:      TAG_TRIGGER_EVERYTHING
+               Hitag = Match
+
+Stepping into this sector triggers any event with a matching tag.
+
+Lotag 212:      TAG_TRIGGER_EVERYTHING_ONCE
+                Hitag = Match
+
+Stepping into this sector triggers any event with a matching tag once and
+only once.
+
+Lotag 216:      TAG_SPAWN_ACTOR_TRIGGER
+                Hitag = Match
+
+Give an actor a lotag of 203, and a matching hitag, and he will not appear
+normally at the map startup. Instead, he will teleport in when the player
+steps on this sector.
+
+Lotag 217:      TAG_SECRET_AREA_TRIGGER
+
+Marks a sector as a secret area.
+
+Lotag 240:      TAG_SPRING_BOARD
+                Hitag = Height of the jump
+
+Step on the sector, press the SPACEBAR, and it shoots you high into the air.
+Hitag designates how high the player will jump. One example of this is the
+ventilation shaft at the end of $NEWMINE.MAP.
+
+
+1.2     Sine wave floor or ceiling:
+
+You can have a maximum of five of these per level. See room GA in EXAMPLE.MAP
+to see how this is done. Lotag the first sector with 400, the next with 401,
+and so on up to 419. The WAVE will actually flow from the opposite end.
+The wave direction is what is referred to when BEGINNING and END are
+referred to below.
+
+1st sector hitag = The range in pixels the floor will undulate in the
+                   Z direction
+2nd sector hitag = Range decrement - takes the range from the 1st sector
+                   high tag and adjusts all the rest by this decrement -
+                   makes the WAVE start off small and get LARGER toward
+                   the end - THIS IS IN Z COORDINATES *NOT* PIXELS
+3rd sector hitag = Speed of the motion - defaults to 3
+4th sector hitag = Number of sectors from one peak (top of the curve) to the
+                   next. The default is the total number of sectors in the
+                   entire sine wave. (max of 20)
+Last sector hitag= Special tag to make a realistic ocean wave - modifies the
+                   range toward the END (greatest range is usually here) of
+                   the WAVE so that it dissapates quickly. Without this it
+                   would just continue to get bigger toward the end of the
+                   WAVE.
+
+Lotag 400:      TAG_SINE_WAVE_FLOOR
+                Hitag = Range in Z pixels floor will undulate
+
+First sector lotag is 400, then 401, then 402, all the way up to a max of
+419. Creates a sine wave on the floor. Slope the sectors to make a smooth,
+sloping sine wave.
+
+Lotag 420:      TAG_SINE_WAVE_CEILING
+                Hitag = Range in Z pixels ceiling will undulate
+
+First sector lotag is 420, then 421, then 422, all the way up to a max of
+439. Creates a sine wave effect on the ceiling.
+
+Lotag 440:      TAG_SINE_WAVE_BOTH
+                Hitag = Range in Z pixels both floor and ceiling
+
+First sector lotag is 440, then 441, then 442, all the way up to a max of
+459. Creates a sine wave effect both on the floor and on the ceiling.
+
+
+1.3     Sector Object Tags:
+
+Sector objects (SO's) are groups of sectors that can be moved around together
+as a unit. All SOs must have at a minimum:
+
+1. Bounding sprites (upper left and lower right) that form an imaginary
+   rectangle to contain all sectors and sprites to be moved.
+   ST1 SECT_SO_BOUNDING tags 500-600 are used for this.
+2. A sector marked as the center of the SO.
+3. An outer wall loop which forms an unbroken single sector that entirely
+   encircles the sector object. One of the walls in this loop must have a
+   lotag of 504.
+
+Sector lotags 500-596 are set reserved for sector objects. There is a
+maximum of 20 SO's per level. Lotags 500-501 correspond to object 0,
+505-506 to object 1, 510-511 to object 2, and so on, just like the
+SECT_SO_BOUNDING ST1 sprites.
+
+Lotag 501:      TAG_OBJECT_CENTER
+                Hitag =    -1: Don't follow a track
+                         0-94: Track to follow
+                           95: Killable Sector Object
+                           96: Auto turret
+                           98: Operational
+
+Lotag 501 tags the center sector of SO 0, while 506 would tag the center of
+SO 1, and so on. The center sector lotag will always be the same as the
+lower bounding sprite hitag. The sector hitag defines how the sector object
+will behave.
+
+
+-----------------
+2.      Wall Tags
+-----------------
+
+Several things can be done in Shadow Warrior using wall tags. In general, the
+wall's lotag is used to identify the effect the wall will produce, while
+the hitag is used to supply supplemental information like a match tag.
+
+2.1     Sine wave wall effect:
+
+You can have a maximum of 5 of these per level. Lotag the first wall to sine
+wave with 300, the last one with 302. Look in room GB in EXAMPLE.MAP to see
+how to do this.
+
+1st wall hitag = Range
+2nd wall hitag = Speed
+3rd wall hitag = A distance from one peak (top of curve) to the next
+
+Lotag 300:      TAG_WALL_SINE_Y_BEGIN
+                Hitag = Range
+
+        Use this to start a sine wave effect on a horizontal wall. Sine wave
+        will travel along the wall until it encounters a lotag 302.
+
+Lotag 301:      TAG_WALL_SINE_X_BEGIN
+                Hitag = Range
+
+        Use this to start a sine wave effect on a vertical wall. Sine wave
+        will travel along the wall until it encounters a lotag 303.
+
+Lotag 302:      TAG_WALL_SINE_Y_END
+
+        End a sine wave wall effect.
+
+Lotag 303:      TAG_WALL_SINE_X_END
+
+        End a sine wave wall effect.
+
+
+2.2     Other Wall Tags:
+
+Lotag 305:      TAG_WALL_CLIMB
+
+        Climbable wall, used with SPRI_CLIMB_MARKER (hitag 30) ST1. You may
+        only use this walltag on a red wall. Ladders aren't allowed on
+        white walls.
+
+Lotag 306:      TV_CAMERA_SCREEN
+                Hitag = Match
+
+        Use this walltag only on a mirror. The hitag is a match equal to the
+        TAG2 of a MIRROR_CAM (hitag 1000) ST1. Allows a mirror to display
+        the view of the camera instead of a reflection.
+
+Lotag 307:      TAG_WALL_BREAK
+                Hitag = Match
+
+        Used in conjunction with BREAKABLE (hitag 132) ST1. Marks a wall as
+        being breakable. The wall's hitag is equal to the BREAKABLE ST1's
+        TAG2.
+
+Hitag 900:      TAG_WALL_PLAY_SOUND
+                Lotag = Sound effect #
+
+        Notice that the hitag is 900, not the lotag! When the player presses
+        SPACEBAR against this wall, the sound effect designated by the lotag
+        will be played.
+
+2.3     Sector Object Wall Tags:
+
+These are mainly for sector objects that rotate. Tag ONE wall of the loop to
+obtain the desired effect. See room FD in EXAMPLE.MAP for an example of how
+to use this kind of walltag.
+
+Lotag 500:      TAG_WALL_LOOP_DONT_SPIN
+
+        This wall loop will not spin along with the rest of
+        the sector object.
+
+Lotag 501:      TAG_WALL_LOOP_REVERSE_SPIN
+
+        This wall loop will spin in the opposite direction of the rest of
+        the sector object.
+
+Lotag 502:      TAG_WALL_LOOP_SPIN_2X
+
+        This wall loop will spin two times as fast as the rest of the
+        sector object.
+
+Lotag 503:      TAG_WALL_LOOP_SPIN_4X
+
+        This wall loop will spin four times as fast as the rest of the
+        sector object.
+
+Lotag 504:      TAG_WALL_LOOP_OUTER
+
+        All sector objects use this. Tags the outermost bounding wall loop of
+        the sector object.
+
+Lotag 507:      TAG_WALL_LOOP_DONT_SCALE
+
+        Tag one wall in a loop you don't want to scale with the rest of the
+        sector object.
+
+Lotag 508:      TAG_WALL_LOOP_OUTER_SECONDARY
+
+        Rectangular clipping doesn't work too well if you've got an
+        operational sector object in a stacked sector area. Use lotag 508
+        on the secondary sector object instead of the usual 504 to make
+        rectangular clipping behave. See the driveable boat in $YAMATO.MAP
+        for an example of how to use this.
+
+Lotag 550:      TAG_WALL_ALIGN_SLOPE_TO_POINT
+
+        See room ED in EXAMPLE.MAP for an example of this. Used to make all
+        slopes in a sector object align to a single point, usually as the
+        point moves up and down.
+
+
+//===========================================================================
+
+--------------------------------------
+Advanced Shadow Warrior Mapping Topics
+Written By Keith Schuler
+(c) 1997 3D Realms Entertainment
+--------------------------------------
+
+Timing Vators                                                   1
+Room-Over-Room                                                  2
+        How It Works                                            2.1
+                BOUND_FLOOR_BASE_OFFSET and BOUND_FLOOR_OFFSET  2.1.1
+                VIEW_LEVEL1 and VIEW_LEVEL2                     2.1.2
+                The Floor Mirror                                2.1.3
+        The Rules Of Construction                               2.2
+                BOUND_FLOOR_BASE_OFFSET and BOUND_FLOOR_OFFSET  2.2.1
+                VIEW_THRU_FLOOR and VIEW_THRU_CEILING           2.2.2
+                VIEW_LEVEL1 and VIEW_LEVEL2                     2.2.3
+                Raising ceilings and lowering floors            2.2.4
+                Z heights and overlap                           2.2.5
+Advanced Room-Over-Room                                         3
+        Visible Ceilings And Floors                             3.1
+        Translucent Water                                       3.2
+        Sloping Room-Over-Room                                  3.3
+Sector Objects                                                  4
+        Rules of construction                                   4.1
+                The Wall Loop                                   4.1.1
+                The Bounding Box                                4.1.2
+                The Center Sector Lotag                         4.1.3
+                The Center Sector Hitag                         4.1.4
+                Sector Object Limitations                       4.1.5
+        What Can You Do With It                                 4.2
+                Follow A Track                                  4.2.1
+                Auto Turret                                     4.2.2
+                Driveables                                      4.2.3
+                Bind It Across Floors                           4.2.4
+SWSAVE                                                          5
+
+---------------------
+1.      Timing Vators
+---------------------
+
+Timing vators can be used to time events, cause things to happen after a
+pause, or whatever. A timing vator is usually just a small sector somewhere
+that the player can't get into. A SECT_VATOR (hitag 92) ST1 in the sector
+has a TAG6 match equal to the event you want to trigger. Adjust the speed or
+height of the vator to make a longer or shorter timer. Examples of timing
+vators exist in almost every map of Shadow Warrior.
+
+----------------------
+2.      Room-Over-Room
+----------------------
+
+Room-Over-Room is the most significant feature of Shadow Warrior. It allows
+for building genuinely 3-dimensional areas by placing one layer of sectors
+over another, and allowing players and sprites to pass freely between the
+two layers. It is, admittedly, a hack, and as such several rules of
+construction must be followed in order for it to work at all. This being
+the case, we'll start off by explaining what the heck the BUILD engine is
+doing to produce this effect anyway.
+
+2.1     How It Works:
+
+The BUILD engine is sector based, which means every sector must have walls,
+a ceiling, and a floor. Sectors can overlap each other, but these
+overlapping sectors can never see each other, or the view becomes garbled.
+
+        2.1.1 BOUND_FLOOR_BASE_OFFSET and BOUND_FLOOR_OFFSET
+
+        These two ST1's (hitags 202 and 203, respectively) are used to drag
+        groups of sectors over top of each other at premap. The BASE_OFFSET
+        serves as an "anchor point." The next OFFSET processed is moved to
+        the same x,y location as the BASE_OFFSET, dragging every sector
+        connected to it along for the ride.
+
+        2.1.2 VIEW_LEVEL1 and VIEW_LEVEL2
+
+        Let's assume for now that the player will be viewing the lower
+        layer (level 1) from within the upper layer (level 2). That's when
+        the VIEW_LEVEL1 (hitag 110) ST1 kicks in. Behind the scenes,
+        VIEW_LEVEL1 causes Shadow Warrior to draw level 1 as though the
+        player were standing in it, but with one difference: the ceiling
+        is moved up really, really high. If the player had been instead
+        standing in the lower layer (level 1) and looking up at level 2,
+        then the VIEW_LEVEL2 (hitag 111) sprite does a similar action.
+        Behind the scenes, VIEW_LEVEL2 causes Shadow Warrior to draw level
+        2 as though the player were standing in it, but with one
+        difference, the floor is moved down really, really low.
+
+        2.1.3 The Floor Mirror
+
+        Okay, so behind the scenes, we've drawn this weird looking area with
+        a really high ceiling or low floor. Now Shadow Warrior draws the
+        layer that the player is actually standing in, but it doesn't draw
+        anything where the floor mirror is. The "floor mirror" (tile #341)
+        is a special texture used expressly for this purpose. Because
+        Shadow Warrior didn't draw anything where the floor mirror was, the
+        scene appears to "see through" it into the other layer. That's the
+        image that the player sees on the screen at the next refresh.
+
+2.2     The Rules Of Construction
+
+        2.2.1 BOUND_FLOOR_BASE_OFFSET and BOUND_FLOOR_OFFSET
+
+        As stated above, these are necessary in order to drag one level over
+        the other. The lotag is the order in which they are processed, so
+        you'd set a BASE_OFFSET first, with a lotag of 0. Then you'd set up
+        all the OFFSETS you wanted to align to that BASE_OFFSET.
+
+        2.2.2 VIEW_THRU_FLOOR and VIEW_THRU_CEILING
+
+        One VIEW_THRU_CEILING (hitag 120) ST1 must be placed in a sector in
+        level 1 with a floor mirror texture on the ceiling. The lotag is a
+        view match tag, and must be the same as the lotag for the
+        VIEW_THRU_FLOOR sprite, as well as all the VIEW_LEVEL1 and
+        VIEW_LEVEL2 sprites in the room-over-room area. One VIEW_THRU_FLOOR
+        (hitag 121) ST1 must be place in a sector in level 2 with a floor
+        mirror texture on the floor, again, the lotag must be the same as
+        the VIEW_THRU_CEILING sprite. Both of the VIEW_THRU sprites must be
+        in the same relative positions in their respective sectors. Any
+        sectors in level 1 with a floor mirror texture must be congruent
+        to their matching sectors in level 2.
+
+        2.2.3 VIEW_LEVEL1 and VIEW_LEVEL2
+
+        These VIEW sprites are responsible for the actual drawing of room
+        over room, so there must be one in every sector where the player
+        can see the other level. Remember how the first area is drawn as
+        though the player's view were there, with the ceiling pushed up?
+        This means that there must be valid player space in level 1
+        everywhere the player can view it from level 2. This means that if
+        a player is standing anywhere in level 2, he cannot be standing over
+        "null space" in level 1. Also note that the VIEW_LEVEL sprites
+        should always be angled downward in 2D mode.
+
+        2.2.4 Raising ceilings and lowering floors
+
+        Because Shadow Warrior temporarily alters ceiling and floor heights
+        in room over room areas, two side effects will occur. The first is
+        that you can never see the ceiling of level 1 from level 2, nor see
+        the floor of level 2 from level 1. The second is that wall textures
+        will move depending on whether they are oriented to the ceiling or
+        floor. Keep this in mind when constructing your room over room areas.
+
+        2.2.5 Z heights and overlap
+
+        Level 1 and level 2 must be constructed with proper Z heights,
+        because Shadow Warrior won't do it for you. By this I mean that the
+        floor of level 2 must actually be higher than the ceiling of level 1.
+        The difference between the two is called the "overlap." At least
+        some overlap is necessary for room over room to behave correctly.
+        To build overlap correctly, follow these guidelines:
+
+                1> The height of the floor mirror (on the ceiling) in level 1
+                   must be the exact same as the height of the -floor- (not
+                   the floor mirror) in level 2.
+                2> The height of the floor mirror in level 2 must be the
+                   same as the height of the -ceiling- (not the floor mirror)
+                   in level 1.
+
+
+-------------------------------
+3.      Advanced Room-Over-Room
+-------------------------------
+
+Confused by room over room yet? Now let's move on the exceptions and special
+cases!
+
+3.1     Visible Ceilings And Floors
+
+        Above, we stated that you can never see the floor of level 2 from
+        level 1, and you can never see the ceiling of level 1 from level 2.
+        We lied. In $SHRINE.MAP, you can see sloping floors in level 2
+        from level 1 out in front of the temple. In $AUTO.MAP you can see
+        a car on the floor of level 2 from level 1. This is a special
+        trick, and you'll need to look at those maps to see how its done.
+        Here are some guidelines:
+
+        1> You must use two sets of VIEW_LEVEL and VIEW_THRU tags. Depending
+           on the sector, some VIEW_LEVEL tags will be turned "on" (pointing
+           down) and some will be turned "off" (pointing up.)
+        2> The player can only see the floor/ceiling from the sector with
+           the floor mirror texture, so be sure to construct your area
+           accordingly.
+        3> The player cannot see the floor/ceiling and see more floor mirror
+           on the other side. It just won't work.
+
+3.2     Translucent Water
+
+        To do this, build level 1 like any room over room area, but tag it
+        to be water, too, by placing a SECT_UNDERWATER (hitag 8) sprite in
+        there. The floor mirror sector is the sector you can enter and
+        exit the water from. The floor mirror sector in level 2 should not
+        have a DIVE_SECTOR (hitag 7) sprite, but it will need a
+        FLOOR_Z_ADJUST (hitag 98) with a lotag of 40. This allows the player
+        to wade along the surface without "falling" underwater. Use a
+        CEILING_FLOOR_PIC_OVERRIDE (hitag 136) to give the water a texture.
+
+        NOTE: This technique was also used to create reflective or masked
+              floors in Shadow Warrior.
+
+3.3     Sloping Room-Over-Room
+
+        Yes, it can be done. Look at $AIRPORT.MAP for an example.
+
+
+----------------------
+4.      Sector Objects
+----------------------
+
+A "sector object" is a group of connected sectors that operate as a unit.
+Driveables, amoebas, turrets, and numberous other things can be built using
+sector objects.
+
+4.1     Rules of construction:
+
+        4.1.1 The Wall Loop
+
+        Any sector object must be entirely surrounded by an unbroken
+        "wall loop." This means that no line can connect a vertex on the wall
+        loop to a vertex within the sector object. One line of this wall loop
+        must have a lotag set to TAG_WALL_LOOP_OUTER (walltag 504).
+
+        4.1.2 The Bounding Box
+
+        Every sector must have two SECT_SO_BOUNDING (hitag 500-600) ST1. One
+        sprite (BOUND_SO_UPPER) is placed in the upper left corner of the
+        sector object, while the other (BOUND_SO_LOWER) is placed in the
+        lower right corner. These two sprites form an imaginary rectangle.
+        Place these sprites so that this "imaginary rectangle" is large
+        enough to contain the entire outer wall loop plus any sprites you
+        want to move with the sector object. For sector object #0, the
+        BOUND_SO_UPPER sprite is hitag 500, and the BOUND_SO_LOWER sprite
+        is hitag 501. For sector object #1, use 505 and 506, respectively.
+        Sector object #2 uses 510 and 511. This continues all the way up
+        to sector object #19, which uses hitags 595 and 596.
+
+        4.1.3 The Center Sector Lotag
+
+        Every sector object must contain one and only one sector tagged as
+        its "center sector." This determines the center point around which
+        the sector object will pivot. The lotag of the center sector will
+        always be the same as the hitag of the sector object's
+        BOUND_SO_LOWER sprite. So, sector object #0 uses 501, #1 uses 506,
+        #2 uses 511, and so on all the way up to sector object #19, which
+        has a center sector lotag of 596.
+
+        4.1.4 The Center Sector Hitag
+
+        The sector hitag of the center sector is the track # that the
+        sector object will follow. See SPRITAGS.TXT for a description of
+        track sprites. If you don't want the sector object to follow a
+        track, set the hitag to -1. Other special cases include: 95 for a
+        killable sector object, 96 for an auto-turret, and 98 for a
+        driveable.
+
+        4.1.5 Sector Object Limitations
+
+        You can have up to twenty (0-19) sector objects in a map. Each
+        sector object can contain up to 30 sectors.
+
+4.2     What Can You Do With It?
+
+        4.2.1 Follow A Track
+
+        This is the most common use of a sector object. Set the hitag equal
+        to a track # and make the thing wander around. See SPRITAGS.TXT
+        to find out what you can do with tracks.
+
+        4.2.2 Auto Turret
+
+        Set the center sector hitag to 96, then put an AUTO_TURRET (hitag 81)
+        ST1 in the center sector. Put in a SO_ANGLE (hitag 16) to tell it
+        which way is the front, and then the sector object will always turn
+        to track the movement of the player. Add a SHOOT_POINT and the
+        auto-turret will shoot at the player.
+
+        4.2.3 Driveables
+
+        Set the center sector hitag to 98, then put in a SECT_OPERATIONAL
+        (hitag 1) and a SO_ANGLE and your sector object can now be driven
+        around by the player. It can never leave the sector surrounding the
+        wall loop, though, so keep that in mind.
+
+        4.2.4 Bind It Across Floors
+
+        If you want to place a sector object in water or in room over room
+        areas, you're going to want a "bottom" that moves with the top
+        half of the SO. This can be done pretty easily with
+        BOUND_FLOOR_BASE_OFFSET and BOUND_FLOOR_OFFSET. If the sector object
+        finds itself in a BOUND_FLOOR area, it will automatically try to
+        find its other half in the matching BOUND_FLOOR area. All the
+        secondary part needs is a wall loop tagged with 504 or 508, and
+        it will move as a unit. See rooms FB,FC, FE, and FF in EXAMPLE.MAP.
+
+--------------
+5.      SWSAVE
+--------------
+
+SWSAVE is a powerful and convenient debugging feature of Shadow Warrior. We
+found it to be immensely useful for finding stacked sector walls that don't
+match up, as well other odd uses. While in the game, press "T" and type in
+"SWSAVE" just like a cheat code. The program will save the map in its
+current state as SWSAVE.MAP, which you can then load into BUILD.
+BOUND_FLOOR_OFFSET dragging will have taken place, so you'll see room over
+room area sectors in their actual positions during the game.
+
+
+//===========================================================================
+

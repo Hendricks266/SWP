@@ -1431,10 +1431,10 @@ int startwin_open(void)
     CONFIG_ReadSetup();
     cmdbuf = strdup(GetCommandLine());
 
-    if (Bstrncasecmp(cmdbuf, "Swp.exe -z", 10) == 0)
+    if (Bstrncasecmp(cmdbuf, "SWP.exe -z", 10) == 0)
         return 0;
 
-    if (Bstrncasecmp(cmdbuf, "Swp.exe -by", 11) == 0)
+    if (Bstrncasecmp(cmdbuf, "SWP.exe -by", 11) == 0)
         return 0;
 
 	if (startupdlg)
@@ -2122,7 +2122,7 @@ void Showhelp(short x)
         " ",                                    // 39
 	    " Commandline Parameters",
         " ",
-	    " [Usage: Swp [options]\noptions:  ('-' or '/' may be used)]",
+	    " [Usage: SWP [options]\noptions:  ('-' or '/' may be used)]",
 	    " -?\t\tDump these paramaters to the log file",
         " -music [filename]\tLoad a musicfile",
         " -map [mapname]\tLoad a map",
@@ -2282,7 +2282,7 @@ void tabhelp(void)
     {
         t = "Multiplayer Information";
         s = "[Multiplayer Options]\n"
-        "Swp offers a full multiplay section which can be accessed initially from\n"
+        "SWP offers a full multiplay section which can be accessed initially from\n"
         "the start menu.\n"
         "Select the mode of play, click on Select Multiplay Game and click on Start.\n"
         "If you chose a map in the Maps section, the game will launch directly in the\n"

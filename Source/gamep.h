@@ -567,8 +567,8 @@ void LoadDefFiles(short iTyp)
           initprintf("Adding Definitions file: %s\n", "Sw.def");
           bDefFile = TRUE;
        }
-       if (!getdeffile("Swp.def"))
-           initprintf("Adding Definitions file: %s\n", "Swp.def");
+       if (!getdeffile("SWP.def"))
+           initprintf("Adding Definitions file: %s\n", "SWP.def");
     }
     else
     if (!SW_SHAREWARE)
@@ -603,7 +603,7 @@ long SetupUserMap()
         sprintf(mp,"-music %s%s", MusicFolder, MenuMusic);
     if (iMons == 0)  // no monsters
         strcpy(mt, " -monst");
-    sprintf(ds, "Swp.exe -map %s%s -s%d %s%s", MapsFolder, MenuMap, iSkill, mp, mt);
+    sprintf(ds, "SWP.exe -map %s%s -s%d %s%s", MapsFolder, MenuMap, iSkill, mp, mt);
 
     i = SetCommandLine(ds);
     return i;
@@ -642,7 +642,7 @@ long SetupUserGame(short gnum)
                sprintf(mu," -music %s%s", MusicFolder, MenuMusic);
            sprintf(mp," -map %s -s%d%s", GameMap, iSkill, mu);
        }
-       sprintf(ds, "Swp.exe %s-g%s -h%s.def -c%s.cfg%s%s", gFol, MenuGame, sBuff, sBuff, mp, gn);
+       sprintf(ds, "SWP.exe %s-g%s -h%s.def -c%s.cfg%s%s", gFol, MenuGame, sBuff, sBuff, mp, gn);
 
        i = SetCommandLine(ds);
        return i;
@@ -657,7 +657,7 @@ long SetupUserSavedGame(short snum)
    if (MenuGame[0] != 0)
        return SetupUserGame(snum);
 
-    sprintf(ds, "Swp.exe -game%d", snum);
+    sprintf(ds, "SWP.exe -game%d", snum);
 
     i = SetCommandLine(ds);
     return i;
@@ -667,7 +667,7 @@ long SetupUserLevel(short lnum)
 {
    long i;
 
-   sprintf(ds, "Swp.exe -level%d -s%d", lnum, iSkill);
+   sprintf(ds, "SWP.exe -level%d -s%d", lnum, iSkill);
 
    i = SetCommandLine(ds);
    return i;
@@ -738,9 +738,9 @@ long SetupMultiPlayer()
     strcpy(mnet, ds);
 
     if (HostMulti == 1)
-        sprintf(ds, "Swp.exe %s%s /name %s /net /n1 %s", mbuf, mnet, PlayerNameArg, IPAddress);
+        sprintf(ds, "SWP.exe %s%s /name %s /net /n1 %s", mbuf, mnet, PlayerNameArg, IPAddress);
     else
-        sprintf(ds, "Swp.exe %s /name %s -col %d /net %s /n1", mbuf, PlayerNameArg, iColr, IPAddress);
+        sprintf(ds, "SWP.exe %s /name %s -col %d /net %s /n1", mbuf, PlayerNameArg, iColr, IPAddress);
 
 
     i = SetCommandLine(ds);

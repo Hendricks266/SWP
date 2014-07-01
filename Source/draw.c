@@ -25,7 +25,7 @@ Prepared for public release: 03/28/2005 - Charlie Wiederhold, 3D Realms
 //-------------------------------------------------------------------------
 
 // Remove statusbar if in menu
-// Modified for SwpBuild
+// Modified for SWPBUILD
 // Reduced size of xhair
 // Fixed crosshair in bbp = 8
 // Added move stats

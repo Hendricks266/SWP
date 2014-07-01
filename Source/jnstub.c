@@ -14,7 +14,7 @@ of the License, or (at your option) any later version.
 
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 See the GNU General Public License for more details.
 
@@ -25,6 +25,12 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 Prepared for public release: 03/28/2005 - Charlie Wiederhold, 3D Realms
 */
 //-------------------------------------------------------------------------
+
+// Added increase stat font size                 wxyz
+// Added Colors                                  wxcl
+// Removed frame count                           wxfc
+// ---------------------- 2009 ----------------------
+//
 
 #include "build.h"
 #include "compat.h"
@@ -65,7 +71,7 @@ short siNextTag = 1;                    // Shows next available tag if there
 short siNextEndTag = 1;                 // Shows the hightest possible next
                                         // tag
 
-long loaded_numwalls;                                        
+long loaded_numwalls;
 // Boolean flags used for sprite searching
 BOOL bFindPicNum = TRUE;                // Default
 BOOL bFindHiTag = FALSE;
@@ -115,7 +121,7 @@ void PrintStatus(char *string, int num, char x, char y, char color);
 
 #define NUMOPTIONS 8
 extern long mapversion;
-char option[NUMOPTIONS] = {0, 0, 0, 0, 0, 0, 1, 0};
+char option[NUMOPTIONS] = {0, 0, 1, 1, 0, 0, 1, 64};
 char keys[NUMBUILDKEYS] =
     {
     0xc8, 0xd0, 0xcb, 0xcd, 0x2a, 0x9d, 0x1d, 0x39,
@@ -135,6 +141,22 @@ extern short asksave;
 short ExtSectorTag[MAXSECTORS][4];
 static char tempbuf[256];
 char ds[256];
+
+short cblk = 0;    // 0                                                    // wxcl
+short cblu = 1;    //
+short cgrn = 2;    //
+short ctel = 3;    //
+short cred = 120;  // 120
+short cpur = 5;    //
+short cbrn = 254;  // 254
+short csil = 16;   // 16
+                   //
+short clim = 144;  // 144
+short ccyn = 11;   //
+short cpnk = 12;   //
+short cvio = 255;  // 255
+short cyel = 128;  // 128
+short cwht = 32;   // 32
 
 enum
     {
@@ -231,7 +253,7 @@ void ExtPreCheckKeys(void)
 // Toggle sprites on/off.  Good for frame rate checks.
 BOOL DebugActorFreeze = 0;
 
-void 
+void
 ToggleSprites()
     {
     spritetype *tspr;
@@ -311,7 +333,7 @@ ToggleSprites()
     }
 
 
-void 
+void
 DoAutoSize(spritetype * tspr)
     {
     short i;
@@ -653,7 +675,7 @@ ExtInit(void)
 
 char *startwin_labeltext = "Starting Build Editor for Shadow Warrior...";
 
-int 
+int
 ExtInit(void)
     {
 	int rv = 0;
@@ -661,7 +683,7 @@ ExtInit(void)
 
 #ifndef BUILD_DEV_VER
     char ch;
-    
+
     printf("\n------------------------------------------------------------------------------\n");
     printf("BUILD.EXE for Shadow Warrior\n\n");
     printf("Copyright (c) 1993 - 1997, 3D Realms Entertainment.\n");
@@ -728,8 +750,9 @@ ExtInit(void)
 			free(homedir);
 		}
 	}
-	
-    if (getenv("SWGRP")) {
+
+    if (getenv("SWGRP"))
+    {
 	    swgrp = getenv("SWGRP");
 	    initprintf("Using %s as main GRP file\n", swgrp);
     }
@@ -745,7 +768,7 @@ ExtInit(void)
             }
 	    */
 	bpp = 8;
-	if (loadsetup("build.cfg") < 0) initprintf("Configuration file not found, using defaults.\n"), rv = 1;
+	if (loadsetup("SWPBUILD.cfg") < 0) initprintf("Configuration file not found, using defaults.\n"), rv = 1;
 	Bmemcpy((void *)buildkeys,(void *)keys,NUMBUILDKEYS);   //Trick to make build use setup.dat keys
         if (option[4] > 0)
             option[4] = 0;
@@ -779,7 +802,7 @@ void
 ExtUnInit(void)
     {
     uninitgroupfile();
-	writesetup("build.cfg");
+	writesetup("SWPBUILD.cfg");
     // Store user log in time
     //LogUserTime(FALSE);                 // FALSE means user is logging out
                                         // now.
@@ -790,7 +813,7 @@ SetSpriteExtra(VOID)
     {
     SPRITEp sp;
     int i;
-    
+
 #define DEFAULT_SKILL 2
 
     // for (sp = sprite; sp < &sprite[MAXSPRITES]; sp++)
@@ -800,12 +823,12 @@ SetSpriteExtra(VOID)
             {
             if (sp->owner == -1)
                 sp->owner = 0;
-            }    
+            }
         else
             {
             sp->owner = -1;
             }
-            
+
         if (sp->extra == -1)
             {
             sp->extra = 0;
@@ -814,7 +837,7 @@ SetSpriteExtra(VOID)
         }
 
     // loaded_numwalls is what numwalls is after a load
-    // only new walls get their extra's set    
+    // only new walls get their extra's set
     if (loaded_numwalls != numwalls)
         {
         for (i = 0; i < numwalls; i++)
@@ -822,8 +845,8 @@ SetSpriteExtra(VOID)
             if (wall[i].extra != 0)
                 wall[i].extra = 0;
             }
-        }    
-    loaded_numwalls = numwalls;    
+        }
+    loaded_numwalls = numwalls;
     }
 
 VOID
@@ -1330,12 +1353,12 @@ Keys3D(VOID)
         for (i = 0; i < highlightsectorcnt; i++)
             {
             currsector = highlightsector[i];
-            
+
             if((sector[currsector].ceilingpal == temppal && temppal != 0) || (temppal == 0 && sector[currsector].ceilingpal != 0))
                 sector[currsector].ceilingshade = 127;
             if((sector[currsector].floorpal == temppal && temppal != 0) || (temppal == 0 && sector[currsector].ceilingpal != 0))
                 sector[currsector].floorshade = 127;
-                
+
             // Do all the walls in the sector
             start_wall = sector[currsector].wallptr;
             end_wall = start_wall + sector[currsector].wallnum;
@@ -1352,7 +1375,7 @@ Keys3D(VOID)
     }                                   // end Keys3D()
 
 // Used to help print out the item status list
-void 
+void
 PrintStatus(char *string, int num, char x, char y, char color)
     {
     sprintf(tempbuf, "%s %d", string, num);
@@ -2042,7 +2065,7 @@ MoreKeys(short searchstat, short searchwall, short searchsector, short pointhigh
 #define COINCURSOR 2440
 
 int intro;
-void 
+void
 ExtCheckKeysNotice(void)
     {
     #if 0
@@ -2057,8 +2080,10 @@ ExtCheckKeysNotice(void)
             rotatesprite((320 - 8) << 16, (200 - 8) << 16, 64 << 9, 0, COINCURSOR + (((4 - totalclock >> 3)) & 7), 0, 0, 0, 0, 0, xdim - 1, ydim - 1);
             }
         }
-    #endif    
+    #endif
     }                                   // end
+
+extern void Display3DStats(void);
 
 void
 ExtCheckKeys(void)
@@ -2084,8 +2109,8 @@ ExtCheckKeys(void)
 //  slackerclock += ticdiff;
 //  ticdiff = 0;            // Set it back to 0!
 
-
-    if (qsetmode == 200)                // In 3D mode
+/*
+    if (qsetmode == 200)                // In 3D mode                // wxfc
         {
 #define AVERAGEFRAMES 16
         static long frameval[AVERAGEFRAMES], framecnt = 0;
@@ -2094,24 +2119,22 @@ ExtCheckKeys(void)
         i = totalclock;
         if (i != frameval[framecnt])
             {
-            sprintf(tempbuf, "%ld", ((120 * AVERAGEFRAMES) / (i - frameval[framecnt])) + f_c);
-            printext256(0L, 0L, 1, -1, tempbuf, 1);
+            sprintf(tempbuf, "FPS: %ld", ((120 * AVERAGEFRAMES) / (i - frameval[framecnt])) + f_c);
+            printext256(0L, 0L, 1, -1, tempbuf, 0);
             frameval[framecnt] = i;
             }
         framecnt = ((framecnt + 1) & (AVERAGEFRAMES - 1));
-
         }
-
+*/
     MoreKeys(searchstat, searchwall, searchsector, pointhighlight);
 
     if (qsetmode == 200)                // In 3D mode
         {
         Keys3D();
-
+        Display3DStats();                                            // wxst
         if (KEY_PRESSED(KEYSC_W))
             {
             KEY_PRESSED(KEYSC_W) = 0;
-
             switch (searchstat)
                 {
             case 0:
@@ -2648,7 +2671,7 @@ ExtGetSpriteCaption(short spritenum)
             DrawClipBox(spritenum);
         if (sp->hitag == SECT_SO_CLIP_DIST)
             DrawClipBox(spritenum);
-    
+
         if ((sprite[spritenum].lotag | sprite[spritenum].hitag) == 0)
             sprintf(tempbuf, "S:%d,%s%s", data, p, multi_str);
         else
@@ -2735,7 +2758,7 @@ DrawClipBox(short spritenum)
         SectorMidPoint(sprite[spritenum].sectnum,&x, &y, &z);
         x = mulscale14(x - posx, zoom);
         y = mulscale14(y - posy, zoom);
-        }    
+        }
 
     x += 320;
     y += 200;
@@ -2797,76 +2820,101 @@ ExtShowSectorData(short sectnum)        // F5
     clearmidstatbar16();                // Clear middle of status bar
 
     x = 1;
-    x2 = 14;
+    x2 = 15;
     y = 4;
-    printext16(x * 8, ydim16+y * 8, 11, -1, "Item Count", 0);
-    PrintStatus("10%Health=", numsprite[ICON_SM_MEDKIT], x, y + 2, 11);
+    printext16(x * 8, ydim16+y * 8, cblk, -1, "Item Count", 0);
+    PrintStatus("Health 10 =", numsprite[ICON_SM_MEDKIT], x, y + 2, cblk);
     PrintStatus("", multisprite[ICON_SM_MEDKIT], x2, y + 2, 1);
-    PrintStatus("HealthBot=", numsprite[ICON_BOOSTER], x, y + 3, 11);
+    PrintStatus("HealthBot =", numsprite[ICON_BOOSTER], x, y + 3, cblk);
     PrintStatus("", multisprite[ICON_BOOSTER], x2, y + 3, 1);
-    PrintStatus("Armor    =", numsprite[ICON_ARMOR], x, y + 4, 11);
+    PrintStatus("Armor     =", numsprite[ICON_ARMOR], x, y + 4, cblk);
     PrintStatus("", multisprite[ICON_ARMOR], x2, y + 4, 1);
 
-    x = 17;
-    x2 = 30;
+    x = 20;
+    x2 = 34;
     y = 4;
-    printext16(x * 8, ydim16+y * 8, 11, -1, "Inventory", 0);
-    PrintStatus("Med-Kit  =", numsprite[ICON_MEDKIT], x, y + 2, 11);
+    printext16(x * 8, ydim16+y * 8, cblk, -1, "Inventory", 0);
+    PrintStatus("Med-Kit   =", numsprite[ICON_MEDKIT], x, y + 2, cblk);
     PrintStatus("", multisprite[ICON_MEDKIT], x2, y + 2, 1);
-    PrintStatus("Bio_Suit =", numsprite[ICON_ENVIRON_SUIT], x, y + 3, 11);
+    PrintStatus("Bio Suit  =", numsprite[ICON_ENVIRON_SUIT], x, y + 3, cblk);
     PrintStatus("", multisprite[ICON_ENVIRON_SUIT], x2, y + 3, 1);
-    PrintStatus("NightGogs=", numsprite[ICON_NIGHT_VISION], x, y + 4, 11);
+    PrintStatus("NightGogs =", numsprite[ICON_NIGHT_VISION], x, y + 4, cblk);
     PrintStatus("", multisprite[ICON_NIGHT_VISION], x2, y + 4, 1);
-    PrintStatus("SmokeBomb=", numsprite[ICON_CLOAK], x, y + 5, 11);
+    PrintStatus("SmokeBomb =", numsprite[ICON_CLOAK], x, y + 5, cblk);
     PrintStatus("", multisprite[ICON_CLOAK], x2, y + 5, 1);
-    PrintStatus("Tool_Box =", numsprite[ICON_REPAIR_KIT], x, y + 6, 11);
+    PrintStatus("Tool Box  =", numsprite[ICON_REPAIR_KIT], x, y + 6, cblk);
     PrintStatus("", multisprite[ICON_REPAIR_KIT], x2, y + 6, 1);
-    PrintStatus("Heat_Card=", numsprite[ICON_HEAT_CARD], x, y + 7, 11);
+    PrintStatus("Heat Card =", numsprite[ICON_HEAT_CARD], x, y + 7, cblk);
     PrintStatus("", multisprite[ICON_HEAT_CARD], x2, y + 7, 1);
-    PrintStatus("FlashBomb=", numsprite[ICON_FLASHBOMB], x, y + 8, 11);
+    PrintStatus("FlashBomb =", numsprite[ICON_FLASHBOMB], x, y + 8, cblk);
     PrintStatus("", multisprite[ICON_FLASHBOMB], x2, y + 8, 1);
-    PrintStatus("Caltrops =", numsprite[ICON_CALTROPS], x, y + 9, 11);
+    PrintStatus("Caltrops  =", numsprite[ICON_CALTROPS], x, y + 9, cblk);
     PrintStatus("", multisprite[ICON_CALTROPS], x2, y + 9, 1);
 
-    x = 33;
-    x2 = 46;
+    x = 39;
+    x2 = 53;
     y = 4;
-    printext16(x * 8, ydim16+y * 8, 11, -1, "Weapon Count", 0);
-    PrintStatus("Shuriken =", numsprite[ICON_STAR], x, y + 2, 11);
+    printext16(x * 8, ydim16+y * 8, cblk, -1, "Weapon Count", 0);
+    PrintStatus("Shuriken  =", numsprite[ICON_STAR], x, y + 2, cblk);
     PrintStatus("", multisprite[ICON_STAR], x2, y + 2, 1);
-    PrintStatus("Uzi      =", numsprite[ICON_UZI], x, y + 3, 11);
+    PrintStatus("Uzi       =", numsprite[ICON_UZI], x, y + 3, cblk);
     PrintStatus("", multisprite[ICON_UZI], x2, y + 3, 1);
-    PrintStatus("Riot_Gun =", numsprite[ICON_SHOTGUN], x, y + 4, 11);
+    PrintStatus("Riot Gun  =", numsprite[ICON_SHOTGUN], x, y + 4, cblk);
     PrintStatus("", multisprite[ICON_SHOTGUN], x2, y + 4, 1);
-    PrintStatus("Misl_Bat =", numsprite[ICON_MICRO_GUN], x, y + 5, 11);
+    PrintStatus("Rocket  L =", numsprite[ICON_MICRO_GUN], x, y + 5, cblk);
     PrintStatus("", multisprite[ICON_MICRO_GUN], x2, y + 5, 1);
-    PrintStatus("40mm     =", numsprite[ICON_GRENADE_LAUNCHER], x, y + 6, 11);
+    PrintStatus("Grenade L =", numsprite[ICON_GRENADE_LAUNCHER], x, y + 6, cblk);
     PrintStatus("", multisprite[ICON_GRENADE_LAUNCHER], x2, y + 6, 1);
-    PrintStatus("Mines    =", numsprite[ICON_LG_MINE], x, y + 7, 11);
+    PrintStatus("Mines     =", numsprite[ICON_LG_MINE], x, y + 7, cblk);
     PrintStatus("", multisprite[ICON_LG_MINE], x2, y + 7, 1);
-    PrintStatus("Rail_Gun =", numsprite[ICON_RAIL_GUN], x, y + 8, 11);
+    PrintStatus("Rail Gun  =", numsprite[ICON_RAIL_GUN], x, y + 8, cblk);
     PrintStatus("", multisprite[ICON_RAIL_GUN], x2, y + 8, 1);
-    PrintStatus("Evil Head=", numsprite[ICON_GUARD_HEAD], x, y + 9, 11);
+    PrintStatus("Goro Head =", numsprite[ICON_GUARD_HEAD], x, y + 9, cblk);
     PrintStatus("", multisprite[ICON_GUARD_HEAD], x2, y + 9, 1);
-    PrintStatus("Heart    =", numsprite[ICON_HEART], x, y + 10, 11);
+    PrintStatus("Heart     =", numsprite[ICON_HEART], x, y + 10, cblk);
     PrintStatus("", multisprite[ICON_HEART], x2, y + 10, 1);
 
-    x = 49;
-    x2 = 62;
+    x = 58;
+    x2 = 72;
     y = 4;
-    printext16(x * 8, ydim16+y * 8, 11, -1, "Ammo Count", 0);
-    PrintStatus("Bullets  =", numsprite[ICON_LG_UZI_AMMO], x, y + 2, 11);
+    printext16(x * 8, ydim16+y * 8, cblk, -1, "Ammo Count", 0);
+    PrintStatus("Bullets   =", numsprite[ICON_LG_UZI_AMMO], x, y + 2, cblk);
     PrintStatus("", multisprite[ICON_LG_UZI_AMMO], x2, y + 2, 1);
-    PrintStatus("ShotShell=", numsprite[ICON_LG_SHOTSHELL], x, y + 3, 11);
+    PrintStatus("ShotShell =", numsprite[ICON_LG_SHOTSHELL], x, y + 3, cblk);
     PrintStatus("", multisprite[ICON_LG_SHOTSHELL], x2, y + 3, 1);
-    PrintStatus("Rockets  =", numsprite[ICON_MICRO_BATTERY], x, y + 4, 11);
+    PrintStatus("Rockets   =", numsprite[ICON_MICRO_BATTERY], x, y + 4, cblk);
     PrintStatus("", multisprite[ICON_MICRO_BATTERY], x2, y + 4, 1);
-    PrintStatus("40mmShell=", numsprite[ICON_LG_GRENADE], x, y + 5, 11);
+    PrintStatus("Grenades  =", numsprite[ICON_LG_GRENADE], x, y + 5, cblk);
     PrintStatus("", multisprite[ICON_LG_GRENADE], x2, y + 5, 1);
-    PrintStatus("Rail_Pack=", numsprite[ICON_RAIL_AMMO], x, y + 6, 11);
+    PrintStatus("Rail Pack =", numsprite[ICON_RAIL_AMMO], x, y + 6, cblk);
     PrintStatus("", multisprite[ICON_RAIL_AMMO], x2, y + 6, 1);
 
+    x = 77;
+    y = 4;
+    printext16(x * 8, ydim16+y * 8, cblk, -1, "Monster Count", 0);
+    PrintStatus("Ninja    =", numsprite[4096], x, y + 2, cblk);
+    PrintStatus("Coolie   =", numsprite[1400], x, y + 3, cblk);
+    PrintStatus("Skeleton =", numsprite[1441], x, y + 4, cblk);
+    PrintStatus("Ripper 1 =", numsprite[1580], x, y + 5, cblk);
+    PrintStatus("Ripper 2 =", numsprite[4320], x, y + 6, cblk);
+    PrintStatus("Guardian =", numsprite[1469], x, y + 7, cblk);
+    PrintStatus("Hornet   =", numsprite[800],  x, y + 8, cblk);
+    PrintStatus("Fish     =", numsprite[3780], x, y + 9, cblk);
 
+    if (xdim2d > 1000)
+       {
+       x = 92;
+       y = 4;
+       printext16(x * 8, ydim16+y * 8, cblk, -1, "Monster Count", 0);
+       PrintStatus("Lady Ninja   =", numsprite[5162], x, y + 2, cblk);
+       PrintStatus("Bunny        =", numsprite[4550], x, y + 3, cblk);
+       PrintStatus("Skull        =", numsprite[820],  x, y + 4, cblk);
+       PrintStatus("Betty        =", numsprite[817],  x, y + 5, cblk);
+
+       PrintStatus("Serpent Boss =", numsprite[1300], x, y + 7, cblk);
+       PrintStatus("Sumo    Boss =", numsprite[1210], x, y + 8, cblk);
+       PrintStatus("Zilla   Boss =", numsprite[5426], x, y + 9, cblk);
+       }
     // Show next tags
     FindNextTag();
     ShowNextTag();
@@ -2906,7 +2954,7 @@ ExtShowWallData(short wallnum)          // F6
 
     clearmidstatbar16();                // Clear middle of status bar
     sprintf(tempbuf, "Wall %d", wallnum);
-    printext16(8, ydim16+32, 11, -1, tempbuf, 0);
+    printext16(8, ydim16+32, cblk, -1, tempbuf, 0);
     }
 
 void
@@ -2917,7 +2965,7 @@ ExtShowSpriteData(short spritenum)      // F6
 
     while (KEY_PRESSED(KEYSC_F6));
     ResetKeys();
-    ContextHelp(spritenum);             // Get context sensitive help
+//    ContextHelp(spritenum);             // Get context sensitive help
 
 
 // OLD
@@ -2941,16 +2989,16 @@ ExtEditSectorData(short sectnum)        // F7
     clearmidstatbar16();                // Clear middle of status bar
 
     sprintf(tempbuf, "Current attributes for sprite being searched for:");
-    printext16(8, ydim16+32, 11, -1, tempbuf, 0);
+    printext16(8, ydim16+32, cblk, -1, tempbuf, 0);
 
     sprintf(tempbuf, "PicNum = %d", FindPicNum);
-    printext16(8, ydim16+32 + 16, 11, -1, tempbuf, 0);
+    printext16(8, ydim16+32 + 16, cblk, -1, tempbuf, 0);
 
-    sprintf(tempbuf, "HiTag = %d", sp->hitag);
-    printext16(8, ydim16+32 + 24, 11, -1, tempbuf, 0);
+    sprintf(tempbuf, "HiTag  = %d", sp->hitag);
+    printext16(8, ydim16+32 + 24, cblk, -1, tempbuf, 0);
 
     sprintf(tempbuf, "LowTag = %d", sp->lotag);
-    printext16(8, ydim16+32 + 32, 11, -1, tempbuf, 0);
+    printext16(8, ydim16+32 + 32, cblk, -1, tempbuf, 0);
 
     FindNextSprite(FindPicNum);
     }
@@ -2988,10 +3036,10 @@ ExtEditSpriteData(short spritenum)      // F8
         return;
 
     clearmidstatbar16();                // Clear middle of status bar
-    printext16(8, ydim16+32, 11, -1, "(1)  Skill Level - 0=Easy 1=Normal 2=Hard 3=Crazy", 0);
-    printext16(8, ydim16+32 + 8, 11, -1, "(2)  Multi-Player Item Toggle", 0);
-    printext16(8, ydim16+32 + 16, 11, -1, "(3)  Find Sprite", 0);
-    printext16(8, ydim16+32 + 24, 11, -1, "(4)  Dbug Toggle (* Programming use only *) ", 0);
+    printext16(8, ydim16+32, cblk, -1, "(1)  Skill Level - 0=Easy 1=Normal 2=Hard 3=Crazy", 0);
+    printext16(8, ydim16+32 + 8, cblk, -1, "(2)  Multi-Player Item Toggle", 0);
+    printext16(8, ydim16+32 + 16, cblk, -1, "(3)  Find Sprite", 0);
+    printext16(8, ydim16+32 + 24, cblk, -1, "(4)  Dbug Toggle (* Programming use only *) ", 0);
     showframe(1);
 
     while (KEY_PRESSED(KEYSC_F8)) handleevents();
@@ -3030,25 +3078,25 @@ ExtEditSpriteData(short spritenum)      // F8
             {
     DISPLAY:
             clearmidstatbar16();
-            printext16(8, ydim16+32, 11, -1, "Toggle Sprite Seach Criteria.  ESC quits.", 0);
+            printext16(8, ydim16+32, cblk, -1, "Toggle Sprite Seach Criteria.  ESC quits.", 0);
 
-            printext16(8, ydim16+32 + 16, 11, -1, "(1) Use PicNum in search: ", 0);
+            printext16(8, ydim16+32 + 16, cblk, -1, "(1) Use PicNum in search: ", 0);
             if (bFindPicNum)
-                printext16(8 + 240, ydim16+32 + 16, 11, -1, "TRUE", 0);
+                printext16(8 + 240, ydim16+32 + 16, cblk, -1, "TRUE", 0);
             else
-                printext16(8 + 240, ydim16+32 + 16, 11, -1, "FALSE", 0);
+                printext16(8 + 240, ydim16+32 + 16, cblk, -1, "FALSE", 0);
 
-            printext16(8, ydim16+32 + 24, 11, -1, "(2) Use HiTag in search: ", 0);
+            printext16(8, ydim16+32 + 24, cblk, -1, "(2) Use HiTag in search: ", 0);
             if (bFindHiTag)
-                printext16(8 + 240, ydim16+32 + 24, 11, -1, "TRUE", 0);
+                printext16(8 + 240, ydim16+32 + 24, cblk, -1, "TRUE", 0);
             else
-                printext16(8 + 240, ydim16+32 + 24, 11, -1, "FALSE", 0);
+                printext16(8 + 240, ydim16+32 + 24, cblk, -1, "FALSE", 0);
 
-            printext16(8, ydim16+32 + 32, 11, -1, "(3) Use LowTag in search: ", 0);
+            printext16(8, ydim16+32 + 32, cblk, -1, "(3) Use LowTag in search: ", 0);
             if (bFindLowTag)
-                printext16(8 + 240, ydim16+32 + 32, 11, -1, "TRUE", 0);
+                printext16(8 + 240, ydim16+32 + 32, cblk, -1, "TRUE", 0);
             else
-                printext16(8 + 240, ydim16+32 + 32, 11, -1, "FALSE", 0);
+                printext16(8 + 240, ydim16+32 + 32, cblk, -1, "FALSE", 0);
 	    showframe(1);
 
             // Disallow invalid settings
@@ -3099,16 +3147,16 @@ ExtEditSpriteData(short spritenum)      // F8
     clearmidstatbar16();                // Clear middle of status bar
 
     sprintf(tempbuf, "Current attributes for selected sprite:");
-    printext16(8, ydim16+32, 11, -1, tempbuf, 0);
+    printext16(8, ydim16+32, cblk, -1, tempbuf, 0);
 
     sprintf(tempbuf, "     Skill = %d", TEST(sp->extra, SPRX_SKILL));
-    printext16(8, ydim16+32 + 16, 11, -1, tempbuf, 0);
+    printext16(8, ydim16+32 + 16, cblk, -1, tempbuf, 0);
 
     sprintf(tempbuf, "     Multi Item = %d", !!TEST(sp->extra, SPRX_MULTI_ITEM));
-    printext16(8, ydim16+32 + 24, 11, -1, tempbuf, 0);
+    printext16(8, ydim16+32 + 24, cblk, -1, tempbuf, 0);
 
     sprintf(tempbuf, "     Debug = %d", !!TEST(sp->extra, SPRX_BLOCK));
-    printext16(8, ydim16+32 + 32, 11, -1, tempbuf, 0);
+    printext16(8, ydim16+32 + 32, cblk, -1, tempbuf, 0);
 
     }
 
@@ -3142,7 +3190,7 @@ PlaxSetShade(void)
     clearmidstatbar16();                // Clear middle of status bar
 
     sprintf(tempbuf, "%ld Plax Sky shades set.", count);
-    printext16(8, ydim16+32, 11, -1, tempbuf, 0);
+    printext16(8, ydim16+32, cblk, -1, tempbuf, 0);
     }
 
 void
@@ -3180,7 +3228,7 @@ PlaxAdjustShade(void)
     clearmidstatbar16();                // Clear middle of status bar
 
     sprintf(tempbuf, "%ld Plax Sky shades adjusted.", count);
-    printext16(8, ydim16+32, 11, -1, tempbuf, 0);
+    printext16(8, ydim16+32, cblk, -1, tempbuf, 0);
     }
 
 void
@@ -3350,7 +3398,7 @@ AdjustVisibility(void)
     clearmidstatbar16();                // Clear middle of status bar
 
     sprintf(tempbuf, "%ld Vis adjusted.", count);
-    printext16(8, ydim16+32, 11, -1, tempbuf, 0);
+    printext16(8, ydim16+32, cblk, -1, tempbuf, 0);
     }
 
 void
@@ -3561,10 +3609,10 @@ ShadeMenu(void)                         // F8
         return;
 
     clearmidstatbar16();                // Clear middle of status bar
-    printext16(8, ydim16+32, 11, -1, "(1) Plax Set ", 0);
-    printext16(8, ydim16+32 + 8, 11, -1, "(2) Plax Adjust ", 0);
-    printext16(8, ydim16+32 + 16, 11, -1, "(3) Shade Adjust ", 0);
-    printext16(8, ydim16+32 + 24, 11, -1, "(4) Visibility ", 0);
+    printext16(8, ydim16+32, cblk, -1, "(1) Plax Set ", 0);
+    printext16(8, ydim16+32 + 8, cblk, -1, "(2) Plax Adjust ", 0);
+    printext16(8, ydim16+32 + 16, cblk, -1, "(3) Shade Adjust ", 0);
+    printext16(8, ydim16+32 + 24, cblk, -1, "(4) Visibility ", 0);
 
     ResetKeys();
 
@@ -3659,7 +3707,7 @@ ShowMessage(void)
     printext256(1 * 4, 1 * 8, 1, 0, messagebuf, 1);
     }
 
-void 
+void
 ResetSprites()
     {
     short i;
@@ -3694,7 +3742,7 @@ void
 dsprintf(char *str, char *format, ...)
     {
     va_list arglist;
-    
+
     va_start( arglist, format );
     vsprintf( str, format, arglist );
     va_end( arglist );
@@ -3707,7 +3755,7 @@ dsprintf_null(char *str, char *format, ...)
     }
 
 
-VOID 
+VOID
 BuildStagTable(VOID)
     {
 #define MAKE_STAG_TABLE

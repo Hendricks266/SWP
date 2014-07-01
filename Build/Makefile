@@ -62,7 +62,7 @@ AR=ar
 RANLIB=ranlib
 OURCFLAGS=$(debug) -W -Wall -Wimplicit -Wno-char-subscripts -Wno-unused \
 	-fno-pic -funsigned-char -fno-strict-aliasing -DNO_GCC_BUILTINS \
-	-DKSFORBUILD -I$(INC)
+	-DKSFORBUILD -I$(INC) -Werror-implicit-function-declaration
 OURCXXFLAGS=-fno-exceptions -fno-rtti
 GAMECFLAGS=-I$(GAME)
 LIBS= -lm
@@ -96,7 +96,8 @@ ENGINEOBJS+= \
 	$(OBJ)/scriptfile.$o
 
 EDITOROBJS=$(OBJ)/build.$o \
-	$(OBJ)/config.$o
+	$(OBJ)/config.$o \
+	$(OBJ)/dialog.$o
 
 GAMEEXEOBJS=$(OBJ)/game.$o \
 	$(OBJ)/jfaud_sound.$o \

@@ -321,7 +321,7 @@ int startwin_open(void)
     char *cmdbuf = NULL;
 
     cmdbuf = strdup(GetCommandLine());
-    if (Bstrncasecmp(cmdbuf, "Swp.exe -z", 10) == 0)
+    if (Bstrncasecmp(cmdbuf, "SWP.exe -z", 10) == 0)
         return 0;
 
 	if (startupdlg) return 1;

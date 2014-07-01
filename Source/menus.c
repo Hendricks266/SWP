@@ -1532,7 +1532,7 @@ BOOL MNU_OrderCustom(UserCall call, MenuItem * item)
 		"-",
 		"-",
 		"-",
-		" SWP version "SwpVer"",
+		" SWP version " SwpVer,
         " by ProAsm - http://www.proasm.com/",
         " Modified by Hendricks266 - http://hendricks266.duke4.net/",
 	};
@@ -4435,7 +4435,7 @@ static void MNU_DrawItemIcon(MenuItem * item)
 
     if (menucmp(currentmenu->text, "^Options") == 0)
     {
-        char *sVers = "SWP - Version "SwpVer;
+        char *sVers = "SWP - Version " SwpVer;
         MNU_MeasureString(sVers, &w, &h);
         MNU_DrawString(TEXT_XCENTER(w), 190, sVers, 24, 14);
     }

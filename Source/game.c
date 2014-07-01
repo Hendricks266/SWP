@@ -4635,7 +4635,7 @@ long app_main(long argc, char *argv[])
     VOID gameinput(VOID);
     ULONG TotalMemory;
 
-    wm_setapptitle("SWP - Version "SwpVer);
+    wm_setapptitle("SWP - Version " SwpVer);
 
     for (i=1; i<argc; i++)
     {
@@ -4655,12 +4655,16 @@ long app_main(long argc, char *argv[])
 
     OSD_SetLogFile("SWP.log");
 
+    initprintf("SWP - Version " SwpVer "\n");
+    initprintf("By ProAsm - http://www.proasm.com/\n");
+    initprintf("Modified by Hendricks266 - http://hendricks266.duke4.net/\n\n");
+
 #ifdef RENDERTYPEWIN
 	if (win_checkinstance())
     {
 	   if (argc > 1 && Bstrcasecmp(argv[1]+1, "z") != 0 && Bstrcasecmp(argv[1]+1, "setup") != 0)
 	   {
-	      if (!wm_ynbox("Shadow Warrior","Another SWP game is currently running. "
+	      if (!wm_ynbox("Shadow Warrior","Another BUILD game is currently running. "
 		 			    "Do you wish to continue starting this copy ?"))
 			  return 0;
 	   }
@@ -4668,7 +4672,7 @@ long app_main(long argc, char *argv[])
 #endif
 
     if (argc > 1 && Bstrcasecmp(argv[1]+1, "z") == 0)
-        LocationInfo = 2;                                            // for SwpBuild
+        LocationInfo = 2;                                            // for SWPBUILD
 
     if (argc > 1 && Bstrcasecmp(argv[1]+1, "nohrp") == 0)
 	    NoHrp = 1;
@@ -4765,10 +4769,6 @@ long app_main(long argc, char *argv[])
     }
 
     AlphaMessage();
-
-    initprintf("SWP - Version %s\n", SwpVer);
-    initprintf("By ProAsm - http://www.proasm.com/\n");
-    initprintf("Modified by Hendricks266 - http://hendricks266.duke4.net/\n");
 
     if (SW_SHAREWARE)
 	    initprintf("Detected shareware Grp\n");

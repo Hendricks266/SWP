@@ -292,3 +292,21 @@ int writesetup(const char *fn)
 
 	return 0;
 }
+
+int loadexternal(const char *fn)
+{
+	BFILE *fp;
+#define VL 32
+	char val[VL];
+	int iRes = -1;
+
+	if ((fp = Bfopen(fn, "rt")) == NULL)
+	    return -1;
+	if (readconfig(fp, "Result1", val, VL) > 0) // { if (Batoi(val) != 0) fullscreen = 1; else fullscreen = 0; }
+	   {
+	   if (Batoi(val) != 0)
+	       iRes = Batoi(val);
+	   }
+	Bfclose(fp);
+	return iRes;
+}

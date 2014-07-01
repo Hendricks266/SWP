@@ -5,6 +5,35 @@
 // This file has been modified from Ken Silverman's original release
 // by Jonathon Fowler (jonof@edgenetwk.com)
 
+// Added Version + Revision                      wxvr
+// Added default screen 1024x768                 wxsc
+// Added Play map                                wxpy
+// Added help and notepad                        wxhp
+// Added 3 tile display sizes                    wxts
+// Added color cBlak                             wxcl
+// Added background colors                       wxbg
+// Added show monster tiles in view textures     wxvc
+// Added newboard map with room at startup       wxnm winlayer.c
+// Added CheckSaveNewMap                         wxnm
+// Added Display3DStats and 2D                   wxst
+// Added caption display with map                wxcp
+// --------------------------------------------------
+// Version 1.1
+// Added Alt Q - direct quit 3D                  wxaq
+// Added long filesname                          wxlf
+// Added space in filename = '_'                 wxlf
+// ---------------------- 2009 ----------------------
+// Version 1.2
+// Fixed map saving                              wxas
+// Version 1.21
+// Added extra + fix debug in cache1d            wxer
+// Version 1.3
+// Removed all debugs in cache1d, else = 1.2
+//
+
+#include <process.h>                                                 // wxpy
+#include <windows.h>
+
 #include "build.h"
 #include "compat.h"
 #include "pragmas.h"
@@ -12,13 +41,26 @@
 #include "cache1d.h"
 #include "editor.h"
 
-#define VERSION "rev.321" //"20040115JF"
+#define VERSION "SWPBUILD - Version 1.3 beta 1"
+#define REVISION "0"
 
 #include "baselayer.h"
 #ifdef RENDERTYPEWIN
 #include "winlayer.h"
 #endif
 
+void CheckSelections(short iKey);
+void PlayTestMap(void);
+void SaveTestMap(int iforce);
+void SWPBUILDHelp(void);
+void BackupMap(void);
+void SaveConfigs(void);
+void Display2DStats(void);
+void Display3DStats(void);
+void DoMainCaption(void);
+void ExtractFilename(char *filename);
+int CheckAnimations(long iNum);
+extern int GetMenuOption(void);
 
 #define TIMERINTSPERSECOND 120
 
@@ -26,6 +68,9 @@
 static long crctable[256];
 static char kensig[24];
 
+int xsA = 128;   //64;                                               // wxts
+int xsB = 127;   //63;
+int xsC = 7;     //6
 
 long vel, svel, angvel;
 
@@ -46,6 +91,7 @@ extern long editorgridextent;	// in engine.c
 extern double msens;
 
 static long synctics = 0, lockclock = 0;
+static long mytick = 0;
 
 extern char vgacompatible;
 
@@ -53,13 +99,13 @@ extern char picsiz[MAXTILES];
 extern long startposx, startposy, startposz;
 extern short startang, startsectnum;
 extern long frameplace, ydim16, halfxdim16, midydim16;
-long xdim2d = 640, ydim2d = 480, xdimgame = 640, ydimgame = 480, bppgame = 8;
+long xdim2d = 1024, ydim2d = 768, xdimgame = 1024, ydimgame = 768, bppgame = 8; // wxsc
 long forcesetup = 1;
 
 extern long cachesize, artsize;
 
 static short oldmousebstatus = 0;
-short brightness = 0;
+short brightness = 5;
 long zlock = 0x7fffffff, zmode = 0, whitecol, kensplayerheight = 32;
 short defaultspritecstat = 0;
 
@@ -163,6 +209,36 @@ void clearfilenames(void);
 
 void clearkeys(void) { memset(keystatus,0,sizeof(keystatus)); }
 
+char myMapname[32];                                                  // wxcp
+char  quitflag;                                                      // wxyz
+short cBlak = 0;                                                     // wxcl
+short cBlue = 1;                                                     // wxcl
+short cYell = 14;                                                    // wxcl
+short cWhit = 15;                                                    // wxcl
+short yellcol = 128;                                                 // wxcl
+short sTileMax = 70;                                                 // wxvc
+long iTile[70]  = {800,817,820,1094,1210,1300,1400,1441,1469,1580,3192,3780,4096,4162,4320,4550,5162,5426,
+                  4590,4594,4600,4604,5023,5032,
+                  1765,1766,1767,1769,1770,1771,1773,1774,1775,1777,1778,1779,
+                  1846,1847,1850,1851,1852,1853,
+                  1793,1794,1797,1799,1800,1807,1811,1812,1814,1817,1818,1823,1824,1831,1842,
+                  1802,1803,1804,1805,1808,1809,1810,1813,1819,1829,3030,3031,9999};   // wxvc
+
+char *sTile[70] = {"Hornet ", "Betty ", "Skull ", "Player ", "Sumo Boss ", "Serpent Boss ", // wxvc
+                   "Coolie ", "Skeleton ", "Guardian ", "Ripper 1 ", "Fireball ", "Fish ",
+                   "Ninja ", "Ninja Crawl ", "Ripper 2 ","Bunny ", "Girl Ninja ", "Zilla ",
+                   "Mechanicgirl ", "Cargirl ", "Sailorgirl ", "Prunegirl ", "Toiletgirl ", "Washgirl ",
+                   "Gold Skelkey ", "Blue Key ", "Blue Card ", "Silver Skelkey ", "Red Key ",
+                   "Red Card ", "Bronze Skelkey ", "Green Key ", "Green Card ", "Red Skelkey ",
+                   "Yellow Key ", "Yellow Card ",
+                   "Skel Locked ", "Skel Unlocked ", "Ramcard Locked ", "Ramcard Unlocked ",
+                   "Card Locked ", "Card Unlocked ",
+                   "Shurikens ", "Riotgun ", "Uzi ", "Bullets ", "Rockets ", "Uzi Floor ",
+                   "Rail Gun ", "Rail Ammo ", "Guard Head ", "Grenade Launcher ", "Micro Gun ",
+                   "Shotshells ", "Heart ", "Grenades ", "Mines ",
+                   "Health ", "Medkit ", "Smoke Bomb ", "Flashbomb ", "Gasbomb ", "Nuke ",
+                   "Cookie ", "Repair Kit ", "Heat Card ", "Caltrops ", "Armor ", "Vision ", ""};
+
 static int osdcmd_restartvid(const osdfuncparm_t *parm)
 {
 	extern long qsetmode;
@@ -206,13 +282,46 @@ static int osdcmd_vidmode(const osdfuncparm_t *parm)
 
 extern int startwin_run(void);
 
+static void CheckSaveNewMap()
+{
+	BFILE *fp;
+	long   fl;
+
+	char cBuff[195] =
+	{
+	7,0,0,0,247,250,255,255,10,2,0,0,0,230,255,255,15,0,0,0,1,0,
+	0,0,4,0,0,168,255,255,0,32,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	0,0,0,0,0,0,0,0,0,0,0,2,0,4,0,0,249,255,255,0,254,255,255,1,
+	0,255,255,255,255,0,0,0,0,0,0,0,0,18,8,0,0,0,0,0,0,0,0,0,2,0,
+	0,0,254,255,255,2,0,255,255,255,255,0,0,0,0,0,0,0,0,16,8,0,0,
+	0,0,0,0,0,0,0,2,0,0,0,6,0,0,3,0,255,255,255,255,0,0,0,0,0,0,
+	0,0,18,8,0,0,0,0,0,0,0,0,0,249,255,255,0,6,0,0,0,0,255,255,255,
+	255,0,0,0,0,0,0,0,0,16,8,0,0,0,0,0,0,0,0,0,0
+	};
+
+   	fp = Bfopen("newboard.map","rb");
+	if (!fp)
+       {
+       fp = Bfopen("newboard.map","wb");
+       Bfwrite(&cBuff, 194, 1, fp);
+       }
+    Bfclose(fp);
+}
+
 extern char *defsfilename;	// set in bstub.c
 int app_main(int argc, const char **argv)
 {
-	char ch, quitflag, cmdsetup = 0;
-	int grpstoadd = 0;
+	//char ch, quitflag, cmdsetup = 0;
+	char ch, cmdsetup = 0;
+	int grpstoadd = 0, ky;
 	const char **grps = NULL;
 	long i, j, k;
+
+	OSD_SetLogFile("SWPBUILD.log");
+
+	initprintf(VERSION "\n"); // wxvr
+    initprintf("By ProAsm - http://www.proasm.com/\n");
+    initprintf("Modified by Hendricks266 - http://hendricks266.duke4.net/\n\n");
 
 	pathsearchmode = 1;		// unrestrict findfrompath so that full access to the filesystem can be had
 
@@ -221,96 +330,124 @@ int app_main(int argc, const char **argv)
 	OSD_RegisterFunction("vidmode","vidmode [xdim ydim] [bpp] [fullscreen]: immediately change the video mode",osdcmd_vidmode);
 #endif
 
-	wm_setapptitle("BUILD by Ken Silverman");
-
 #ifdef RENDERTYPEWIN
 	backgroundidle = 1;
 #endif
 
 	editstatus = 1;
 	boardfilename[0] = 0;
-	for (i=1; i<argc; i++) {
-		if (argv[i][0] == '-') {
-			if (!strcmp(argv[i], "-setup")) cmdsetup = 1;
-			else if (!strcmp(argv[i], "-g") || !strcmp(argv[i], "-grp")) {
-				i++;
-				grps = (const char**)realloc(grps, sizeof(const char*)*(grpstoadd+1));
-				grps[grpstoadd++] = argv[i];
-			}
-			else if (!strcmp(argv[i], "-help") || !strcmp(argv[i], "--help") || !strcmp(argv[i], "-?")) {
-				char *s =
-					"BUILD by Ken Silverman\n"
-					"Syntax: build [options] mapname\n"
-					"Options:\n"
-					"\t-grp\tUse an extra GRP or ZIP file.\n"
-					"\t-g\tSame as above.\n"
+	for (i=1; i<argc; i++)
+	    {
+		if (argv[i][0] == '-')
+		   {
+		   if (!strcmp(argv[i], "-setup"))
+		       cmdsetup = 1;
+		   else
+		   if (!strcmp(argv[i], "-g") || !strcmp(argv[i], "-grp"))
+		      {
+			  i++;
+			  grps = (const char**)realloc(grps, sizeof(const char*)*(grpstoadd+1));
+			  grps[grpstoadd++] = argv[i];
+			  }
+		   else
+		   if (!strcmp(argv[i], "-help") || !strcmp(argv[i], "--help") || !strcmp(argv[i], "-?"))
+		      {
+			  char *s =
+			  "BUILD by Ken Silverman\n"
+			  "Syntax: build [options] mapname\n"
+			  "Options:\n"
+			  "\t-grp\tUse an extra GRP or ZIP file.\n"
+			  "\t-g\tSame as above.\n"
 #if defined RENDERTYPEWIN || (defined RENDERTYPESDL && (defined __APPLE__ || defined HAVE_GTK2))
-					"\t-setup\tDisplays the configuration dialogue box before entering the editor.\n"
+		      "\t-setup\tDisplays the configuration dialogue box before entering the editor.\n"
 #endif
-					;
+			  ;
 #if defined RENDERTYPEWIN || (defined RENDERTYPESDL && (defined __APPLE__ || defined HAVE_GTK2))
-				wm_msgbox("BUILD by Ken Silverman",s);
+		      wm_msgbox("BUILD by Ken Silverman",s);
 #else
-				puts(s);
+			  puts(s);
 #endif
-				return 0;
-			}
-			continue;
-		}
-		if (!boardfilename[0]) {
-			strncpy(boardfilename, argv[i], BMAX_PATH-4-1);
-			boardfilename[i-BMAX_PATH] = 0;
-		}
-	}
-	if (boardfilename[0] == 0) {
+			  return 0;
+			  }
+		   continue;
+		   }
+		if (!boardfilename[0])
+		   {
+		   strncpy(boardfilename, argv[i], BMAX_PATH-4-1);
+		   boardfilename[i-BMAX_PATH] = 0;
+		   }
+	    }
+
+
+    CheckSaveNewMap();                                         // wxnm
+
+    if (boardfilename[0] == 0) {
 		Bstrcpy(boardfilename,"newboard.map");
-	} else if (Bstrchr(boardfilename,'.') == 0) {
+	}
+	else
+	if (Bstrchr(boardfilename,'.') == 0)
+	   {
 		Bstrcat(boardfilename, ".map");
-	}
-	//Bcanonicalisefilename(boardfilename,0);
+	   }
 
-	if ((i = ExtInit()) < 0) return -1;
+    wm_setapptitle(VERSION);
+
+	//Bcanonicalisefilename(boardfilename,0);
+	if ((i = ExtInit()) < 0)
+	   return -1;
 #if defined RENDERTYPEWIN || (defined RENDERTYPESDL && (defined __APPLE__ || defined HAVE_GTK2))
-	if (i || forcesetup || cmdsetup) {
+	if (i || forcesetup || cmdsetup)
+	   {
 		if (quitevent || !startwin_run()) return -1;
-	}
+//       if (quitevent) return -1;                                    // wxyz
+	   }
 #endif
 
-	if (grps && grpstoadd > 0) {
-		for (i=0;i<grpstoadd;i++) {
+	DoMainCaption();
+
+	if (grps && grpstoadd > 0)
+	   {
+	   for (i=0;i<grpstoadd;i++) {
 			initprintf("Adding %s\n",grps[i]);
-			initgroupfile((char*)grps[i]);
-		}
-		free(grps);
+	   initgroupfile((char*)grps[i]);
+	   }
+    i = initgroupfile("Sw_Hrp.zip");                                 // wxhz
+    if (i >= 0)
+        initprintf("Adding Sw High Resolution Pack\n");
+    free(grps);
 	}
 
-	OSD_SetLogFile("build.log");
 	inittimer(TIMERINTSPERSECOND);
 	installusertimercallback(keytimerstuff);
 
 	loadpics("tiles000.art",1048576);
 	loadnames();
 
-	Bstrcpy(kensig,"BUILD by Ken Silverman");
+	Bstrcpy(kensig,"BUILD by Ken Silverman");     // main display
 	initcrc();
 
-	if (!loaddefinitionsfile(defsfilename)) initprintf("Definitions file loaded.\n");
+	if (!loaddefinitionsfile(defsfilename))
+	    initprintf("Definitions file loaded.\n");
 
-		if (setgamemode(fullscreen,xdimgame,ydimgame,bppgame) < 0)
-		{
-			ExtUnInit();
-			uninitengine();
-			Bprintf("%ld * %ld not supported in this graphics mode\n",xdim,ydim);
-			exit(0);
-		}
-		setbrightness(brightness,palette,0);
+	if (setgamemode(fullscreen,xdimgame,ydimgame,bppgame) < 0)
+	   {
+	   ExtUnInit();
+	   uninitengine();
+	   Bprintf("%ld * %ld not supported in this graphics mode\n",xdim,ydim);
+	   exit(0);
+	   }
+	setbrightness(brightness,palette,0);
 
 	k = 0;
-	for(i=0;i<256;i++)
-	{
-		j = ((long)palette[i*3])+((long)palette[i*3+1])+((long)palette[i*3+2]);
-		if (j > k) { k = j; whitecol = i; }
-	}
+	for(i=0; i<256; i++)
+	   {
+	   j = ((long)palette[i*3])+((long)palette[i*3+1])+((long)palette[i*3+2]);
+	   if (j > k)
+	      {
+	      k = j;
+	      whitecol = i;
+	      }
+	   }
 
 	for(i=0;i<MAXSECTORS;i++) sector[i].extra = -1;
 	for(i=0;i<MAXWALLS;i++) wall[i].extra = -1;
@@ -318,7 +455,11 @@ int app_main(int argc, const char **argv)
 
 	ExtPreLoadMap();
 	i = loadboard(boardfilename,(!pathsearchmode&&grponlymode?2:0),&posx,&posy,&posz,&ang,&cursectnum);
-	if (i == -2) i = loadoldboard(boardfilename,(!pathsearchmode&&grponlymode?2:0),&posx,&posy,&posz,&ang,&cursectnum);
+	if (i == -2)
+	    i = loadoldboard(boardfilename,(!pathsearchmode&&grponlymode?2:0),&posx,&posy,&posz,&ang,&cursectnum);
+
+    initprintf("Loaded map: %s\n", boardfilename);
+
 	if (i < 0)
 	{
 		initspritelists();
@@ -350,15 +491,16 @@ int app_main(int argc, const char **argv)
 	quitflag = 0;
 	while (quitflag == 0)
 	{
-		if (handleevents()) {
-			if (quitevent) {
+		if (handleevents())
+		   {
+			if (quitevent)
+			   {
 				keystatus[1] = 1;
 				quitevent = 0;
-			}
-		}
+			   }
+		   }
 
 		OSD_DispatchQueued();
-
 		ExtPreCheckKeys();
 
 		drawrooms(posx,posy,posz,ang,horiz,cursectnum);
@@ -366,61 +508,52 @@ int app_main(int argc, const char **argv)
 		ExtAnalyzeSprites();
 #endif
 		drawmasks();
-
 		ExtCheckKeys();
-
 		nextpage();
 		synctics = totalclock-lockclock;
 		lockclock += synctics;
 
-		if (keystatus[1] > 0)
-		{
-			keystatus[1] = 0;
-			begindrawing();	//{{{
-			printext256(0,0,whitecol,0,"Really want to quit?",0);
-			enddrawing();	//}}}
-
-			showframe(1);
-			synctics = totalclock-lockclock;
-			lockclock += synctics;
-
-			while ((keystatus[1]|keystatus[0x1c]|keystatus[0x39]|keystatus[0x31]) == 0)
-			{
-				if (handleevents()) {
-					if (quitevent) {
-						quitflag = 1;
-						break;
-					}
-				}
-
-				if (keystatus[0x15] != 0) {
-					keystatus[0x15] = 0;
-					quitflag = 1; break;
-				}
-			}
-		}
-	}
+		if (keystatus[0x10] > 0)          //Q  - 3D                  // wxaq
+		   {
+	       keystatus[0x10] = 0;
+	       if (keystatus[0x38] > 0)       //Alt
+	          {
+              keystatus[0x38] = 0;        // Direct no save quit
+              asksave = 0;
+              quitflag = 1;
+              break;
+              }
+           }
+        ch = bgetchar();
+		if (ch == 27)
+		   {
+	       keystatus[1] = 0;
+           ky = GetMenuOption();          // 3D
+//           ResetEvent(VK_ESCAPE);
+           if (ky > 0)
+              {
+              CheckSelections(ky);        // 3D
+              if (ky < 3)   // quit
+                 {
+                 if (ky == 2)
+                     asksave = 0;
+                 quitflag = 1;
+                 break;
+                 }
+              }
+           bflushchars();
+		   }
+	   }
 
 	if (asksave)
 	{
-		begindrawing();	//{{{
-		printext256(0,8,whitecol,0,"Save changes?",0);
-		showframe(1);	//}}}
-
-		while ((keystatus[1]|keystatus[0x1c]|keystatus[0x39]|keystatus[0x31]) == 0)
-		{
-			if (handleevents()) if (quitevent) break;	// like saying no
-
-			if (keystatus[0x15] != 0) {
-				keystatus[0x15] = 0;
-
-				updatesector(startposx,startposy,&startsectnum);
-				ExtPreSaveMap();
-				saveboard(boardfilename,&startposx,&startposy,&startposz,&startang,&startsectnum);
-				ExtSaveMap(boardfilename);
-				break;
+		if (ky == 1)
+			{
+			updatesector(startposx,startposy,&startsectnum);
+			ExtPreSaveMap();
+			saveboard(boardfilename,&startposx,&startposy,&startposz,&startang,&startsectnum);
+			ExtSaveMap(boardfilename);
 			}
-		}
 	}
 
 	clearfilenames();
@@ -445,7 +578,7 @@ void showmouse(void)
 	}
 }
 
-void editinput(void)
+void editinput(void)  // 3D
 {
 	char smooshyalign, repeatpanalign, *ptr, buffer[80];
 	short sectnum, nextsectnum, startwall, endwall, dasector, daang;
@@ -454,19 +587,24 @@ void editinput(void)
 	long dashade[2], goalz, xvect, yvect, hiz, loz;
 	short hitsect, hitwall, hitsprite;
 	long hitx, hity, hitz, dax, day, hihit, lohit;
+    short ky = 0;
 
-	if (keystatus[0x57] > 0)  //F11 - brightness
+//    keystatus[1] = 0;
+
+	if (keystatus[0x57] > 0)  //F11 - 3D brightness
 	{
 		keystatus[0x57] = 0;
 		brightness++;
 		if (brightness >= 16) brightness = 0;
 		setbrightness(brightness,palette,0);
 	}
-	if (keystatus[88] > 0)   //F12
-	{
-		screencapture("captxxxx.tga",keystatus[0x2a]|keystatus[0x36]);
-		keystatus[88] = 0;
-	}
+
+     if (keystatus[0x58] > 0)   //F12 3D
+		{
+			keystatus[0x58] = 0;
+			screencapture("captxxxx.tga",keystatus[0x2a]|keystatus[0x36]);
+			showframe(1);
+		}
 
 	mousz = 0;
 	getmousevalues(&mousx,&mousy,&bstatus);
@@ -1382,7 +1520,7 @@ void editinput(void)
 				}
 			}
 		}
-		if (keystatus[0x2f] > 0)  //V
+		if (keystatus[0x2f] > 0)  //V  from 3D mode
 		{
 			if (searchstat == 0) templong = wall[searchwall].picnum;
 			if (searchstat == 1) templong = sector[searchsector].ceilingpicnum;
@@ -1402,6 +1540,7 @@ void editinput(void)
 			}
 			asksave = 1;
 			keystatus[0x2f] = 0;
+            bflushchars();
 		}
 
 		if (keystatus[0x1a])  // [
@@ -1729,6 +1868,7 @@ void editinput(void)
 			asksave = 1;
 		}
 
+
 		if (keystatus[0x19] > 0)  // P (parallaxing sky)
 		{
 			if ((keystatus[0x1d]|keystatus[0x9d]) > 0)
@@ -1968,7 +2108,7 @@ void editinput(void)
 			}
 			keystatus[0x32] = 0;
 		}
-		if (keystatus[0x23] > 0)  // H (hitscan sensitivity)
+		if (keystatus[0x23] > 0)  // H (hitscan sensitivity) (help)
 		{
 			if (searchstat == 3)
 			{
@@ -2123,8 +2263,8 @@ void editinput(void)
 			day = divscale14(searchx-(xdim>>1),xdim>>1);
 			rotatepoint(0,0,dax,day,ang,&dax,&day);
 
-			hitscan(posx,posy,posz,cursectnum,               //Start position
-				dax,day,(scale(searchy,200,ydim)-horiz)*2000, //vector of 3D ang
+			hitscan(posx,posy,posz,cursectnum,               // Start position
+				dax,day,(scale(searchy,200,ydim)-horiz)*2000, // vector of 3D ang
 				&hitsect,&hitwall,&hitsprite,&hitx,&hity,&hitz,CLIPMASK1);
 
 			if (hitsect >= 0)
@@ -2260,8 +2400,10 @@ void editinput(void)
 		}
 
 	}
-	if (keystatus[buildkeys[14]] > 0)  // Enter
+
+	if (keystatus[buildkeys[14]] > 0)  // Enter from 3D
 	{
+		BackupMap();                                                 // wxbu
 		overheadeditor();
 		keystatus[buildkeys[14]] = 0;
 	}
@@ -2299,9 +2441,12 @@ long gettile(long tilenum)
 	long i, j, k, otilenum, topleft, gap, temp, templong;
 	long xtiles, ytiles, tottiles;
 
-	if (tilenum < 0) tilenum = 0;
+	if (tilenum < 0)
+	    tilenum = 0;
 
-	xtiles = (xdim>>6); ytiles = (ydim>>6); tottiles = xtiles*ytiles;
+	xtiles = (xdim>>xsC);                                            // wxts
+	ytiles = (ydim>>xsC);                                            // wxts
+	tottiles = xtiles*ytiles;
 	otilenum = tilenum;
 
 	keystatus[0x2f] = 0;
@@ -2327,6 +2472,7 @@ long gettile(long tilenum)
 			if (sprite[i].statnum < MAXSTATUS)
 				localartfreq[sprite[i].picnum]++;
 	gap = (MAXTILES>>1);
+
 	do
 	{
 		for(i=0;i<MAXTILES-gap;i++)
@@ -2365,9 +2511,12 @@ long gettile(long tilenum)
 	}
 
 	topleft = ((tilenum/(xtiles<<gettilezoom))*(xtiles<<gettilezoom))-(xtiles<<gettilezoom);
-	if (topleft < 0) topleft = 0;
-	if (topleft > MAXTILES-(tottiles<<(gettilezoom<<1))) topleft = MAXTILES-(tottiles<<(gettilezoom<<1));
-	while ((keystatus[0x1c]|keystatus[1]) == 0)
+	if (topleft < 0)
+	    topleft = 0;
+	if (topleft > MAXTILES-(tottiles<<(gettilezoom<<1)))
+	    topleft = MAXTILES-(tottiles<<(gettilezoom<<1));
+
+	while ((keystatus[0x1c]|keystatus[1]) == 0)          // enter | esc
 	{
 		drawtilescreen(topleft,tilenum);
 
@@ -2378,7 +2527,7 @@ long gettile(long tilenum)
 		synctics = totalclock-lockclock;
 		lockclock += synctics;
 
-		if ((keystatus[0x37] > 0) && (gettilezoom < 2))
+		if ((keystatus[0x37] > 0) && (gettilezoom < 2))  // kp star
 		{
 			gettilezoom++;
 			topleft = ((tilenum/(xtiles<<gettilezoom))*(xtiles<<gettilezoom))-(xtiles<<gettilezoom);
@@ -2386,7 +2535,7 @@ long gettile(long tilenum)
 			if (topleft > MAXTILES-(tottiles<<(gettilezoom<<1))) topleft = MAXTILES-(tottiles<<(gettilezoom<<1));
 			keystatus[0x37] = 0;
 		}
-		if ((keystatus[0xb5] > 0) && (gettilezoom > 0))
+		if ((keystatus[0xb5] > 0) && (gettilezoom > 0))  // kp slash
 		{
 			gettilezoom--;
 			topleft = ((tilenum/(xtiles<<gettilezoom))*(xtiles<<gettilezoom))-(xtiles<<gettilezoom);
@@ -2394,37 +2543,39 @@ long gettile(long tilenum)
 			if (topleft > MAXTILES-(tottiles<<(gettilezoom<<1))) topleft = MAXTILES-(tottiles<<(gettilezoom<<1));
 			keystatus[0xb5] = 0;
 		}
-		if ((keystatus[0xcb] > 0) && (tilenum > 0))
+		if ((keystatus[0xcb] > 0) && (tilenum > 0))                               // left arrow
 			tilenum--, keystatus[0xcb] = 0;
-		if ((keystatus[0xcd] > 0) && (tilenum < MAXTILES-1))
+		if ((keystatus[0xcd] > 0) && (tilenum < MAXTILES-1))                      // right arrow
 			tilenum++, keystatus[0xcd] = 0;
-		if ((keystatus[0xc8] > 0) && (tilenum >= (xtiles<<gettilezoom)))
+		if ((keystatus[0xc8] > 0) && (tilenum >= (xtiles<<gettilezoom)))          // up arrow
 			tilenum-=(xtiles<<gettilezoom), keystatus[0xc8] = 0;
-		if ((keystatus[0xd0] > 0) && (tilenum < MAXTILES-(xtiles<<gettilezoom)))
+		if ((keystatus[0xd0] > 0) && (tilenum < MAXTILES-(xtiles<<gettilezoom)))  // down arrow
 			tilenum+=(xtiles<<gettilezoom), keystatus[0xd0] = 0;
-		if ((keystatus[0xc9] > 0) && (tilenum >= (xtiles<<gettilezoom)))
+		if ((keystatus[0xc9] > 0) && (tilenum >= (xtiles<<gettilezoom)))          // pgup
 		{
 			tilenum-=(tottiles<<(gettilezoom<<1));
 			if (tilenum < 0) tilenum = 0;
 			keystatus[0xc9] = 0;
 		}
-		if ((keystatus[0xd1] > 0) && (tilenum < MAXTILES-(xtiles<<gettilezoom)))
+		if ((keystatus[0xd1] > 0) && (tilenum < MAXTILES-(xtiles<<gettilezoom)))  // pgdn
 		{
 			tilenum+=(tottiles<<(gettilezoom<<1));
 			if (tilenum >= MAXTILES) tilenum = MAXTILES-1;
 			keystatus[0xd1] = 0;
 		}
-		if (keystatus[0x2f] > 0)   //V
+
+		if (keystatus[0x2f] > 0)   //V                                            // v
 		{
 			keystatus[0x2f] = 0;
 			if (tilenum < localartlookupnum)
 				tilenum = localartlookup[tilenum];
 			else
 				tilenum = 0;
-			localartlookupnum = MAXTILES;
+			localartlookupnum = MAXTILES;       // displays all tiles
 			for(i=0;i<MAXTILES;i++)
 				localartlookup[i] = i;
 		}
+                                                                                  // g
 		if (keystatus[0x22] > 0)       //G (goto)
 		{
 			if (tilenum < localartlookupnum)         //Automatically press 'V'
@@ -2470,7 +2621,7 @@ long gettile(long tilenum)
 		if (topleft > MAXTILES-(tottiles<<(gettilezoom<<1))) topleft = MAXTILES-(tottiles<<(gettilezoom<<1));
 	}
 
-	if (keystatus[0x1c] == 0)
+	if (keystatus[0x1c] == 0)                                                     // enter
 	{
 		tilenum = otilenum;
 	}
@@ -2496,7 +2647,9 @@ long drawtilescreen(long pictopleft, long picbox)
 	long dax, day, scaledown, xtiles, ytiles, tottiles;
 	char *picptr, snotbuf[80];
 
-	xtiles = (xdim>>6); ytiles = (ydim>>6); tottiles = xtiles*ytiles;
+	xtiles = (xdim>>xsC);        // 6 = 32 tiles   xdim = 1024 (screen size) // wxts
+	ytiles = (ydim>>xsC);        // 6                                        // wxts
+	tottiles = xtiles*ytiles;
 
 	begindrawing(); //{{{
 
@@ -2514,14 +2667,15 @@ long drawtilescreen(long pictopleft, long picbox)
 			{
 				if (waloff[wallnum] == 0) loadtile(wallnum);
 				picptr = (char *)(waloff[wallnum]);
-				xdime = tilesizx[wallnum];
+				xdime = tilesizx[wallnum];             // actual pic size
 				ydime = tilesizy[wallnum];
 
-				dax = ((cnt%(xtiles<<gettilezoom))<<(6-gettilezoom));
-				day = ((cnt/(xtiles<<gettilezoom))<<(6-gettilezoom));
-				if (polymost_drawtilescreen(dax, day, wallnum, 64>>gettilezoom)) {
+				dax = ((cnt%(xtiles<<gettilezoom))<<(xsC-gettilezoom));   // wxts 6 dax increments by 32
+				day = ((cnt/(xtiles<<gettilezoom))<<(xsC-gettilezoom));   // wxts
+
+				if (polymost_drawtilescreen(dax, day, wallnum, xsA>>gettilezoom)) {      // wxts
 					vidpos = ylookup[day]+dax+frameplace;
-					if ((xdime <= (64>>gettilezoom)) && (ydime <= (64>>gettilezoom)))
+					if ((xdime <= (xsA>>gettilezoom)) && (ydime <= (xsA>>gettilezoom)))  // wxts
 					{
 						for(i=0;i<xdime;i++)
 						{
@@ -2533,12 +2687,12 @@ long drawtilescreen(long pictopleft, long picbox)
 							}
 						}
 					}
-					else                          //if 1 dimension > 64
+					else                          //if 1 dimension > xsA
 					{
 						if (xdime > ydime)
-							scaledown = ((xdime+(63>>gettilezoom))>>(6-gettilezoom));
+							scaledown = ((xdime+(xsB>>gettilezoom))>>(xsC-gettilezoom));   // wxts
 						else
-							scaledown = ((ydime+(63>>gettilezoom))>>(6-gettilezoom));
+							scaledown = ((ydime+(xsB>>gettilezoom))>>(xsC-gettilezoom));   // wxts
 
 						for(i=0;i<xdime;i+=scaledown)
 						{
@@ -2557,8 +2711,8 @@ long drawtilescreen(long pictopleft, long picbox)
 				}
 				if (localartlookupnum < MAXTILES)
 				{
-					dax = ((cnt%(xtiles<<gettilezoom))<<(6-gettilezoom));
-					day = ((cnt/(xtiles<<gettilezoom))<<(6-gettilezoom));
+					dax = ((cnt%(xtiles<<gettilezoom))<<(xsC-gettilezoom));  // wxts
+					day = ((cnt/(xtiles<<gettilezoom))<<(xsC-gettilezoom));  // wxts
 					Bsprintf(snotbuf,"%d",localartfreq[cnt+pictopleft]);
 					printext256(dax,day,whitecol,-1,snotbuf,1);
 				}
@@ -2567,22 +2721,31 @@ long drawtilescreen(long pictopleft, long picbox)
 	}
 
 	cnt = picbox-pictopleft;    //draw open white box
-	dax = ((cnt%(xtiles<<gettilezoom))<<(6-gettilezoom));
-	day = ((cnt/(xtiles<<gettilezoom))<<(6-gettilezoom));
+	dax = ((cnt%(xtiles<<gettilezoom))<<(xsC-gettilezoom));          // wxts  horiz cursor size
+	day = ((cnt/(xtiles<<gettilezoom))<<(xsC-gettilezoom));          // wxts
 
-	for(i=0;i<(64>>gettilezoom);i++)
+	for(i=0;i<(xsA>>gettilezoom);i++)                                // wxts
 	{
 		plotpixel(dax+i,day,whitecol);
-		plotpixel(dax+i,day+(63>>gettilezoom),whitecol);
+		plotpixel(dax+i,day+(xsB>>gettilezoom),whitecol);            // wxts
 		plotpixel(dax,day+i,whitecol);
-		plotpixel(dax+(63>>gettilezoom),day+i,whitecol);
+		plotpixel(dax+(xsB>>gettilezoom),day+i,whitecol);            // wxts
 	}
 
 	i = localartlookup[picbox];
 	Bsprintf(snotbuf,"%ld",i);
-	printext256(0L,ydim-8,whitecol,-1,snotbuf,0);
+	j = CheckAnimations(i);
+	if (j == -1)
+	   {
+	   printext256(0L,ydim-8,whitecol,-1,snotbuf,0);
+	   }
+	else
+	   {
+	   strcat(snotbuf, " - ");                                       // wxvc
+	   strcat(snotbuf, sTile[j]);                                    // wxvc
+	   printext256(0L,ydim-8,0,whitecol,snotbuf,0);
+	   }
 	printext256(xdim-(Bstrlen(names[i])<<3),ydim-8,whitecol,-1,names[i],0);
-
 	Bsprintf(snotbuf,"%dx%d",tilesizx[i],tilesizy[i]);
     printext256(xdim>>2,ydim-8,whitecol,-1,snotbuf,0);
 
@@ -2590,6 +2753,22 @@ long drawtilescreen(long pictopleft, long picbox)
 	showframe(1);
 
 	return(0);
+}
+
+int CheckAnimations(long iNum)                                        // wxvc
+{
+    int i;
+    int x = -1;
+
+    for (i=0; i<sTileMax; i++)
+        {
+        if (iTile[i] == iNum)
+           {
+           x = i;
+           break;
+           }
+        }
+    return x;
 }
 
 void overheadeditor(void)
@@ -2609,9 +2788,11 @@ void overheadeditor(void)
 	short cursectorhighlight, sectorhighlightstat;
 	short hitsect, hitwall, hitsprite;
 	long hitx, hity, hitz;
+	short ky = 0;
 	walltype *wal;
 
-	//qsetmode640480();
+    keystatus[1] = 0;
+
 	qsetmodeany(xdim2d,ydim2d);
 	xdim2d = xdim;
 	ydim2d = ydim;
@@ -2620,21 +2801,25 @@ void overheadeditor(void)
 	searchy = scale(searchy,ydim2d-STATUS2DSIZ,ydimgame);
 	oposz = posz;
 
-	begindrawing();	//{{{
+	begindrawing();	//{{{                                       // draws window lines on 2D screen
 	ydim16 = ydim;
-	drawline16(0,ydim-STATUS2DSIZ,xdim-1,ydim-STATUS2DSIZ,7);
-	drawline16(0,ydim-1,xdim-1,ydim-1,7);
-	drawline16(0,ydim-STATUS2DSIZ,0,ydim-1,7);
-	drawline16(xdim-1,ydim-STATUS2DSIZ,xdim-1,ydim-1,7);
-	drawline16(0,ydim-STATUS2DSIZ+24,xdim-1,ydim-STATUS2DSIZ+24,7);
+//	drawline16(0,ydim-STATUS2DSIZ,xdim-1,ydim-STATUS2DSIZ,7);
+//	drawline16(0,ydim-1,xdim-1,ydim-1,7);
+//	drawline16(0,ydim-STATUS2DSIZ,0,ydim-1,7);
+//	drawline16(xdim-1,ydim-STATUS2DSIZ,xdim-1,ydim-1,7);
+//	drawline16(0,ydim-STATUS2DSIZ+24,xdim-1,ydim-STATUS2DSIZ+24,7);
 	drawline16(192,ydim-STATUS2DSIZ,192,ydim-STATUS2DSIZ+24,7);
-	printext16(9L,ydim-STATUS2DSIZ+9L,4,-1,kensig,0);
-	printext16(8L,ydim-STATUS2DSIZ+8L,12,-1,kensig,0);
-	printmessage16("Version: "VERSION);
-	drawline16(0,ydim-1-24,xdim-1,ydim-1-24,7);
+//    if (xdim2d > 1000)
+//	     printext16(xdim2d-200, ydim-STATUS2DSIZ+128, 8, -1, kensig, 0);
+	printext16(9L,ydim-STATUS2DSIZ+9L, 8, -1, kensig, 0);
+//	printext16(8L,ydim-STATUS2DSIZ+8L,12,-1,kensig,0);
+	// printmessage16(REVISION);
+//	drawline16(0,ydim-1-24,xdim-1,ydim-1-24,7);
 	drawline16(256,ydim-1-24,256,ydim-1,7);
 	ydim16 = ydim-STATUS2DSIZ;
 	enddrawing();	//}}}
+
+    clearmidstatbar16();                                             // wxyz
 
 	pag = 0;
 	highlightcnt = -1;
@@ -2676,6 +2861,7 @@ void overheadeditor(void)
 	circlepoints = 7;
 	bstatus = 0;
 	keystatus[buildkeys[14]] = 0;
+
 	while ((keystatus[buildkeys[14]]>>1) == 0)
 	{
 		if (handleevents()) {
@@ -2896,26 +3082,15 @@ void overheadeditor(void)
 
 		OSD_Draw();
 
-		if (keystatus[88] > 0)   //F12
-		{
-			keystatus[88] = 0;
-			/*
-			j = ydim16; ydim16 = ydim;
-			clear2dscreen();
-			draw2dgrid(posx,posy,ang,zoom,grid);
-			draw2dscreen(posx,posy,ang,zoom,grid);
-			*/
+        Display2DStats();                                            // wxst
 
+        if (keystatus[0x58] > 0)   //F12 2D
+	   	   {
+			keystatus[0x58] = 0;
 			screencapture("captxxxx.tga",keystatus[0x2a]|keystatus[0x36]);
-
-			/*
-			ydim16 = j;
-			clear2dscreen();
-			draw2dgrid(posx,posy,ang,zoom,grid);
-			draw2dscreen(posx,posy,ang,zoom,grid);
-			*/
 			showframe(1);
-		}
+		   }
+
 		if (keystatus[0x30] > 0)  // B (clip Blocking xor) (2D)
 		{
 			pointhighlight = getpointhighlight(mousxplc, mousyplc);
@@ -3188,10 +3363,10 @@ void overheadeditor(void)
 			asksave = 1;
 		}
 
-		if (keystatus[0x3f] > 0)  //F5
+		if (keystatus[0x3f] > 0)  //F5   2D
 		{
 			keystatus[0x3f] = 0;
-
+            clearmidstatbar16();                                             // wxyz
 			for (i=0;i<numsectors;i++)
 				if (inside(mousxplc,mousyplc,i) == 1)
 				{
@@ -3221,11 +3396,12 @@ void overheadeditor(void)
 				ExtShowWallData((short)i);
 				ydim16 = ydim-STATUS2DSIZ;
 			}
+
 		}
 		if (keystatus[0x41] > 0)  //F7
 		{
 			keystatus[0x41] = 0;
-
+            clearmidstatbar16();                                             // wxyz
 			for (i=0;i<numsectors;i++)
 				if (inside(mousxplc,mousyplc,i) == 1)
 				{
@@ -4970,18 +5146,22 @@ void overheadeditor(void)
 		synctics = totalclock-lockclock;
 		lockclock += synctics;
 
-		if (keystatus[buildkeys[14]] > 0)
+		if (keystatus[buildkeys[14]] > 0)  // enter from 2D
 		{
 			updatesector(posx,posy,&cursectnum);
 			if (cursectnum >= 0)
-				keystatus[buildkeys[14]] = 2;
+			   {
+			   BackupMap();                                          // wxbu
+			   keystatus[buildkeys[14]] = 2;
+			   }
 			else
-				printmessage16("Arrow must be inside a sector before entering 3D mode.");
+			   printmessage16("Arrow must be inside a sector before entering 3D mode.");
 		}
+
 		if (keystatus[1] > 0)
 		{
 			keystatus[1] = 0;
-			printmessage16("(N)ew, (L)oad, (S)ave, save (A)s, (Q)uit");
+			printmessage16("(N)ew, (L)oad, (S)ave, Save (A)s, (P)lay, (M)enu, (Q)uit ");
 			showframe(1);
 			bflushchars();
 			bad = 1;
@@ -5046,6 +5226,7 @@ void overheadeditor(void)
 							cursectnum = -1;
 							initspritelists();
 							Bstrcpy(boardfilename,"newboard.map");
+							DoMainCaption();
 							break;
 						} else if (ch == 'N' || ch == 'n' || ch == 13 || ch == ' ') {
 							break;
@@ -5066,7 +5247,8 @@ void overheadeditor(void)
 					else
 					{
 						Bstrcpy(boardfilename, selectedboardfilename);
-
+						DoMainCaption();
+                        clearmidstatbar16();                                             // wxyz
 						if (highlightsectorcnt >= 0)
 						{
 							j = 0; k = 0;
@@ -5230,64 +5412,77 @@ void overheadeditor(void)
 
 					bflushchars();
 					while (bad == 0)
-					{
+					    {
 						Bsprintf(buffer,"Save as: %s_", boardfilename);
 						printmessage16(buffer);
 						showframe(1);
-
-						if (handleevents()) {
-							if (quitevent) quitevent = 0;
-						}
-
+						if (handleevents())
+						   {
+							if (quitevent)
+							    quitevent = 0;
+						   }
 						ch = bgetchar();
-
-						if (keystatus[1] > 0) bad = 1;
-						else if (ch == 13) bad = 2;
-						else if (ch > 0) {
-							if (i > 0 && (ch == 8 || ch == 127)) {
+						if (keystatus[1] > 0)
+						    bad = 1;
+						else
+						if (ch == 13)
+						    bad = 2;
+						else
+						if (ch > 0)
+						   {
+							if (i > 0 && (ch == 8 || ch == 127))
+							   {
 								i--;
 								boardfilename[i] = 0;
-							}
-							else if (i < 8 && ch > 32 && ch < 128)
-							{
+							   }
+							else
+							if (i < 32 && ch > 31 && ch < 123)       // wxlf  i < 8
+							   {
+								if (ch == 32)
+								    ch = '_';
 								boardfilename[i++] = ch;
 								boardfilename[i] = 0;
-							}
-						}
-					}
+							   }
+						    }
+					    }
 					if (bad == 1)
-					{
+					   {
 						Bstrcpy(boardfilename, selectedboardfilename);
 						keystatus[1] = 0;
 						printmessage16("Operation cancelled");
 						showframe(1);
-					}
+					   }
 					if (bad == 2)
-					{
+					   {
 						char *f;
 						keystatus[0x1c] = 0;
-
-						boardfilename[i] = '.';
-						boardfilename[i+1] = 'm';
-						boardfilename[i+2] = 'a';
-						boardfilename[i+3] = 'p';
-						boardfilename[i+4] = 0;
-
+						if (boardfilename[i-4] != '.')
+						   {
+						   boardfilename[i] = '.';
+						   boardfilename[i+1] = 'm';
+						   boardfilename[i+2] = 'a';
+						   boardfilename[i+3] = 'p';
+						   boardfilename[i+4] = 0;
+						   }
+						else
+						   {
+						   boardfilename[i] = 0;
+						   }
 						if (Bstrrchr(selectedboardfilename,'/'))
 							Bstrcpy(Bstrrchr(selectedboardfilename, '/')+1, boardfilename);
 						else
 							Bstrcpy(selectedboardfilename, boardfilename);
 						if (pathsearchmode) f = selectedboardfilename;
-						else {
+						else
+						   {
 							// virtual filesystem mode can't save to directories so drop the file into
 							// the current directory
 							f = strrchr(selectedboardfilename, '/');
 							if (!f) f = selectedboardfilename; else f++;
-						}
+						   }
 						Bsprintf(buffer,"Saving to %s...",f);
 						printmessage16(buffer);
 						showframe(1);
-
 						fixspritesectors();   //Do this before saving!
 						updatesector(startposx,startposy,&startsectnum);
 						ExtPreSaveMap();
@@ -5295,12 +5490,15 @@ void overheadeditor(void)
 						ExtSaveMap(f);
 						printmessage16("Board saved.");
 						Bstrcpy(boardfilename, selectedboardfilename);
-					}
+					   }
 					bad = 0;
-				}
-				else if (ch == 's' || ch == 'S')  //S
+				    DoMainCaption();
+				   }
+				else
+				if (ch == 's' || ch == 'S')  //S
 				{
 					char *f;
+
 					bad = 0;
 					printmessage16("Saving board...");
 					showframe(1);
@@ -5317,8 +5515,34 @@ void overheadeditor(void)
 					saveboard(f,&startposx,&startposy,&startposz,&startang,&startsectnum);
 					ExtSaveMap(f);
 					printmessage16("Board saved.");
+					asksave = 0;
 					showframe(1);
 				}
+				else if (ch == 'p' || ch == 'P')  // Play               wxpy
+				{
+				// printmessage16(REVISION);
+                PlayTestMap();
+				bad = 0;
+				}
+				else if (ch == 'm' || ch == 'M')  // Menu               wxpy
+				{
+                ky = GetMenuOption();             // 2D
+                if (ky > 0)
+                   {
+                   CheckSelections(ky);           // 2D
+                   if (ky < 3)   // quit
+                      {
+                      if (ky == 2)
+                          asksave = 0;
+                      quitflag = 1;
+                      return;
+                      }
+                   }
+                bflushchars();
+                clearkeys();
+               //  printmessage16(REVISION);
+                bad = 0;
+  		        }
 				else if (ch == 'q' || ch == 'Q')  //Q
 				{
 					bad = 0;
@@ -5326,47 +5550,55 @@ void overheadeditor(void)
 					showframe(1);
 					bflushchars();
 					while (keystatus[1] == 0)
-					{
-						if (handleevents()) {
-							if (quitevent) quitevent = 0;
-						}
+					    {
+						if (handleevents())
+						   {
+						   if (quitevent)
+						       quitevent = 0;
+						   }
 
 						ch = bgetchar();
+						if (ch == 'y' || ch == 'Y' || ch == 13)
+						   {
+						   //QUIT!
+                           if (asksave == 1)                        // wxyz
+                              {
+						       printmessage16("Save changes?");
+							   showframe(1);
+							   while (keystatus[1] == 0)
+							      {
+							  	if (handleevents())
+							  	   {
+							  	   if (quitevent) break;	// like saying no
+							  	   }
 
-						if (ch == 'y' || ch == 'Y')
-						{
-							//QUIT!
-
-							printmessage16("Save changes?");
-							showframe(1);
-							while (keystatus[1] == 0)
-							{
-								if (handleevents()) {
-									if (quitevent) break;	// like saying no
-								}
-
-								ch = bgetchar();
-
-								if (ch == 'y' || ch == 'Y')
-								{
-									char *f;
-									fixspritesectors();   //Do this before saving!
-									updatesector(startposx,startposy,&startsectnum);
-									ExtPreSaveMap();
-									if (pathsearchmode) f = boardfilename;
-									else {
-										// virtual filesystem mode can't save to directories so drop the file into
-										// the current directory
-										f = strrchr(boardfilename, '/');
-										if (!f) f = boardfilename; else f++;
-									}
-									saveboard(f,&startposx,&startposy,&startposz,&startang,&startsectnum);
-									ExtSaveMap(f);
-									break;
-								} else if (ch == 'n' || ch == 'N' || ch == 13 || ch == ' ') {
-									break;
-								}
-							}
+							  	ch = bgetchar();
+							  	if (ch == 'y' || ch == 'Y')
+							  	   {
+							  		char *f;
+							  		fixspritesectors();   //Do this before saving!
+							  		updatesector(startposx,startposy,&startsectnum);
+							  		ExtPreSaveMap();
+							  		if (pathsearchmode)
+							  		    f = boardfilename;
+							  		else
+							  		   {
+							  			// virtual filesystem mode can't save to directories so drop the file into
+							  			// the current directory
+							  			f = strrchr(boardfilename, '/');
+							  			if (!f) f = boardfilename; else f++;
+							  		   }
+							  		saveboard(f,&startposx,&startposy,&startposz,&startang,&startsectnum);
+							  		ExtSaveMap(f);
+							  		break;
+							  	    }
+							  	else
+							  	if (ch == 'n' || ch == 'N' || ch == 13 || ch == ' ')
+							  	   {
+							  		break;
+							  	   }
+							      }
+							  }
 							clearfilenames();
 							uninittimer();
 							uninitinput();
@@ -5375,9 +5607,12 @@ void overheadeditor(void)
 							printf("Memory status: %ld(%ld) bytes\n",cachesize,artsize);
 							printf("%s\n",kensig);
 							exit(0);
-						} else if (ch == 'n' || ch == 'N' || ch == 13 || ch == ' ') {
+						    }
+						 else
+						 if (ch == 'n' || ch == 'N' || ch == 13 || ch == ' ')
+						    {
 							break;
-						}
+						    }
 					}
 					printmessage16("");
 					showframe(1);
@@ -5821,11 +6056,11 @@ void fixrepeats(short i)
 	wall[i].xrepeat = (char)min(max(mulscale10(dist,day),1),255);
 }
 
-void clearmidstatbar16(void)
+void clearmidstatbar16(void) // clears main center of text area
 {
 	begindrawing();
-	ydim16 = ydim;
-	clearbuf((char *)(frameplace + (bytesperline*(ydim-STATUS2DSIZ+25L))),(bytesperline*(STATUS2DSIZ-1-(25<<1))) >> 2, 0x08080808l);
+	ydim16 = ydim;                                                                                          //0x080808081  wxyz
+	clearbuf((char *)(frameplace + (bytesperline*(ydim-STATUS2DSIZ+26L))),(bytesperline*(STATUS2DSIZ-1-(25<<1))) >> 2, 0x07070707l);
 	drawline16(0,ydim-STATUS2DSIZ,0,ydim-1,7);
 	drawline16(xdim-1,ydim-STATUS2DSIZ,xdim-1,ydim-1,7);
 	ydim16 = ydim-STATUS2DSIZ;
@@ -6021,7 +6256,7 @@ long menuselect(void)
 			sprintf(buffer,"Game filesystem %smode. Press F for local filesystem, G for %s.",
 					grponlymode?"GRP-only ":"", grponlymode?"all files":"GRP files only");
 		}
-		printext16(halfxdim16-(8*strlen(buffer)/2), 4, 14,0,buffer,0);
+		printext16(halfxdim16-(8*strlen(buffer)/2), 4, cBlak,0,buffer,0);      // wxcl
 
 		Bsnprintf(buffer,78,"(%d dirs, %d files) %s",numdirs,numfiles,selectedboardfilename);
 		buffer[sizeof(buffer)-1] = 0;
@@ -6438,23 +6673,23 @@ void printcoords16(long posxe, long posye, short ange)
 
 	m = (numsectors > MAXSECTORSV7 || numwalls > MAXWALLSV7 || numsprites > MAXSPRITESV7);
 
-	printext16(8, ydim-STATUS2DSIZ+128, 11, 6, snotbuf,0);
+	printext16(8, ydim-STATUS2DSIZ+128, cWhit, cBlue, snotbuf,0);            // wxcl wxbg
 
-	Bsprintf(snotbuf,"%d/%d sect. %d/%d walls %ld/%d spri.",
+	Bsprintf(snotbuf,"%d/%d sectors %d/%d walls %ld/%d sprites",
 					numsectors,m?MAXSECTORSV8:MAXSECTORSV7,
 					numwalls,m?MAXWALLSV8:MAXWALLSV7,
 					numsprites,m?MAXSPRITESV8:MAXSPRITESV7);
 	i = 0;
-	while ((snotbuf[i] != 0) && (i < 46))
+	while ((snotbuf[i] != 0) && (i < 56))
 		i++;
-	while (i < 46)
+	while (i < 56)
 	{
 		snotbuf[i] = 32;
 		i++;
 	}
-	snotbuf[46] = 0;
+	snotbuf[56] = 0;
 
-	printext16(264, ydim-STATUS2DSIZ+128, 14+m, 6, snotbuf,0);
+	printext16(264, ydim-STATUS2DSIZ+128, cWhit, cBlue, snotbuf,0);          // wxcl wxbg
 }
 
 void updatenumsprites(void)
@@ -6526,55 +6761,55 @@ void showsectordata(short sectnum)
 	char snotbuf[80];
 
 	Bsprintf(snotbuf,"Sector %d",sectnum);
-	printext16(8,ydim-STATUS2DSIZ+32,11,-1,snotbuf,0);
+	printext16(8,ydim-STATUS2DSIZ+32,cBlak,-1,snotbuf,0);
 	Bsprintf(snotbuf,"Firstwall: %d",sector[sectnum].wallptr);
-	printext16(8,ydim-STATUS2DSIZ+48,11,-1,snotbuf,0);
+	printext16(8,ydim-STATUS2DSIZ+48,cBlak,-1,snotbuf,0);
 	Bsprintf(snotbuf,"Numberofwalls: %d",sector[sectnum].wallnum);
-	printext16(8,ydim-STATUS2DSIZ+56,11,-1,snotbuf,0);
+	printext16(8,ydim-STATUS2DSIZ+56,cBlak,-1,snotbuf,0);
 	Bsprintf(snotbuf,"Firstsprite: %d",headspritesect[sectnum]);
-	printext16(8,ydim-STATUS2DSIZ+64,11,-1,snotbuf,0);
+	printext16(8,ydim-STATUS2DSIZ+64,cBlak,-1,snotbuf,0);
 	Bsprintf(snotbuf,"Tags: %d, %d",sector[sectnum].hitag,sector[sectnum].lotag);
-	printext16(8,ydim-STATUS2DSIZ+72,11,-1,snotbuf,0);
+	printext16(8,ydim-STATUS2DSIZ+72,cBlak,-1,snotbuf,0);
 	Bsprintf(snotbuf,"     (0x%x), (0x%x)",sector[sectnum].hitag,sector[sectnum].lotag);
-	printext16(8,ydim-STATUS2DSIZ+80,11,-1,snotbuf,0);
+	printext16(8,ydim-STATUS2DSIZ+80,cBlak,-1,snotbuf,0);
 	Bsprintf(snotbuf,"Extra: %d",sector[sectnum].extra);
-	printext16(8,ydim-STATUS2DSIZ+88,11,-1,snotbuf,0);
+	printext16(8,ydim-STATUS2DSIZ+88,cBlak,-1,snotbuf,0);
 	Bsprintf(snotbuf,"Visibility: %d",sector[sectnum].visibility);
-	printext16(8,ydim-STATUS2DSIZ+96,11,-1,snotbuf,0);
+	printext16(8,ydim-STATUS2DSIZ+96,cBlak,-1,snotbuf,0);
 	Bsprintf(snotbuf,"Pixel height: %ld",(sector[sectnum].floorz-sector[sectnum].ceilingz)>>8);
-	printext16(8,ydim-STATUS2DSIZ+104,11,-1,snotbuf,0);
+	printext16(8,ydim-STATUS2DSIZ+104,cBlak,-1,snotbuf,0);
 
-	printext16(200,ydim-STATUS2DSIZ+32,11,-1,"CEILINGS:",0);
+	printext16(200,ydim-STATUS2DSIZ+32,cBlak,-1,"CEILINGS:",0);
 	Bsprintf(snotbuf,"Flags (hex): %x",sector[sectnum].ceilingstat);
-	printext16(200,ydim-STATUS2DSIZ+48,11,-1,snotbuf,0);
+	printext16(200,ydim-STATUS2DSIZ+48,cBlak,-1,snotbuf,0);
 	Bsprintf(snotbuf,"(X,Y)pan: %d, %d",sector[sectnum].ceilingxpanning,sector[sectnum].ceilingypanning);
-	printext16(200,ydim-STATUS2DSIZ+56,11,-1,snotbuf,0);
+	printext16(200,ydim-STATUS2DSIZ+56,cBlak,-1,snotbuf,0);
 	Bsprintf(snotbuf,"Shade byte: %d",sector[sectnum].ceilingshade);
-	printext16(200,ydim-STATUS2DSIZ+64,11,-1,snotbuf,0);
+	printext16(200,ydim-STATUS2DSIZ+64,cBlak,-1,snotbuf,0);
 	Bsprintf(snotbuf,"Z-coordinate: %ld",sector[sectnum].ceilingz);
-	printext16(200,ydim-STATUS2DSIZ+72,11,-1,snotbuf,0);
+	printext16(200,ydim-STATUS2DSIZ+72,cBlak,-1,snotbuf,0);
 	Bsprintf(snotbuf,"Tile number: %d",sector[sectnum].ceilingpicnum);
-	printext16(200,ydim-STATUS2DSIZ+80,11,-1,snotbuf,0);
+	printext16(200,ydim-STATUS2DSIZ+80,cBlak,-1,snotbuf,0);
 	Bsprintf(snotbuf,"Ceiling heinum: %d",sector[sectnum].ceilingheinum);
-	printext16(200,ydim-STATUS2DSIZ+88,11,-1,snotbuf,0);
+	printext16(200,ydim-STATUS2DSIZ+88,cBlak,-1,snotbuf,0);
 	Bsprintf(snotbuf,"Palookup number: %d",sector[sectnum].ceilingpal);
-	printext16(200,ydim-STATUS2DSIZ+96,11,-1,snotbuf,0);
+	printext16(200,ydim-STATUS2DSIZ+96,cBlak,-1,snotbuf,0);
 
-	printext16(400,ydim-STATUS2DSIZ+32,11,-1,"FLOORS:",0);
+	printext16(400,ydim-STATUS2DSIZ+32,cBlak,-1,"FLOORS:",0);
 	Bsprintf(snotbuf,"Flags (hex): %x",sector[sectnum].floorstat);
-	printext16(400,ydim-STATUS2DSIZ+48,11,-1,snotbuf,0);
+	printext16(400,ydim-STATUS2DSIZ+48,cBlak,-1,snotbuf,0);
 	Bsprintf(snotbuf,"(X,Y)pan: %d, %d",sector[sectnum].floorxpanning,sector[sectnum].floorypanning);
-	printext16(400,ydim-STATUS2DSIZ+56,11,-1,snotbuf,0);
+	printext16(400,ydim-STATUS2DSIZ+56,cBlak,-1,snotbuf,0);
 	Bsprintf(snotbuf,"Shade byte: %d",sector[sectnum].floorshade);
-	printext16(400,ydim-STATUS2DSIZ+64,11,-1,snotbuf,0);
+	printext16(400,ydim-STATUS2DSIZ+64,cBlak,-1,snotbuf,0);
 	Bsprintf(snotbuf,"Z-coordinate: %ld",sector[sectnum].floorz);
-	printext16(400,ydim-STATUS2DSIZ+72,11,-1,snotbuf,0);
+	printext16(400,ydim-STATUS2DSIZ+72,cBlak,-1,snotbuf,0);
 	Bsprintf(snotbuf,"Tile number: %d",sector[sectnum].floorpicnum);
-	printext16(400,ydim-STATUS2DSIZ+80,11,-1,snotbuf,0);
+	printext16(400,ydim-STATUS2DSIZ+80,cBlak,-1,snotbuf,0);
 	Bsprintf(snotbuf,"Floor heinum: %d",sector[sectnum].floorheinum);
-	printext16(400,ydim-STATUS2DSIZ+88,11,-1,snotbuf,0);
+	printext16(400,ydim-STATUS2DSIZ+88,cBlak,-1,snotbuf,0);
 	Bsprintf(snotbuf,"Palookup number: %d",sector[sectnum].floorpal);
-	printext16(400,ydim-STATUS2DSIZ+96,11,-1,snotbuf,0);
+	printext16(400,ydim-STATUS2DSIZ+96,cBlak,-1,snotbuf,0);
 }
 
 void showwalldata(short wallnum)
@@ -6583,54 +6818,54 @@ void showwalldata(short wallnum)
 	char snotbuf[80];
 
 	Bsprintf(snotbuf,"Wall %d",wallnum);
-	printext16(8,ydim-STATUS2DSIZ+32,11,-1,snotbuf,0);
+	printext16(8,ydim-STATUS2DSIZ+32,cBlak,-1,snotbuf,0);
 	Bsprintf(snotbuf,"X-coordinate: %ld",wall[wallnum].x);
-	printext16(8,ydim-STATUS2DSIZ+48,11,-1,snotbuf,0);
+	printext16(8,ydim-STATUS2DSIZ+48,cBlak,-1,snotbuf,0);
 	Bsprintf(snotbuf,"Y-coordinate: %ld",wall[wallnum].y);
-	printext16(8,ydim-STATUS2DSIZ+56,11,-1,snotbuf,0);
+	printext16(8,ydim-STATUS2DSIZ+56,cBlak,-1,snotbuf,0);
 	Bsprintf(snotbuf,"Point2: %d",wall[wallnum].point2);
-	printext16(8,ydim-STATUS2DSIZ+64,11,-1,snotbuf,0);
+	printext16(8,ydim-STATUS2DSIZ+64,cBlak,-1,snotbuf,0);
 	Bsprintf(snotbuf,"Sector: %ld",sectorofwall(wallnum));
-	printext16(8,ydim-STATUS2DSIZ+72,11,-1,snotbuf,0);
+	printext16(8,ydim-STATUS2DSIZ+72,cBlak,-1,snotbuf,0);
 
 	Bsprintf(snotbuf,"Tags: %d, %d",wall[wallnum].hitag,wall[wallnum].lotag);
-	printext16(8,ydim-STATUS2DSIZ+88,11,-1,snotbuf,0);
+	printext16(8,ydim-STATUS2DSIZ+88,cBlak,-1,snotbuf,0);
 	Bsprintf(snotbuf,"     (0x%x), (0x%x)",wall[wallnum].hitag,wall[wallnum].lotag);
-	printext16(8,ydim-STATUS2DSIZ+96,11,-1,snotbuf,0);
+	printext16(8,ydim-STATUS2DSIZ+96,cBlak,-1,snotbuf,0);
 
-	printext16(200,ydim-STATUS2DSIZ+32,11,-1,names[wall[wallnum].picnum],0);
+	printext16(200,ydim-STATUS2DSIZ+32,cBlak,-1,names[wall[wallnum].picnum],0);
 	Bsprintf(snotbuf,"Flags (hex): %x",wall[wallnum].cstat);
-	printext16(200,ydim-STATUS2DSIZ+48,11,-1,snotbuf,0);
+	printext16(200,ydim-STATUS2DSIZ+48,cBlak,-1,snotbuf,0);
 	Bsprintf(snotbuf,"Shade: %d",wall[wallnum].shade);
-	printext16(200,ydim-STATUS2DSIZ+56,11,-1,snotbuf,0);
+	printext16(200,ydim-STATUS2DSIZ+56,cBlak,-1,snotbuf,0);
 	Bsprintf(snotbuf,"Pal: %d",wall[wallnum].pal);
-	printext16(200,ydim-STATUS2DSIZ+64,11,-1,snotbuf,0);
+	printext16(200,ydim-STATUS2DSIZ+64,cBlak,-1,snotbuf,0);
 	Bsprintf(snotbuf,"(X,Y)repeat: %d, %d",wall[wallnum].xrepeat,wall[wallnum].yrepeat);
-	printext16(200,ydim-STATUS2DSIZ+72,11,-1,snotbuf,0);
+	printext16(200,ydim-STATUS2DSIZ+72,cBlak,-1,snotbuf,0);
 	Bsprintf(snotbuf,"(X,Y)pan: %d, %d",wall[wallnum].xpanning,wall[wallnum].ypanning);
-	printext16(200,ydim-STATUS2DSIZ+80,11,-1,snotbuf,0);
+	printext16(200,ydim-STATUS2DSIZ+80,cBlak,-1,snotbuf,0);
 	Bsprintf(snotbuf,"Tile number: %d",wall[wallnum].picnum);
-	printext16(200,ydim-STATUS2DSIZ+88,11,-1,snotbuf,0);
+	printext16(200,ydim-STATUS2DSIZ+88,cBlak,-1,snotbuf,0);
 	Bsprintf(snotbuf,"OverTile number: %d",wall[wallnum].overpicnum);
-	printext16(200,ydim-STATUS2DSIZ+96,11,-1,snotbuf,0);
+	printext16(200,ydim-STATUS2DSIZ+96,cBlak,-1,snotbuf,0);
 
 	Bsprintf(snotbuf,"nextsector: %d",wall[wallnum].nextsector);
-	printext16(400,ydim-STATUS2DSIZ+48,11,-1,snotbuf,0);
+	printext16(400,ydim-STATUS2DSIZ+48,cBlak,-1,snotbuf,0);
 	Bsprintf(snotbuf,"nextwall: %d",wall[wallnum].nextwall);
-	printext16(400,ydim-STATUS2DSIZ+56,11,-1,snotbuf,0);
+	printext16(400,ydim-STATUS2DSIZ+56,cBlak,-1,snotbuf,0);
 
 	Bsprintf(snotbuf,"Extra: %d",wall[wallnum].extra);
-	printext16(400,ydim-STATUS2DSIZ+72,11,-1,snotbuf,0);
+	printext16(400,ydim-STATUS2DSIZ+72,cBlak,-1,snotbuf,0);
 
 	dax = wall[wallnum].x-wall[wall[wallnum].point2].x;
 	day = wall[wallnum].y-wall[wall[wallnum].point2].y;
 	dist = ksqrt(dax*dax+day*day);
 	Bsprintf(snotbuf,"Wall length: %ld",dist>>4);
-	printext16(400,ydim-STATUS2DSIZ+96,11,-1,snotbuf,0);
+	printext16(400,ydim-STATUS2DSIZ+96,cBlak,-1,snotbuf,0);
 
 	dax = (long)sectorofwall(wallnum);
 	Bsprintf(snotbuf,"Pixel height: %ld",(sector[dax].floorz-sector[dax].ceilingz)>>8);
-	printext16(400,ydim-STATUS2DSIZ+104,11,-1,snotbuf,0);
+	printext16(400,ydim-STATUS2DSIZ+104,cBlak,-1,snotbuf,0);
 }
 
 void showspritedata(short spritenum)
@@ -6638,52 +6873,52 @@ void showspritedata(short spritenum)
 	char snotbuf[80];
 
 	Bsprintf(snotbuf,"Sprite %d",spritenum);
-	printext16(8,ydim-STATUS2DSIZ+32,11,-1,snotbuf,0);
+	printext16(8,ydim-STATUS2DSIZ+32,cBlak,-1,snotbuf,0);
 	Bsprintf(snotbuf,"X-coordinate: %ld",sprite[spritenum].x);
-	printext16(8,ydim-STATUS2DSIZ+48,11,-1,snotbuf,0);
+	printext16(8,ydim-STATUS2DSIZ+48,cBlak,-1,snotbuf,0);
 	Bsprintf(snotbuf,"Y-coordinate: %ld",sprite[spritenum].y);
-	printext16(8,ydim-STATUS2DSIZ+56,11,-1,snotbuf,0);
+	printext16(8,ydim-STATUS2DSIZ+56,cBlak,-1,snotbuf,0);
 	Bsprintf(snotbuf,"Z-coordinate: %ld",sprite[spritenum].z);
-	printext16(8,ydim-STATUS2DSIZ+64,11,-1,snotbuf,0);
+	printext16(8,ydim-STATUS2DSIZ+64,cBlak,-1,snotbuf,0);
 
 	Bsprintf(snotbuf,"Sectnum: %d",sprite[spritenum].sectnum);
-	printext16(8,ydim-STATUS2DSIZ+72,11,-1,snotbuf,0);
+	printext16(8,ydim-STATUS2DSIZ+72,cBlak,-1,snotbuf,0);
 	Bsprintf(snotbuf,"Statnum: %d",sprite[spritenum].statnum);
-	printext16(8,ydim-STATUS2DSIZ+80,11,-1,snotbuf,0);
+	printext16(8,ydim-STATUS2DSIZ+80,cBlak,-1,snotbuf,0);
 
 	Bsprintf(snotbuf,"Tags: %d, %d",sprite[spritenum].hitag,sprite[spritenum].lotag);
-	printext16(8,ydim-STATUS2DSIZ+96,11,-1,snotbuf,0);
+	printext16(8,ydim-STATUS2DSIZ+96,cBlak,-1,snotbuf,0);
 	Bsprintf(snotbuf,"     (0x%x), (0x%x)",sprite[spritenum].hitag,sprite[spritenum].lotag);
-	printext16(8,ydim-STATUS2DSIZ+104,11,-1,snotbuf,0);
+	printext16(8,ydim-STATUS2DSIZ+104,cBlak,-1,snotbuf,0);
 
-	printext16(200,ydim-STATUS2DSIZ+32,11,-1,names[sprite[spritenum].picnum],0);
+	printext16(200,ydim-STATUS2DSIZ+32,cBlak,-1,names[sprite[spritenum].picnum],0);
 	Bsprintf(snotbuf,"Flags (hex): %x",sprite[spritenum].cstat);
-	printext16(200,ydim-STATUS2DSIZ+48,11,-1,snotbuf,0);
+	printext16(200,ydim-STATUS2DSIZ+48,cBlak,-1,snotbuf,0);
 	Bsprintf(snotbuf,"Shade: %d",sprite[spritenum].shade);
-	printext16(200,ydim-STATUS2DSIZ+56,11,-1,snotbuf,0);
+	printext16(200,ydim-STATUS2DSIZ+56,cBlak,-1,snotbuf,0);
 	Bsprintf(snotbuf,"Pal: %d",sprite[spritenum].pal);
-	printext16(200,ydim-STATUS2DSIZ+64,11,-1,snotbuf,0);
+	printext16(200,ydim-STATUS2DSIZ+64,cBlak,-1,snotbuf,0);
 	Bsprintf(snotbuf,"(X,Y)repeat: %d, %d",sprite[spritenum].xrepeat,sprite[spritenum].yrepeat);
-	printext16(200,ydim-STATUS2DSIZ+72,11,-1,snotbuf,0);
+	printext16(200,ydim-STATUS2DSIZ+72,cBlak,-1,snotbuf,0);
 	Bsprintf(snotbuf,"(X,Y)offset: %d, %d",sprite[spritenum].xoffset,sprite[spritenum].yoffset);
-	printext16(200,ydim-STATUS2DSIZ+80,11,-1,snotbuf,0);
+	printext16(200,ydim-STATUS2DSIZ+80,cBlak,-1,snotbuf,0);
 	Bsprintf(snotbuf,"Tile number: %d",sprite[spritenum].picnum);
-	printext16(200,ydim-STATUS2DSIZ+88,11,-1,snotbuf,0);
+	printext16(200,ydim-STATUS2DSIZ+88,cBlak,-1,snotbuf,0);
 
 	Bsprintf(snotbuf,"Angle (2048 degrees): %d",sprite[spritenum].ang);
-	printext16(400,ydim-STATUS2DSIZ+48,11,-1,snotbuf,0);
+	printext16(400,ydim-STATUS2DSIZ+48,cBlak,-1,snotbuf,0);
 	Bsprintf(snotbuf,"X-Velocity: %d",sprite[spritenum].xvel);
-	printext16(400,ydim-STATUS2DSIZ+56,11,-1,snotbuf,0);
+	printext16(400,ydim-STATUS2DSIZ+56,cBlak,-1,snotbuf,0);
 	Bsprintf(snotbuf,"Y-Velocity: %d",sprite[spritenum].yvel);
-	printext16(400,ydim-STATUS2DSIZ+64,11,-1,snotbuf,0);
+	printext16(400,ydim-STATUS2DSIZ+64,cBlak,-1,snotbuf,0);
 	Bsprintf(snotbuf,"Z-Velocity: %d",sprite[spritenum].zvel);
-	printext16(400,ydim-STATUS2DSIZ+72,11,-1,snotbuf,0);
+	printext16(400,ydim-STATUS2DSIZ+72,cBlak,-1,snotbuf,0);
 	Bsprintf(snotbuf,"Owner: %d",sprite[spritenum].owner);
-	printext16(400,ydim-STATUS2DSIZ+80,11,-1,snotbuf,0);
+	printext16(400,ydim-STATUS2DSIZ+80,cBlak,-1,snotbuf,0);
 	Bsprintf(snotbuf,"Clipdist: %d",sprite[spritenum].clipdist);
-	printext16(400,ydim-STATUS2DSIZ+88,11,-1,snotbuf,0);
+	printext16(400,ydim-STATUS2DSIZ+88,cBlak,-1,snotbuf,0);
 	Bsprintf(snotbuf,"Extra: %d",sprite[spritenum].extra);
-	printext16(400,ydim-STATUS2DSIZ+96,11,-1,snotbuf,0);
+	printext16(400,ydim-STATUS2DSIZ+96,cBlak,-1,snotbuf,0);
 }
 
 void keytimerstuff(void)
@@ -6715,26 +6950,34 @@ void keytimerstuff(void)
 	if (vel > 0) vel = max(vel-2,0);
 }
 
-void printmessage16(char name[82])
+void printmessage16(char name[128])     // extended from 82
 {
-	char snotbuf[60];
+	char snotbuf[100];                  // 60
+	short x = 96;
 	long i;
 
+    if (xdim2d < 1000)
+        x = 72;
+    if (xdim2d < 790)
+        x = 54;
+
 	i = 0;
-	while ((name[i] != 0) && (i < 54))
+	while ((name[i] != 0) && (i < x))   // 54
 	{
 		snotbuf[i] = name[i];
 		i++;
 	}
-	while (i < 54)
+
+	while (i < x)                       // 54
 	{
 		snotbuf[i] = 32;
 		i++;
 	}
-	snotbuf[54] = 0;
+
+	snotbuf[x] = 0;                     // 54
 
 	begindrawing();
-	printext16(200L, ydim-STATUS2DSIZ+8L, 0, 6, snotbuf, 0);
+	printext16(200L, ydim-STATUS2DSIZ+8L, cWhit, cBlue, snotbuf, 0);  // (S)ave etc line wxbg
 	enddrawing();
 }
 
@@ -6915,8 +7158,348 @@ void AutoAlignWalls(long nWall0, long ply)
 	}
 }
 
+//=============================================================================
+
+void CheckSelections(short iKey)
+{
+    if (iKey == 1)
+        SaveTestMap(1);
+    else
+    if (iKey == 2)
+        return;
+    else
+    if (iKey == 3)
+       {
+       PlayTestMap();
+	   }
+    else
+    if (iKey == 4)
+       {
+       SaveTestMap(0);
+	   }
+    else
+    if (iKey == 5)
+       {
+       xsA = 64;
+       xsB = 63;
+       xsC = 6;
+	   }
+    else
+    if (iKey == 6)
+       {
+       xsA = 128;
+       xsB = 127;
+       xsC = 7;
+	   }
+    else
+    if (iKey == 7)
+       {
+       xsA = 256;
+       xsB = 255;
+       xsC = 8;
+	   }
+    else
+    if (iKey == 20)
+       {
+       SWPBUILDHelp();
+	   }
+    else
+    if (iKey == 99)         // config save and exit
+       {
+       SaveConfigs();
+	   }
+}
+
+void PlayTestMap(void)
+{
+    int k;
+
+    if (asksave > 0)
+       {
+       if (wm_ynbox("SWPBUILD", "Map not saved!\nSave before playing - Y/N ?"))
+           SaveTestMap(1);
+       }
+    k = MessageBox((HWND)win_gethwnd(),"Play with monsters - Y/N ?", "SWPBUILD - Play Map",MB_YESNOCANCEL|MB_ICONQUESTION|MB_TASKMODAL);
+    if (k == IDYES)
+	    k = 2; // y
+    else
+    if (k == IDNO)
+	    k = 1; // N
+    else
+        return;
+
+  	if (Bstrrchr(boardfilename, '/'))
+	    Bstrcpy(boardfilename, Bstrrchr(boardfilename, '/')+1);
+	Bstrcpy(selectedboardfilename, boardfilename);
+	if (keystatus[1] == 0)   // Esc
+	   {
+	   if (k == 1)           // No
+           strcat(selectedboardfilename, " -monsters");
+       spawnlp( P_NOWAIT, "SWP.exe -z -map", "", selectedboardfilename, NULL );
+       bflushchars();
+       }
+}
+
+void SaveTestMap(int iforce)
+{
+    char *f;
+
+    fixspritesectors();   //Do this before saving!
+    updatesector(startposx,startposy,&startsectnum);
+    if (pathsearchmode)
+        f = boardfilename;
+    else
+       {
+       // virtual filesystem mode can't save to directories so drop the file into
+       // the current directory
+       f = strrchr(boardfilename, '/');
+       if (!f)
+           f = boardfilename; else f++;
+       }
+    ExtPreSaveMap();
+    saveboard(f,&startposx,&startposy,&startposz,&startang,&startsectnum);
+    ExtSaveMap(f);
+    asksave = 0;
+    if (iforce == 0)
+ 	    MessageBeep(64);;
+}
+
+void SWPBUILDHelp(void)
+{
+//    HWND myHandle;
+
+//    myHandle = win_gethwnd();
+    //spawnlp( P_NOWAIT, "SWPBUILDHelp.exe", "", "", NULL );
+    spawnlp( P_NOWAIT, "Notepad.exe", "", "SWPBUILDHelp.txt", NULL );
+    //SetFocus(myHandle);
+    SetFocus((HWND)win_gethwnd());
+}
+
+void BackupMap(void)                                                 // wxas
+{
+    char fn[BMAX_PATH];
+    short i;
+
+    fn[0] = 0;
+    i = strlen(boardfilename);
+    strncpy(fn, boardfilename, i);
+
+    if (fn[i-4] == '.')
+       {
+       fn[i-3] = 'b';
+       fn[i-2] = 'a';
+       fn[i-1] = 'k';
+       fn[i] = 0;
+       }
+
+    updatesector(startposx,startposy,&startsectnum);
+    saveboard(fn,&startposx,&startposy,&startposz,&startang,&startsectnum);
+    //initprintf("Saving map: %s\n", fn);
+}
+
+void SaveConfigs(void)
+{
+    quitflag = 1;
+}
+
+void Display2DStats(void)                                                     // wxst
+{
+    char sTemp[128], *sTyp = "";
+    short i, nm, ht, lt, tx, x, snm, sht, slt;
+    long msx, msy;
+
+    lt = 0;
+    ht = 0;
+    nm = 0;
+    tx = 0;
+
+    if (pointhighlight >= 16384)
+       {
+       nm = pointhighlight-16384;
+       tx = sprite[nm].picnum;
+	   ht = sprite[nm].hitag;
+	   lt = sprite[nm].lotag;
+       x = CheckAnimations(tx);
+       if (x > 0)
+           sTyp = sTile[x];
+       strcpy(sTemp, "Sprite : %d");
+       }
+    else
+    if (linehighlight >= 0)
+       {
+       nm = linehighlight;
+       tx = wall[nm].picnum;
+	   ht = wall[nm].hitag;
+	   lt = wall[nm].lotag;
+       strcpy(sTemp, "Wall   : %d");
+       }
+
+    getpoint(searchx,searchy,&msx,&msy);
+    for (i=0; i<numsectors; i++)
+        {
+        if (inside(msx,msy,i) == 1)
+           {
+           snm = i;
+           sht = sector[i].hitag;
+           slt = sector[i].lotag;
+           break;
+           }
+        }
+
+    sprintf(tempbuf, sTyp);
+    printext16(8L, ydim-STATUS2DSIZ-75, cYell, -1, tempbuf, 0);
+    sprintf(tempbuf, sTemp, nm);
+    printext16(8L, ydim-STATUS2DSIZ-60, cYell, -1, tempbuf, 0);
+    sprintf(tempbuf, "Picnum : %d", tx);
+    printext16(8L, ydim-STATUS2DSIZ-45, cYell, -1, tempbuf, 0);
+    sprintf(tempbuf, "Hitag  : %d", ht);
+    printext16(8L, ydim-STATUS2DSIZ-30, cYell, -1, tempbuf, 0);
+    sprintf(tempbuf, "Lotag  : %d", lt);
+    printext16(8L, ydim-STATUS2DSIZ-15, cYell, -1, tempbuf, 0);
+
+
+    if (snm >= 0 && snm <= numsectors && sht != 25958 && sht >= 0 && slt != 25958 && slt >= 0)
+       {
+       sprintf(tempbuf, "Sector: %d", snm);
+       printext16(xdim2d-120, ydim-STATUS2DSIZ-45, cYell, -1, tempbuf, 0);
+       sprintf(tempbuf, "Hitag : %d", sht);
+       printext16(xdim2d-120, ydim-STATUS2DSIZ-30, cYell, -1, tempbuf, 0);
+       sprintf(tempbuf, "Lotag : %d", slt);
+       printext16(xdim2d-120, ydim-STATUS2DSIZ-15, cYell, -1, tempbuf, 0);
+       }
+}
+
+void Display3DStats(void)                                                // wxst
+{
+    char *sTemp = "", *sTyp = "";
+    short nm, tx, lt, ht, x;
+
+    tx = 0;
+    lt = 0;
+    ht = 0;
+    nm = 0;
+
+	if (searchstat == 0)
+	   {
+	   tx = wall[searchwall].picnum;
+	   ht = wall[searchwall].hitag;
+	   lt = wall[searchwall].lotag;
+	   sTemp = "Wall   : %d";
+       nm = searchwall;
+	   }
+	else
+	if (searchstat == 1)
+	   {
+	   tx = sector[searchsector].ceilingpicnum;
+	   ht = sector[searchsector].hitag;
+	   lt = sector[searchsector].lotag;
+	   sTemp = "Sector : %d";
+	   nm = searchsector;
+	   }
+	else
+	if (searchstat == 2)
+	   {
+	   tx = sector[searchsector].floorpicnum;
+	   ht = sector[searchsector].hitag;
+	   lt = sector[searchsector].lotag;
+	   sTemp = "Sector : %d";
+	   nm = searchsector;
+	   }
+	else
+	if (searchstat == 3)
+	   {
+	   tx = sprite[searchwall].picnum;
+	   lt = sprite[searchwall].lotag;
+	   ht = sprite[searchwall].hitag;
+	   sTemp = "Sprite : %d";
+	   nm = searchwall;
+       x = CheckAnimations(tx);
+       if (x > 0)
+           sTyp = sTile[x];
+	   }
+	else
+	if (searchstat == 4)
+	   {
+	   tx = wall[searchwall].overpicnum;
+	   ht = wall[searchwall].hitag;
+	   lt = wall[searchwall].lotag;
+	   sTemp = "Wall   : %d";
+	   nm = searchwall;
+	   }
+
+    sprintf(tempbuf, sTyp);
+    printext256(10L, ydim-90, whitecol, -1, tempbuf, 0);
+    sprintf(tempbuf, sTemp, nm);
+    printext256(10L, ydim-75, whitecol, -1, tempbuf, 0);
+    sprintf(tempbuf, "Picnum : %d", tx);
+    printext256(10L, ydim-60, whitecol, -1, tempbuf, 0);
+    sprintf(tempbuf, "Hitag  : %d", ht);
+    printext256(10L, ydim-45, whitecol, -1, tempbuf, 0);
+    sprintf(tempbuf, "Lotag  : %d", lt);
+    printext256(10L, ydim-30, whitecol, -1, tempbuf, 0);
+/*
+    #define AVERAGEFRAMES 16
+    static long frameval[AVERAGEFRAMES], framecnt = 0;
+    extern short f_c;
+    long i;
+
+    if (i != frameval[framecnt])
+       {
+       i = totalclock;
+       sprintf(tempbuf, "Fps    : %ld", ((120 * AVERAGEFRAMES) / (i - frameval[framecnt])) + f_c);
+       printext256(10L, ydim-15, whitecol, -1, tempbuf, 0);
+       frameval[framecnt] = i;
+       framecnt = ((framecnt + 1) & (AVERAGEFRAMES - 1));
+       }
+*/
+}
+
+void DoMainCaption(void)                                             // wxcp
+{
+    char xbuf[128];
+
+    ExtractFilename(boardfilename);
+    snprintf(xbuf, 128, VERSION " | %s", myMapname);
+    wm_setapptitle(xbuf);
+}
+
+void ExtractFilename(char *filename)                                 // wxcp
+{
+    int i, j, k, x;
+    int Ln = strlen(filename);
+
+    for (i=0; i<10; i++)
+         myMapname[i] = 0;
+
+    j = 0;
+    k = 0;
+    for (i=Ln; i>1; i--)
+        {
+        if (boardfilename[i] == 0x2e)  // '.'
+            k = i;
+        if (boardfilename[i] == 0x2f || boardfilename[i] == 0x5c) // '/' or '\'
+           {
+           j = i+1;
+           break;
+           }
+        }
+
+    if (j > 0)
+       {
+       x = 0;
+       if (k > 0)
+           Ln = k;
+       for (i=j; i<Ln; i++)
+           {
+           myMapname[x] = boardfilename[i];
+           x++;
+           }
+       strcat(myMapname, ".map");
+       }
+    else
+       strcpy(myMapname,boardfilename);
+}
 
 /*
  * vim:ts=4:
  */
-
