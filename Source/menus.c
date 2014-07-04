@@ -345,7 +345,7 @@ MenuItem hacks_i[] =
     {
     {DefButton(btn_asv,       0, "Auto Save Game"),    OPT_XS+55, OPT_LINE(1),  1, m_defshade, 0, NULL, NULL, NULL},
     {DefButton(btn_hid,       0, "Player Weapon"),     OPT_XS+55, OPT_LINE(2),  1, m_defshade, 0, NULL, NULL, NULL},
-    {DefButton(btn_drt,       0, "Optional Darts"),    OPT_XS+55, OPT_LINE(3),  1, m_defshade, 0, NULL, NULL, NULL},
+    {DefButton(btn_drt,       0, "Use Darts"),         OPT_XS+55, OPT_LINE(3),  1, m_defshade, 0, NULL, NULL, NULL},
     {DefButton(btn_yin,       0, "Shuriken Cursor"),   OPT_XS+55, OPT_LINE(4),  1, m_defshade, 0, NULL, NULL, NULL},
     {DefButton(btn_ten,       0, "Show TEN Screen"),   OPT_XS+55, OPT_LINE(5),  1, m_defshade, 0, NULL, NULL, NULL},
 

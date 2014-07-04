@@ -7373,6 +7373,7 @@ VOID pDisplaySprites(PLAYERp pp)
                 break;
 
                 case STAR_REST:
+                case 2510:
 		    if (!useDarts)
                     picnum = 2138;
 		    else
