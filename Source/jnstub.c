@@ -2277,10 +2277,10 @@ const char *
 ExtGetSpriteCaption(short spritenum)
     {
     SPRITEp sp = &sprite[spritenum];
-    CHARp p = "";
-    CHAR name[64];
-    CHAR tp[30];
-    CHAR multi_str[30] = "";
+    char* p = "";
+    char name[64];
+    char tp[30];
+    char multi_str[30] = "";
     SHORT data;
 
     data = TEST(sp->extra, SPRX_SKILL);

@@ -313,7 +313,7 @@ int app_main(int argc, const char **argv)
 {
 	//char ch, quitflag, cmdsetup = 0;
 	char ch, cmdsetup = 0;
-	int grpstoadd = 0, ky;
+	int grpstoadd = 0, ky = 0;
 	const char **grps = NULL;
 	long i, j, k;
 
@@ -7305,13 +7305,8 @@ void SaveConfigs(void)
 void Display2DStats(void)                                                     // wxst
 {
     char sTemp[128], *sTyp = "";
-    short i, nm, ht, lt, tx, x, snm, sht, slt;
+    short i, nm = 0, ht = 0, lt = 0, tx = 0, x, snm = 0, sht = 0, slt = 0;
     long msx, msy;
-
-    lt = 0;
-    ht = 0;
-    nm = 0;
-    tx = 0;
 
     if (pointhighlight >= 16384)
        {
@@ -7372,12 +7367,7 @@ void Display2DStats(void)                                                     //
 void Display3DStats(void)                                                // wxst
 {
     char *sTemp = "", *sTyp = "";
-    short nm, tx, lt, ht, x;
-
-    tx = 0;
-    lt = 0;
-    ht = 0;
-    nm = 0;
+    short nm = 0, tx = 0, lt = 0, ht = 0, x;
 
 	if (searchstat == 0)
 	   {

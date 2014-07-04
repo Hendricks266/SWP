@@ -21,9 +21,7 @@ void PopulateConfigDialog(HWND hwnd);
 void DoConfigs(HWND hwndcfg);
 void SWPBUILDConfig(void);
 
-static HWND startupdlog = NULL;
-static int  startupdlogcommand = 0;
-static void (*startupdlogonclose)(void) = NULL;
+static INT_PTR startupdlog = 0;
 
 short KeySelect = 0;
 
@@ -38,7 +36,7 @@ static INT_PTR CALLBACK startup_dialogproc(HWND hwndDlg, UINT uMsg, WPARAM wPara
 	RECT rdlg, rbmp;
 	HDC hdc;
 
-    HINSTANCE hInstanceLocal = win_gethinstance();
+    HINSTANCE hInstanceLocal = (HINSTANCE)win_gethinstance();
 
 	switch (uMsg)
 	{
@@ -89,9 +87,6 @@ static INT_PTR CALLBACK startup_dialogproc(HWND hwndDlg, UINT uMsg, WPARAM wPara
 				DeleteObject(hbmp);
 				hbmp = NULL;
 			}
-			if (startupdlogonclose)
-			    startupdlogonclose();
-			startupdlog = NULL;
 			return TRUE;
 
 		case WM_COMMAND:
@@ -99,7 +94,7 @@ static INT_PTR CALLBACK startup_dialogproc(HWND hwndDlg, UINT uMsg, WPARAM wPara
 		    if (iKey == 2)               // escape
 		       {
                KeySelect = 0;
-               EndDialog(hwndDlg, 1);
+               EndDialog(hwndDlg, startupdlog);
 		       return TRUE;
 		       }
 		    switch (wParam)
@@ -138,21 +133,21 @@ static INT_PTR CALLBACK startup_dialogproc(HWND hwndDlg, UINT uMsg, WPARAM wPara
 		             return TRUE;
 				case ID_HELP:
 				    KeySelect = 20;
-				    EndDialog(hwndDlg, 1);
+				    EndDialog(hwndDlg, startupdlog);
 					return TRUE;
 
 				case ID_CONFIG:
 				    KeySelect = 21;
-				    EndDialog(hwndDlg, 1);
+				    EndDialog(hwndDlg, startupdlog);
 					return TRUE;
 
 				case ID_SUBMIT:
-				    EndDialog(hwndDlg, 1);
+				    EndDialog(hwndDlg, startupdlog);
 					return TRUE;
 
 				case ID_CANCEL:
 					KeySelect = 0;
-					EndDialog(hwndDlg, 1);
+					EndDialog(hwndDlg, startupdlog);
 					return TRUE;
             }
             break;
@@ -172,7 +167,7 @@ static INT_PTR CALLBACK config_dialogproc(HWND hwndDlg, UINT uMsg, WPARAM wParam
 	RECT rdlg, rbmp;
 	HDC hdc;
 
-    HINSTANCE hInstanceLocal = win_gethinstance();
+    HINSTANCE hInstanceLocal = (HINSTANCE)win_gethinstance();
 
 	switch (uMsg)
 	{
@@ -223,9 +218,6 @@ static INT_PTR CALLBACK config_dialogproc(HWND hwndDlg, UINT uMsg, WPARAM wParam
 				DeleteObject(hbmp);
 				hbmp = NULL;
 			}
-			if (startupdlogonclose)
-			    startupdlogonclose();
-			startupdlog = NULL;
 			return TRUE;
 
 		case WM_COMMAND:
@@ -233,7 +225,7 @@ static INT_PTR CALLBACK config_dialogproc(HWND hwndDlg, UINT uMsg, WPARAM wParam
 		    if (iKey == 2)               // escape
 		       {
                KeySelect = 0;
-               EndDialog(hwndDlg, 1);
+               EndDialog(hwndDlg, startupdlog);
 		       return TRUE;
 		       }
 		    switch (wParam)
@@ -246,12 +238,12 @@ static INT_PTR CALLBACK config_dialogproc(HWND hwndDlg, UINT uMsg, WPARAM wParam
 				case ID_ACCEPT:
 				    KeySelect = 99;
 				    DoConfigs(hwndDlg);
-				    EndDialog(hwndDlg, 1);
+				    EndDialog(hwndDlg, startupdlog);
 					return TRUE;
 
 				case ID_CANSEL:
 					KeySelect = 0;
-					EndDialog(hwndDlg, 1);
+					EndDialog(hwndDlg, startupdlog);
 					return TRUE;
             }
             break;
@@ -324,13 +316,6 @@ void PopulateConfigDialog(HWND hwnd)
 	ComboBox_SetCurSel(hwndCmb, i);
 }
 
-int win_getstartupcommand(void)
-{
-	int t = startupdlogcommand;
-	startupdlogcommand = 0;
-	return t;
-}
-
 //-----------------------------------------------------------------------------
 
 // The main access point - called from app to open dialog
@@ -340,34 +325,20 @@ int dialogwin_open(short x)
     HWND hwndStart;
     long saferect[4];
 
-	if (startupdlog)
-	    return 1;
-
 	if (x == 0)
 	    startupdlog = DialogBox((HINSTANCE)win_gethinstance(), MAKEINTRESOURCE(WIN_DIALOGWIN), NULL, startup_dialogproc);
 	else
 	    startupdlog = DialogBox((HINSTANCE)win_gethinstance(), MAKEINTRESOURCE(WIN_CONFIGWIN), NULL, config_dialogproc);
 
-	if (startupdlog)
-		return 0;
 	return -1;
-}
-
-int dialogwin_close(void)
-{
-	if (!startupdlog) return 1;
-	DestroyWindow(startupdlog);
-	startupdlog = NULL;
-	return 0;
 }
 
 int GetMenuOption(void)
 {
-    HWND myHandle = win_gethwnd();
+    HWND myHandle = (HWND)win_gethwnd();
 
     dialogwin_open(0);
-    dialogwin_close();
-    EndDialog(startupdlog, 1);
+
     SetFocus(myHandle);
     if (KeySelect == 21)
        {
@@ -379,11 +350,10 @@ int GetMenuOption(void)
 
 void SWPBUILDConfig(void)
 {
-    HWND myHandle = win_gethwnd();
+    HWND myHandle = (HWND)win_gethwnd();
 
     dialogwin_open(1);
-    dialogwin_close();
-    EndDialog(startupdlog, 1);
+
     SetFocus(myHandle);
 }
 
@@ -418,13 +388,16 @@ void DoConfigs(HWND hwndcfg)
     xdimgame = xdim2d;
     ydimgame = ydim2d;
 
-    ComboBox_GetCurSel(GetDlgItemText(hwndcfg,ID_VIDEOBPP,sTemp,3));
+    ComboBox_GetCurSel(GetDlgItem(hwndcfg,ID_VIDEOBPP));
+    GetDlgItemText(hwndcfg,ID_VIDEOBPP,sTemp,3);
     bppgame = atoi(sTemp);
 
-    ComboBox_GetCurSel(GetDlgItemText(hwndcfg,ID_VREFRESH,sTemp,3));
+    ComboBox_GetCurSel(GetDlgItem(hwndcfg,ID_VREFRESH));
+    GetDlgItemText(hwndcfg,ID_VREFRESH,sTemp,3);
     maxrefreshfreq = atoi(sTemp);
 
-    ComboBox_GetCurSel(GetDlgItemText(hwndcfg,ID_VBRIGHT,sTemp,3));
+    ComboBox_GetCurSel(GetDlgItem(hwndcfg,ID_VBRIGHT));
+    GetDlgItemText(hwndcfg,ID_VBRIGHT,sTemp,3);
     brightness = atoi(sTemp);
 
     writesetup("SWPBUILD.cfg");
