@@ -290,8 +290,8 @@ void CONFIG_SetDefaults( void )
     gs.SwapYinyang = 0;
     gs.ShowTEN = 0;
     gs.MiniHudTyp = 1;
-    gs.UseNinjaHack = 1;
-    gs.UseCarHack = 1;
+    gs.UseNinjaHack = 0;
+    gs.UseCarHack = 0;
 
     gs.MouseSpeed = 65536;
     gs.MouseScaleX = 65536;

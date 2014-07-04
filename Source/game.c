@@ -526,8 +526,8 @@ TRUE,  // WeaponSwitch
 FALSE, // UseDarts
 FALSE, // SwapYinyang
 FALSE,  // ShowTEN
-TRUE,  // UseNinjaHack
-TRUE,  // UseCarHack
+FALSE,  // UseNinjaHack
+FALSE,  // UseCarHack
 FALSE, // auto run
 TRUE, // auto aim
 TRUE, // messages
