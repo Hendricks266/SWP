@@ -1486,7 +1486,7 @@ MoreKeys(short searchstat, short searchwall, short searchsector, short pointhigh
                 case 3:
                     sprintf(tempbuf, "Sprite tag 11 (shade) (snum = %d): ", searchwall);
                     SPRITE_TAG11(searchwall) =
-                        getnumber(tempbuf, SPRITE_TAG11(searchwall), 65536L, 0);
+                        getnumber(tempbuf, SPRITE_TAG11(searchwall), 65536L, 1);
                     break;
                     }
 
@@ -1503,7 +1503,7 @@ MoreKeys(short searchstat, short searchwall, short searchsector, short pointhigh
                 case 3:
                     strcpy(tempbuf, "Sprite tag 12 (pal): ");
                     SPRITE_TAG12(searchwall) =
-                        getnumber(tempbuf, SPRITE_TAG12(searchwall), 65536L, 0);
+                        getnumber(tempbuf, SPRITE_TAG12(searchwall), 65536L, 1);
                     break;
                     }
 
@@ -1518,7 +1518,7 @@ MoreKeys(short searchstat, short searchwall, short searchsector, short pointhigh
                     {
                 case 3:
                     strcpy(tempbuf, "Sprite tag 13 (xoffset/yoffset): ");
-					i = getnumber(tempbuf, SPRITE_TAG13(searchwall), 65536L, 0);
+					i = getnumber(tempbuf, SPRITE_TAG13(searchwall), 65536L, 1);
                     SET_SPRITE_TAG13(searchwall, i);
                     break;
                     }
@@ -1534,7 +1534,7 @@ MoreKeys(short searchstat, short searchwall, short searchsector, short pointhigh
                     {
                 case 3:
                     strcpy(tempbuf, "Sprite tag 14 (xrepeat/yrepeat): ");
-					i = getnumber(tempbuf, SPRITE_TAG14(searchwall), 65536L, 0);
+					i = getnumber(tempbuf, SPRITE_TAG14(searchwall), 65536L, 1);
 					SET_SPRITE_TAG14(searchwall, i);
                     break;
                     }
@@ -1551,7 +1551,7 @@ MoreKeys(short searchstat, short searchwall, short searchsector, short pointhigh
                 case 3:
                     strcpy(tempbuf, "Sprite tag 15 (z): ");
                     SPRITE_TAG15(searchwall) =
-                        getnumber(tempbuf, SPRITE_TAG15(searchwall), 65536L, 0);
+                        getnumber(tempbuf, SPRITE_TAG15(searchwall), 65536L, 1);
                     break;
                     }
 
@@ -1569,18 +1569,18 @@ MoreKeys(short searchstat, short searchwall, short searchsector, short pointhigh
             case 4:
                 strcpy(tempbuf, "Wall tag 1 (hitag): ");
                 wall[searchwall].hitag =
-                    getnumber(tempbuf, wall[searchwall].hitag, 65536L, 0);
+                    getnumber(tempbuf, wall[searchwall].hitag, 65536L, 1);
                 break;
             case 1:
             case 2:
                 strcpy(tempbuf, "Sector tag 1 (hitag): ");
                 sector[searchsector].hitag =
-                    getnumber(tempbuf, sector[searchsector].hitag, 65536L, 0);
+                    getnumber(tempbuf, sector[searchsector].hitag, 65536L, 1);
                 break;
             case 3:
                 strcpy(tempbuf, "Sprite tag 1 (hitag): ");
                 SPRITE_TAG1(searchwall) =
-                    getnumber(tempbuf, SPRITE_TAG1(searchwall), 65536L, 0);
+                    getnumber(tempbuf, SPRITE_TAG1(searchwall), 65536L, 1);
                 break;
                 }
 
@@ -1597,18 +1597,18 @@ MoreKeys(short searchstat, short searchwall, short searchsector, short pointhigh
             case 4:
                 strcpy(tempbuf, "Wall tag 2 (lotag): ");
                 wall[searchwall].lotag =
-                    getnumber(tempbuf, wall[searchwall].lotag, 65536L, 0);
+                    getnumber(tempbuf, wall[searchwall].lotag, 65536L, 1);
                 break;
             case 1:
             case 2:
                 strcpy(tempbuf, "Sector tag 2 (lotag): ");
                 sector[searchsector].lotag =
-                    getnumber(tempbuf, sector[searchsector].lotag, 65536L, 0);
+                    getnumber(tempbuf, sector[searchsector].lotag, 65536L, 1);
                 break;
             case 3:
                 strcpy(tempbuf, "Sprite tag 2 (lotag): ");
                 SPRITE_TAG2(searchwall) =
-                    getnumber(tempbuf, SPRITE_TAG2(searchwall), 65536L, 0);
+                    getnumber(tempbuf, SPRITE_TAG2(searchwall), 65536L, 1);
                 // Find the next lotag
                 if (sprite[searchwall].picnum == ST1)
                     {
@@ -1630,18 +1630,18 @@ MoreKeys(short searchstat, short searchwall, short searchsector, short pointhigh
             case 4:
                 strcpy(tempbuf, "Wall tag 3 (xpanning): ");
                 wall[searchwall].xpanning =
-                    getnumber(tempbuf, wall[searchwall].xpanning, 65536L, 0);
+                    getnumber(tempbuf, wall[searchwall].xpanning, 65536L, 1);
                 break;
             case 1:
             case 2:
                 strcpy(tempbuf, "Sector tag 3 (ceilingxpanning): ");
                 sector[searchsector].ceilingxpanning =
-                    getnumber(tempbuf, sector[searchsector].ceilingxpanning, 65536L, 0);
+                    getnumber(tempbuf, sector[searchsector].ceilingxpanning, 65536L, 1);
                 break;
             case 3:
                 strcpy(tempbuf, "Sprite tag 3 (clipdist) : ");
                 SPRITE_TAG3(searchwall) =
-                    getnumber(tempbuf, SPRITE_TAG3(searchwall), 65536L, 0);
+                    getnumber(tempbuf, SPRITE_TAG3(searchwall), 65536L, 1);
 
                 break;
                 }
@@ -1658,18 +1658,18 @@ MoreKeys(short searchstat, short searchwall, short searchsector, short pointhigh
             case 4:
                 strcpy(tempbuf, "Wall tag 4 (ypanning): ");
                 wall[searchwall].ypanning =
-                    getnumber(tempbuf, wall[searchwall].ypanning, 65536L, 0);
+                    getnumber(tempbuf, wall[searchwall].ypanning, 65536L, 1);
                 break;
             case 1:
             case 2:
                 strcpy(tempbuf, "Sector tag 4 (ceilingypanning): ");
                 sector[searchsector].ceilingypanning =
-                    getnumber(tempbuf, sector[searchsector].ceilingypanning, 65536L, 0);
+                    getnumber(tempbuf, sector[searchsector].ceilingypanning, 65536L, 1);
                 break;
             case 3:
                 strcpy(tempbuf, "Sprite tag 4 (ang) : ");
                 SPRITE_TAG4(searchwall) =
-                    getnumber(tempbuf, SPRITE_TAG4(searchwall), 65536L, 0);
+                    getnumber(tempbuf, SPRITE_TAG4(searchwall), 65536L, 1);
                 break;
                 }
             printmessage("");
@@ -1688,12 +1688,12 @@ MoreKeys(short searchstat, short searchwall, short searchsector, short pointhigh
             case 2:
                 strcpy(tempbuf, "Sector tag 5 (floorxpanning): ");
                 sector[searchsector].floorxpanning =
-                    getnumber(tempbuf, sector[searchsector].floorxpanning, 65536L, 0);
+                    getnumber(tempbuf, sector[searchsector].floorxpanning, 65536L, 1);
                 break;
             case 3:
                 strcpy(tempbuf, "Sprite tag 5 (xvel) : ");
                 SPRITE_TAG5(searchwall) =
-                    getnumber(tempbuf, SPRITE_TAG5(searchwall), 65536L, 0);
+                    getnumber(tempbuf, SPRITE_TAG5(searchwall), 65536L, 1);
                 break;
                 }
             printmessage("");
@@ -1712,12 +1712,12 @@ MoreKeys(short searchstat, short searchwall, short searchsector, short pointhigh
             case 2:
                 strcpy(tempbuf, "Sector tag 6 (floorypanning): ");
                 sector[searchsector].floorypanning =
-                    getnumber(tempbuf, sector[searchsector].floorypanning, 65536L, 0);
+                    getnumber(tempbuf, sector[searchsector].floorypanning, 65536L, 1);
                 break;
             case 3:
                 strcpy(tempbuf, "Sprite tag 6 (yvel) : ");
                 SPRITE_TAG6(searchwall) =
-                    getnumber(tempbuf, SPRITE_TAG6(searchwall), 65536L, 0);
+                    getnumber(tempbuf, SPRITE_TAG6(searchwall), 65536L, 1);
                 break;
                 }
             printmessage("");
@@ -1736,12 +1736,12 @@ MoreKeys(short searchstat, short searchwall, short searchsector, short pointhigh
             case 2:
                 strcpy(tempbuf, "Sector tag 7 (floorypanning): ");
                 sector[searchsector].floorypanning =
-                    getnumber(tempbuf, sector[searchsector].floorypanning, 65536L, 0);
+                    getnumber(tempbuf, sector[searchsector].floorypanning, 65536L, 1);
                 break;
             case 3:
                 strcpy(tempbuf, "Sprite tag 7 (zvel 1) <0-255> : ");
                 SPRITE_TAG7(searchwall) =
-                    getnumber(tempbuf, SPRITE_TAG7(searchwall), 65536L, 0);
+                    getnumber(tempbuf, SPRITE_TAG7(searchwall), 65536L, 1);
                 break;
                 }
             printmessage("");
@@ -1762,7 +1762,7 @@ MoreKeys(short searchstat, short searchwall, short searchsector, short pointhigh
             case 3:
                 strcpy(tempbuf, "Sprite tag 8 (zvel 2) <0-255> : ");
                 SPRITE_TAG8(searchwall) =
-                    getnumber(tempbuf, SPRITE_TAG8(searchwall), 65536L, 0);
+                    getnumber(tempbuf, SPRITE_TAG8(searchwall), 65536L, 1);
                 break;
                 }
             printmessage("");
@@ -1783,7 +1783,7 @@ MoreKeys(short searchstat, short searchwall, short searchsector, short pointhigh
             case 3:
                 strcpy(tempbuf, "Sprite tag 9 (owner 1) <0-255> : ");
                 SPRITE_TAG9(searchwall) =
-                    getnumber(tempbuf, SPRITE_TAG9(searchwall), 65536L, 0);
+                    getnumber(tempbuf, SPRITE_TAG9(searchwall), 65536L, 1);
                 break;
                 }
             printmessage("");
@@ -1804,7 +1804,7 @@ MoreKeys(short searchstat, short searchwall, short searchsector, short pointhigh
             case 3:
                 strcpy(tempbuf, "Sprite tag 10 (owner 2) <0-255> : ");
                 SPRITE_TAG10(searchwall) =
-                    getnumber(tempbuf, SPRITE_TAG10(searchwall), 65536L, 0);
+                    getnumber(tempbuf, SPRITE_TAG10(searchwall), 65536L, 1);
                 break;
                 }
             printmessage("");
@@ -1826,7 +1826,7 @@ MoreKeys(short searchstat, short searchwall, short searchsector, short pointhigh
             case 3:
                 strcpy(tempbuf, "Boolean Sprite tag 11 (0 or 1): ");
                 value = !!TEST_BOOL11(sp);
-                value = getnumber(tempbuf, value, 65536L, 0);
+                value = getnumber(tempbuf, value, 65536L, 1);
 
                 if (value)
                     SET_BOOL11(sp);
@@ -1850,7 +1850,7 @@ MoreKeys(short searchstat, short searchwall, short searchsector, short pointhigh
             case 3:
                 strcpy(tempbuf, "Boolean Sprite tag 1 (0 or 1): ");
                 value = !!TEST_BOOL1(sp);
-                value = getnumber(tempbuf, value, 65536L, 0);
+                value = getnumber(tempbuf, value, 65536L, 1);
 
                 if (value)
                     SET_BOOL1(sp);
@@ -1872,7 +1872,7 @@ MoreKeys(short searchstat, short searchwall, short searchsector, short pointhigh
             case 3:
                 strcpy(tempbuf, "Boolean Sprite tag 2 (0 or 1): ");
                 value = !!TEST_BOOL2(sp);
-                value = getnumber(tempbuf, value, 65536L, 0);
+                value = getnumber(tempbuf, value, 65536L, 1);
 
                 if (value)
                     SET_BOOL2(sp);
@@ -1895,7 +1895,7 @@ MoreKeys(short searchstat, short searchwall, short searchsector, short pointhigh
             case 3:
                 strcpy(tempbuf, "Boolean Sprite tag 3 (0 or 1): ");
                 value = !!TEST_BOOL3(sp);
-                value = getnumber(tempbuf, value, 65536L, 0);
+                value = getnumber(tempbuf, value, 65536L, 1);
 
                 if (value)
                     SET_BOOL3(sp);
@@ -1917,7 +1917,7 @@ MoreKeys(short searchstat, short searchwall, short searchsector, short pointhigh
             case 3:
                 strcpy(tempbuf, "Boolean Sprite tag 4 (0 or 1): ");
                 value = !!TEST_BOOL4(sp);
-                value = getnumber(tempbuf, value, 65536L, 0);
+                value = getnumber(tempbuf, value, 65536L, 1);
 
                 if (value)
                     SET_BOOL4(sp);
@@ -1939,7 +1939,7 @@ MoreKeys(short searchstat, short searchwall, short searchsector, short pointhigh
             case 3:
                 strcpy(tempbuf, "Boolean Sprite tag 5 (0 or 1): ");
                 value = !!TEST_BOOL5(sp);
-                value = getnumber(tempbuf, value, 65536L, 0);
+                value = getnumber(tempbuf, value, 65536L, 1);
 
                 if (value)
                     SET_BOOL5(sp);
@@ -1961,7 +1961,7 @@ MoreKeys(short searchstat, short searchwall, short searchsector, short pointhigh
             case 3:
                 strcpy(tempbuf, "Boolean Sprite tag 6 (0 or 1): ");
                 value = !!TEST_BOOL6(sp);
-                value = getnumber(tempbuf, value, 65536L, 0);
+                value = getnumber(tempbuf, value, 65536L, 1);
 
                 if (value)
                     SET_BOOL6(sp);
@@ -1983,7 +1983,7 @@ MoreKeys(short searchstat, short searchwall, short searchsector, short pointhigh
             case 3:
                 strcpy(tempbuf, "Boolean Sprite tag 7 (0 or 1): ");
                 value = !!TEST_BOOL7(sp);
-                value = getnumber(tempbuf, value, 65536L, 0);
+                value = getnumber(tempbuf, value, 65536L, 1);
 
                 if (value)
                     SET_BOOL7(sp);
@@ -2005,7 +2005,7 @@ MoreKeys(short searchstat, short searchwall, short searchsector, short pointhigh
             case 3:
                 strcpy(tempbuf, "Boolean Sprite tag 8 (0 or 1): ");
                 value = !!TEST_BOOL8(sp);
-                value = getnumber(tempbuf, value, 65536L, 0);
+                value = getnumber(tempbuf, value, 65536L, 1);
 
                 if (value)
                     SET_BOOL8(sp);
@@ -2027,7 +2027,7 @@ MoreKeys(short searchstat, short searchwall, short searchsector, short pointhigh
             case 3:
                 strcpy(tempbuf, "Boolean Sprite tag 9 (0 or 1): ");
                 value = !!TEST_BOOL9(sp);
-                value = getnumber(tempbuf, value, 65536L, 0);
+                value = getnumber(tempbuf, value, 65536L, 1);
 
                 if (value)
                     SET_BOOL9(sp);
@@ -2049,7 +2049,7 @@ MoreKeys(short searchstat, short searchwall, short searchsector, short pointhigh
             case 3:
                 strcpy(tempbuf, "Boolean Sprite tag 10 (0 or 1): ");
                 value = !!TEST_BOOL10(sp);
-                value = getnumber(tempbuf, value, 65536L, 0);
+                value = getnumber(tempbuf, value, 65536L, 1);
 
                 if (value)
                     SET_BOOL10(sp);

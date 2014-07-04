@@ -1884,19 +1884,19 @@ void editinput(void)  // 3D
 				{
 					case 0: case 4:
 						Bstrcpy(buffer,"Wall pal: ");
-						wall[searchwall].pal = getnumber256(buffer,wall[searchwall].pal,256L,0);
+						wall[searchwall].pal = getnumber256(buffer, wall[searchwall].pal, 256L, 1);
 						break;
 					case 1:
 						Bstrcpy(buffer,"Ceiling pal: ");
-						sector[searchsector].ceilingpal = getnumber256(buffer,sector[searchsector].ceilingpal,256L,0);
+						sector[searchsector].ceilingpal = getnumber256(buffer, sector[searchsector].ceilingpal, 256L, 1);
 						break;
 					case 2:
 						Bstrcpy(buffer,"Floor pal: ");
-						sector[searchsector].floorpal = getnumber256(buffer,sector[searchsector].floorpal,256L,0);
+						sector[searchsector].floorpal = getnumber256(buffer, sector[searchsector].floorpal, 256L, 1);
 						break;
 					case 3:
 						Bstrcpy(buffer,"Sprite pal: ");
-						sprite[searchwall].pal = getnumber256(buffer,sprite[searchwall].pal,256L,0);
+						sprite[searchwall].pal = getnumber256(buffer, sprite[searchwall].pal, 256L, 1);
 						break;
 				}
 			}
@@ -1924,7 +1924,7 @@ void editinput(void)  // 3D
 				if (searchstat == 3)
 				{
 					Bstrcpy(buffer,"Sprite clipdist: ");
-					sprite[searchwall].clipdist = getnumber256(buffer,sprite[searchwall].clipdist,256L,0);
+					sprite[searchwall].clipdist = getnumber256(buffer, sprite[searchwall].clipdist, 256L, 1);
 				}
 			}
 		}
@@ -3451,7 +3451,7 @@ void overheadeditor(void)
 				{
 					i = pointhighlight-16384;
 					Bsprintf(buffer,"Sprite (%ld) Lo-tag: ",i);
-					sprite[i].lotag = getnumber16(buffer,sprite[i].lotag,65536L,0);
+					sprite[i].lotag = getnumber16(buffer, sprite[i].lotag, 65536L, 1);
 					clearmidstatbar16();
 					showspritedata((short)i);
 				}
@@ -3459,7 +3459,7 @@ void overheadeditor(void)
 				{
 					i = linehighlight;
 					Bsprintf(buffer,"Wall (%ld) Lo-tag: ",i);
-					wall[i].lotag = getnumber16(buffer,wall[i].lotag,65536L,0);
+					wall[i].lotag = getnumber16(buffer, wall[i].lotag, 65536L, 1);
 					clearmidstatbar16();
 					showwalldata((short)i);
 				}
@@ -3471,7 +3471,7 @@ void overheadeditor(void)
 					if (inside(mousxplc,mousyplc,i) == 1)
 					{
 						Bsprintf(buffer,"Sector (%ld) Lo-tag: ",i);
-						sector[i].lotag = getnumber16(buffer,sector[i].lotag,65536L,0);
+						sector[i].lotag = getnumber16(buffer, sector[i].lotag, 65536L, 1);
 						clearmidstatbar16();
 						showsectordata((short)i);
 						break;
@@ -3509,7 +3509,7 @@ void overheadeditor(void)
 				{
 					i = pointhighlight-16384;
 					Bsprintf(buffer,"Sprite (%ld) Hi-tag: ",i);
-					sprite[i].hitag = getnumber16(buffer,sprite[i].hitag,65536L,0);
+					sprite[i].hitag = getnumber16(buffer, sprite[i].hitag, 65536L, 1);
 					clearmidstatbar16();
 					showspritedata((short)i);
 				}
@@ -3517,7 +3517,7 @@ void overheadeditor(void)
 				{
 					i = linehighlight;
 					Bsprintf(buffer,"Wall (%ld) Hi-tag: ",i);
-					wall[i].hitag = getnumber16(buffer,wall[i].hitag,65536L,0);
+					wall[i].hitag = getnumber16(buffer, wall[i].hitag, 65536L, 1);
 					clearmidstatbar16();
 					showwalldata((short)i);
 				}
@@ -3528,7 +3528,7 @@ void overheadeditor(void)
 					if (inside(mousxplc,mousyplc,i) == 1)
 					{
 						Bsprintf(buffer,"Sector (%ld) Hi-tag: ",i);
-						sector[i].hitag = getnumber16(buffer,sector[i].hitag,65536L,0);
+						sector[i].hitag = getnumber16(buffer, sector[i].hitag, 65536L, 1);
 						clearmidstatbar16();
 						showsectordata((short)i);
 						break;
@@ -3544,12 +3544,12 @@ void overheadeditor(void)
 				if (inside(mousxplc,mousyplc,i) == 1)
 				{
 					Bsprintf(buffer,"Sector (%ld) Ceilingpal: ",i);
-					sector[i].ceilingpal = getnumber16(buffer,sector[i].ceilingpal,256L,0);
+					sector[i].ceilingpal = getnumber16(buffer, sector[i].ceilingpal, 256L, 1);
 					clearmidstatbar16();
 					showsectordata((short)i);
 
 					Bsprintf(buffer,"Sector (%ld) Floorpal: ",i);
-					sector[i].floorpal = getnumber16(buffer,sector[i].floorpal,256L,0);
+					sector[i].floorpal = getnumber16(buffer, sector[i].floorpal, 256L, 1);
 					clearmidstatbar16();
 					showsectordata((short)i);
 
@@ -3563,7 +3563,7 @@ void overheadeditor(void)
 			{
 				i = pointhighlight-16384;
 				Bsprintf(buffer,"Sprite (%ld) Status list: ",i);
-				changespritestat(i,getnumber16(buffer,sprite[i].statnum,65536L,0));
+				changespritestat(i,getnumber16(buffer, sprite[i].statnum, 65536L, 1));
 				clearmidstatbar16();
 				showspritedata((short)i);
 			}
@@ -6133,7 +6133,9 @@ short getnumber16(char namestart[80], short num, long maxnumber, char sign)
 				n = (danum*10)-(ch-'0');
 			else
 				n = (danum*10)+(ch-'0');
-			if (n < maxnumber) danum = n;
+
+			if (n < maxnumber && n > -maxnumber/2 - 1)
+                danum = n;
 		} else if (ch == 8 || ch == 127) {	// backspace
 			danum /= 10;
 		} else if (ch == 13) {
@@ -6141,7 +6143,8 @@ short getnumber16(char namestart[80], short num, long maxnumber, char sign)
 			asksave = 1;
 			break;
 		} else if (ch == '-' && sign) {	// negate
-			danum = -danum;
+			if (-danum < maxnumber && -danum > -maxnumber/2 - 1) 
+                danum = -danum;
 		}
 	}
 	clearkeys();
@@ -6179,7 +6182,9 @@ short getnumber256(char namestart[80], short num, long maxnumber, char sign)
 				n = (danum*10)-(ch-'0');
 			else
 				n = (danum*10)+(ch-'0');
-			if (n < maxnumber) danum = n;
+
+			if (n < maxnumber && n > -maxnumber/2 - 1)
+                danum = n;
 		} else if (ch == 8 || ch == 127) {	// backspace
 			danum /= 10;
 		} else if (ch == 13) {
@@ -6187,7 +6192,8 @@ short getnumber256(char namestart[80], short num, long maxnumber, char sign)
 			asksave = 1;
 			break;
 		} else if (ch == '-' && sign) {	// negate
-			danum = -danum;
+			if (-danum < maxnumber && -danum > -maxnumber/2 - 1) 
+                danum = -danum;
 		}
 	}
 	clearkeys();
