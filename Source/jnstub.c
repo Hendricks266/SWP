@@ -43,6 +43,9 @@ Prepared for public release: 03/28/2005 - Charlie Wiederhold, 3D Realms
 #include "tags.h"
 #include "pal.h"
 
+const char* AppProperName = "SWPBUILD";
+const char* AppTechnicalName = "swpbuild";
+
 #define M_RED 102
 #define M_BLUE 198
 

@@ -371,6 +371,27 @@ int DeleteAutosave(short iEnd, char *gsv)
 
 int SetCommandLine(char *argvbufx);
 
+extern const char* AppProperName;
+extern const char* AppTechnicalName;
+
+typedef void (*dllSetString)(const char*);
+
+static void LoadEBacktrace(void)
+{
+    HMODULE ebacktrace = LoadLibraryA(EBACKTRACEDLL);
+    if (ebacktrace)
+    {
+        dllSetString SetTechnicalName = (dllSetString) GetProcAddress(ebacktrace, "SetTechnicalName");
+        dllSetString SetProperName = (dllSetString) GetProcAddress(ebacktrace, "SetProperName");
+
+        if (SetTechnicalName)
+            SetTechnicalName(AppTechnicalName);
+
+        if (SetProperName)
+            SetProperName(AppProperName);
+    }
+}
+
 //
 // WinMain() -- main Windows entry point
 //
@@ -391,7 +412,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR lpCmdLine, int nC
 		return -1;
 	}
 
-    LoadLibraryA(EBACKTRACEDLL);
+    LoadEBacktrace();
 
 	hdc = GetDC(NULL);
 	r = GetDeviceCaps(hdc, BITSPIXEL);

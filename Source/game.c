@@ -420,6 +420,9 @@ Prepared for public release: 03/28/2005 - Charlie Wiederhold, 3D Realms
 #define TITLE_ROT_FLAGS (ROTATE_SPRITE_CORNER|ROTATE_SPRITE_SCREEN_CLIP|ROTATE_SPRITE_NON_MASK)
 #define PAL_SIZE (256*3)
 
+const char* AppProperName = "SWP";
+const char* AppTechnicalName = "swp";
+
 char DemoName[15][16];
 
 extern long lastUpdate; // CD tic counter
