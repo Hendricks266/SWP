@@ -288,13 +288,15 @@ static void SignalHandler(int signum)
 
 static void print_os_version(void)
 {
-    OSVERSIONINFO osv;
-    const char *ver = NULL;
+    OSVERSIONINFOEX osv;
+    const char *ver = "";
     // I was going to call this 'windows_9x_is_awful', but I couldn't justify ever setting it to 0
     int awful_windows_9x = 0;
 
-    osv.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
-    GetVersionEx(&osv);
+    ZeroMemory(&osv, sizeof(osv));
+    osv.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
+    if (!GetVersionEx((LPOSVERSIONINFOA)&osv))
+        initprintf("Error detecting OS version...\n", ver);
 
     switch (osv.dwPlatformId)
     {
@@ -310,21 +312,38 @@ static void print_os_version(void)
                 ver = "XP";
                 break;
             case 2:
-                ver = "Server 2003";
+                ver = osv.wProductType == VER_NT_WORKSTATION ? "XP x64" : "Server 2003";
                 break;
             }
             break;
         }
-        if (osv.dwMajorVersion == 6 && osv.dwMinorVersion == 0)
+
+        if (osv.dwMajorVersion == 6)
         {
-            ver = "Vista";
-            is_vista = 1;
+            is_vista = osv.dwMinorVersion + 1;
+
+            switch (osv.dwMinorVersion)
+            {
+            case 0:
+                ver = osv.wProductType == VER_NT_WORKSTATION ? "Vista" : "Server 2008";
+                break;
+            case 1:
+                ver = osv.wProductType == VER_NT_WORKSTATION ? "7" : "Server 2008 R2";
+                break;
+            case 2:
+                ver = osv.wProductType == VER_NT_WORKSTATION ? "8" : "Server 2012";
+                break;
+            case 3:
+                ver = osv.wProductType == VER_NT_WORKSTATION ? "8.1" : "Server 2012 R2";
+                break;
+            }
+            break;
         }
-        else
-        if (osv.dwMajorVersion == 6 && osv.dwMinorVersion == 1)
+
+        if (osv.dwMajorVersion >= 7)
         {
-            ver = "7";
-            is_vista = 2;
+            // wot
+            is_vista = 9000;
         }
         break;
 
@@ -343,13 +362,11 @@ static void print_os_version(void)
         return;
     }
 
-    if (ver != NULL)
-    {
-        initprintf("OS: Windows %s (Version %lu.%lu.%lu)\n", ver, osv.dwMajorVersion, osv.dwMinorVersion,
-                   awful_windows_9x?osv.dwBuildNumber&0xffff:osv.dwBuildNumber);
-        if (osv.szCSDVersion[0])
-            initprintf("  - %s\n", osv.szCSDVersion);
-    }
+    initprintf("Windows %s", ver);
+    if (osv.szCSDVersion && osv.szCSDVersion[0])
+        initprintf(" %s", osv.szCSDVersion);
+    initprintf(" (build %lu.%lu.%lu)\n", osv.dwMajorVersion, osv.dwMinorVersion,
+               awful_windows_9x?osv.dwBuildNumber&0xffff:osv.dwBuildNumber);
 }
 
 int DeleteAutosave(short iEnd, char *gsv)
