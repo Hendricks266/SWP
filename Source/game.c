@@ -417,6 +417,7 @@ Prepared for public release: 03/28/2005 - Charlie Wiederhold, 3D Realms
 #define STAT_SCREEN_PIC 5114
 #define TITLE_PIC 2324
 #define THREED_REALMS_PIC 2325
+#define TEN_PIC 5109
 #define TITLE_ROT_FLAGS (ROTATE_SPRITE_CORNER|ROTATE_SPRITE_SCREEN_CLIP|ROTATE_SPRITE_NON_MASK)
 #define PAL_SIZE (256*3)
 
@@ -524,7 +525,7 @@ FALSE, // SetHighres
 TRUE,  // WeaponSwitch
 FALSE, // UseDarts
 FALSE, // SwapYinyang
-TRUE,  // Spare
+FALSE,  // ShowTEN
 TRUE,  // UseNinjaHack
 TRUE,  // UseCarHack
 FALSE, // auto run
@@ -622,6 +623,7 @@ long krandcount;
 void BOT_DeleteAllBots( void );
 VOID BotPlayerInsert(PLAYERp pp);
 VOID SybexScreen(VOID);
+VOID TenScreen(VOID);
 VOID DosScreen(VOID);
 VOID MenuLevel(VOID);
 VOID StatScreen(PLAYERp mpp);
@@ -1034,7 +1036,8 @@ VOID TerminateGame(VOID)
     if (CleanExit)
     {
         SybexScreen();
-        //TenScreen();
+        if (gs.ShowTEN)
+            TenScreen();
     }
 
     ////--->>>> sound stuff was there
@@ -2354,14 +2357,13 @@ VOID SybexScreen(VOID)
 }
 
 // CTW REMOVED
-/*
+
 VOID TenScreen(VOID)
-    {
+{
     char called;
     long fin;
     char backup_pal[256*3];
     char pal[PAL_SIZE];
-    char tempbuf[256];
     char *palook_bak = palookup[0];
     int i;
     ULONG bak;
@@ -2380,20 +2382,21 @@ VOID TenScreen(VOID)
         tempbuf[i] = i;
     palookup[0] = tempbuf;
 
-    GetPaletteFromVESA(pal);
-    memcpy(backup_pal, pal, PAL_SIZE);
+    // GetPaletteFromVESA(pal);
+    // memcpy(backup_pal, pal, PAL_SIZE);
 
     if ((fin = kopen4load("ten.pal", 0)) != -1)
-        {
+    {
         kread(fin, pal, PAL_SIZE);
         kclose(fin);
-        }
+        setbrightness(gs.Brightness, pal, 2);
+    }
 
     // palette to black
-    FadeOut(0, 0);
+    // FadeOut(0, 0);
     bakready2send = ready2send;
-    //totalclock = 0;
-    //ototalclock = 0;
+    totalclock = lastUpdate = 0;
+    ototalclock = 0;
 
     flushperms();
     // draw it
@@ -2401,26 +2404,56 @@ VOID TenScreen(VOID)
     // bring to the front - still back palette
     nextpage();
     // set pal
-    SetPaletteToVESA(pal);
+    // SetPaletteToVESA(pal);
     //FadeIn(0, 3);
     ResetKeys();
 
-    while (!KeyPressed());
+    while (TRUE)
+    {
+		handleevents();
+		OSD_DispatchQueued();
+
+        // taken from top of faketimerhandler
+        // limits checks to max of 40 times a second
+        if (totalclock >= ototalclock + synctics)
+        {
+            //void MNU_CheckForMenusAnyKey( void );
+
+            ototalclock += synctics;
+            //MNU_CheckForMenusAnyKey();
+        }
+
+        //if (UsingMenus)
+        //    MNU_DrawMenu();
+
+        //drawscreen as fast as you can
+        rotatesprite(0, 0, RS_SCALE, 0, TEN_PIC, 0, 0, TITLE_ROT_FLAGS, 0, 0, xdim - 1, ydim - 1);
+
+        nextpage();
+
+        if (totalclock > 5*120 || KeyPressed())
+        {
+            DemoMode = TRUE;
+            DemoPlaying = TRUE;
+            break;
+        }
+    }
 
     palookup[0] = palook_bak;
 
-    clearview(0);
-    nextpage();
-    SetPaletteToVESA(backup_pal);
+    // clearview(0);
+    // nextpage();
+    // SetPaletteToVESA(backup_pal);
+    setbrightness(gs.Brightness, (char*)palette_data, 2);
 
     // put up a blank screen while loading
-    clearview(0);
-    nextpage();
+    // clearview(0);
+    //  nextpage();
 
     ready2send = bakready2send;
     totalclock = bak;
-    }
-*/
+}
+
 // CTW REMOVED END
 
 VOID TitleLevel(VOID)

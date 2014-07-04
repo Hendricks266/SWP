@@ -240,7 +240,7 @@ typedef enum
     btn_hid, btn_res1, btn_res2, btn_res3, btn_res4, btn_res5, btn_res6,
     btn_markers, btn_teamplay, btn_friendlyfire,btn_parental,btn_nuke,
     btn_voxels,btn_stats,btn_asv,
-    btn_wep, btn_drt, btn_yin, btn_str, btn_nja, btn_car,
+    btn_wep, btn_drt, btn_yin, btn_ten, btn_str, btn_nja, btn_car,
     btn_playcd, btn_videofs, btn_videows, btn_hitile, btn_models,
     btn_galpha,btn_txcomp,btn_txcach,btn_cacomp,btn_rand,
     btn_max,btn_vsync,

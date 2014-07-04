@@ -347,9 +347,10 @@ MenuItem hacks_i[] =
     {DefButton(btn_hid,       0, "Player Weapon"),     OPT_XS+55, OPT_LINE(2),  1, m_defshade, 0, NULL, NULL, NULL},
     {DefButton(btn_drt,       0, "Optional Darts"),    OPT_XS+55, OPT_LINE(3),  1, m_defshade, 0, NULL, NULL, NULL},
     {DefButton(btn_yin,       0, "Shuriken Cursor"),   OPT_XS+55, OPT_LINE(4),  1, m_defshade, 0, NULL, NULL, NULL},
+    {DefButton(btn_ten,       0, "Show TEN Screen"),   OPT_XS+55, OPT_LINE(5),  1, m_defshade, 0, NULL, NULL, NULL},
 
-    {DefButton(btn_nja,       0, "Ninja Sliced Hack"), OPT_XS+55, OPT_LINE(6),  1, m_defshade, 0, NULL, NULL, NULL},
-    {DefButton(btn_car,       0, "Seppuku Car Hack"),  OPT_XS+55, OPT_LINE(7),  1, m_defshade, 0, NULL, NULL, NULL},
+    {DefButton(btn_nja,       0, "Ninja Sliced Hack"), OPT_XS+55, OPT_LINE(7),  1, m_defshade, 0, NULL, NULL, NULL},
+    {DefButton(btn_car,       0, "Seppuku Car Hack"),  OPT_XS+55, OPT_LINE(8),  1, m_defshade, 0, NULL, NULL, NULL},
 
     {DefNone}
     };
@@ -2008,6 +2009,7 @@ void MNU_InitMenus(void)
     buttonsettings[btn_str] = ForceSetup;
     buttonsettings[btn_drt] = gs.UseDarts;
     buttonsettings[btn_yin] = gs.SwapYinyang;
+    buttonsettings[btn_ten] = gs.ShowTEN;
     buttonsettings[btn_hid] = gs.WeaponHide;
     buttonsettings[btn_nja] = gs.UseNinjaHack;
     buttonsettings[btn_car] = gs.UseCarHack;
@@ -3153,10 +3155,10 @@ void MNU_DoButton(MenuItem_p item, BOOL draw)
        if (gs.BorderNum > 1)
            i = 108;
 
-       if (iCurs == 4) //Set Ninja Slice Hack
+       if (iCurs == 5) //Set Ninja Slice Hack
            sHint = "Disables 8 bit Ninja dying sequence";
        else
-       if (iCurs == 5) //Set $bullet Car Hack
+       if (iCurs == 6) //Set $bullet Car Hack
        {
            sHint = "Enables Red controls on Yellow car";
            sRest = "Requires a Level Restart";
@@ -3217,6 +3219,9 @@ void MNU_DoButton(MenuItem_p item, BOOL draw)
             break;
         case btn_yin:
             gs.SwapYinyang = state = buttonsettings[item->button];
+            break;
+        case btn_ten:
+            gs.ShowTEN = state = buttonsettings[item->button];
             break;
         case btn_hid:
             gs.WeaponHide = (gs.WeaponHide==1)?0:gs.WeaponHide+1;

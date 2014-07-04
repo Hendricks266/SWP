@@ -62,7 +62,7 @@ BOOL SetHighres;
 BOOL WeaponSwitch;
 BOOL UseDarts;
 BOOL SwapYinyang;
-BOOL Spare;
+BOOL ShowTEN;
 BOOL UseNinjaHack;
 BOOL UseCarHack;
 BOOL AutoRun;

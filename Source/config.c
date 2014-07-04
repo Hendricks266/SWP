@@ -288,6 +288,7 @@ void CONFIG_SetDefaults( void )
         gs.SetHighres = 1;
     gs.UseDarts = 0;
     gs.SwapYinyang = 0;
+    gs.ShowTEN = 0;
     gs.MiniHudTyp = 1;
     gs.UseNinjaHack = 1;
     gs.UseCarHack = 1;
@@ -684,6 +685,9 @@ int32 CONFIG_ReadSetup( void )
       SCRIPT_GetNumber( scripthandle, "SwpOptions","SwapYinyang",&dummy);
       gs.SwapYinyang = dummy;
 
+      SCRIPT_GetNumber( scripthandle, "SwpOptions","ShowTEN",&dummy);
+      gs.ShowTEN = dummy;
+
       SCRIPT_GetNumber( scripthandle, "SwpOptions","AutoSaveGame",&dummy);
       Autosave = dummy;
 
@@ -804,6 +808,8 @@ void CONFIG_WriteSetup( void )
    SCRIPT_PutNumber( scripthandle, "SwpOptions","SwpUseDarts",dummy,FALSE,FALSE);
    dummy = gs.SwapYinyang;
    SCRIPT_PutNumber( scripthandle, "SwpOptions","SwapYinyang",dummy,FALSE,FALSE);
+   dummy = gs.ShowTEN;
+   SCRIPT_PutNumber( scripthandle, "SwpOptions","ShowTEN",dummy,FALSE,FALSE);
    dummy = Autosave;
    SCRIPT_PutNumber( scripthandle, "SwpOptions","AutoSaveGame",dummy,FALSE,FALSE);
    dummy = RandomMusic;
