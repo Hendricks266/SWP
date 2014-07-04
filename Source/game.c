@@ -551,10 +551,10 @@ FALSE, // TeamPlay
 0, // Parental Lock
 "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0", // Password
 TRUE, // nuke
-FALSE, // voxels
+TRUE, // voxels
 FALSE, // stats
-FALSE, // mouse aiming on
-FALSE, // play cd
+TRUE, // mouse aiming on
+TRUE, // play cd
 1,     // minihud type - classic/modern/alternate
 FALSE, // weaponhide
 

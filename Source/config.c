@@ -293,6 +293,9 @@ void CONFIG_SetDefaults( void )
     gs.UseNinjaHack = 0;
     gs.UseCarHack = 0;
 
+    gs.Voxels = 1;
+    gs.PlayCD = 1;
+
     gs.MouseSpeed = 65536;
     gs.MouseScaleX = 65536;
     gs.MouseScaleY = 65536;
