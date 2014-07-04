@@ -115,6 +115,8 @@ extern SW_PACKET loc;
 extern char LevelName[20];
 extern STATE s_NotRestored[];
 
+static char fakegs[84];
+
 OrgTileListP otlist[] = {&orgwalllist, &orgwalloverlist, &orgsectorceilinglist, &orgsectorfloorlist};
 
 int PanelSpriteToNdx(PLAYERp pp, PANEL_SPRITEp psprite)
@@ -790,24 +792,6 @@ int LoadGame(short save_num)
     OrgTileP otp, next_otp;
 
     BYTE cdatrack = Level;
-    BOOL AmbBak = gs.Ambient;
-    BOOL MusicBak = gs.MusicOn;
-    BOOL FxBak = gs.FxOn;
-    BOOL PlayCD = gs.PlayCD;
-    short SndVolBak = gs.SoundVolume;
-    short MusVolBak = gs.MusicVolume;
-
-    long msSpeed  = gs.MouseSpeed;
-    long msScaleX = gs.MouseScaleX;
-    long msScaleY = gs.MouseScaleY;
-    BOOL msInvert = gs.MouseInvert;
-    BOOL WeapSwit = gs.WeaponSwitch;
-    BOOL SwapYiny = gs.SwapYinyang;
-    BOOL UseNinHk = gs.UseNinjaHack;
-    BOOL UseCarHk = gs.UseCarHack;
-    BOOL AutoRun2 = gs.AutoRun;
-    BOOL AutoAim2 = gs.AutoAim;
-    BYTE Usexhair = gs.Crosshair;
 
     long RotNdx;
     long StateStartNdx;
@@ -1228,7 +1212,7 @@ int LoadGame(short save_num)
     MREAD(palette,sizeof(palette),1,fil);
     MREAD(palette_data,sizeof(palette_data),1,fil);
 
-    MREAD(&gs,sizeof(gs),1,fil);
+    MREAD(fakegs,sizeof(fakegs),1,fil); // XXX: remove when save format changes
 
     if (cdatrack < 4)
         cdatrack = 4;
@@ -1352,32 +1336,13 @@ int LoadGame(short save_num)
     DoPlayerDivePalette(Player+myconnectindex);
     DoPlayerNightVisionPalette(Player+myconnectindex);
 
-    gs.Ambient = AmbBak;
-    gs.SoundVolume = SndVolBak;
-    gs.MusicVolume = MusVolBak;
-    gs.MusicOn = MusicBak;
-    gs.FxOn = FxBak;
-    gs.PlayCD = PlayCD;
-
-    gs.MouseSpeed   = msSpeed;
-    gs.MouseScaleX  = msScaleX;
-    gs.MouseScaleY  = msScaleY;
-    gs.MouseInvert  = msInvert;
-    gs.WeaponSwitch = WeapSwit;
-    gs.SwapYinyang  = SwapYiny;
-    gs.UseNinjaHack = UseNinHk;
-    gs.UseCarHack   = UseCarHk;
-    gs.AutoRun      = AutoRun2;
-    gs.AutoAim      = AutoAim2;
-    gs.Crosshair    = Usexhair;
-
     if (save_num == 10)
     {
         strcpy(LevelSong, LastMusic);
         cdatrack = CurrentTrack;
     }
 
-    if (!SW_SHAREWARE && PlayCD)
+    if (!SW_SHAREWARE && gs.PlayCD)
     {
        if (LoadSavedGame >= 0 || cdatrack != CurrentTrack)
        {
