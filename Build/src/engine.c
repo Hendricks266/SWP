@@ -13,6 +13,9 @@
 
 //#define POLYMOST
 //#define SUPERBUILD
+
+// Changed background colors 08080808 wxbg
+
 #define ENGINE
 
 #include "compat.h"
@@ -10157,8 +10160,8 @@ void qsetmode640480(void)
 		midydim16 = 200;
 
 		begindrawing();	//{{{
-		clearbuf((char *)(frameplace + (336l*bytesperline)), (bytesperline*144L) >> 2, 0x08080808l);
-		clearbuf((char *)frameplace, (bytesperline*336L) >> 2, 0L);
+		clearbuf((char *)(frameplace + (336l*bytesperline)), (bytesperline*144L) >> 2, 0x01010101l); // wxbg
+		clearbuf((char *)frameplace, (bytesperline*336L) >> 2, 0L);                 // 0x08080808l
 		enddrawing();	//}}}
 	}
 
@@ -10188,8 +10191,8 @@ void qsetmodeany(long daxdim, long daydim)
 		midydim16 = scale(200,yres,480);
 
 		begindrawing();	//{{{
-		clearbuf((char *)(frameplace + (ydim16*bytesperline)), (bytesperline*STATUS2DSIZ) >> 2, 0x08080808l);
-		clearbuf((char *)frameplace, (ydim16*bytesperline) >> 2, 0L);
+		clearbuf((char *)(frameplace + (ydim16*bytesperline)), (bytesperline*STATUS2DSIZ) >> 2, 0x01010101l); // wxbg
+		clearbuf((char *)frameplace, (ydim16*bytesperline) >> 2, 0L);                        // 0x08080808l
 		enddrawing();	//}}}
 	}
 

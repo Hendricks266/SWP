@@ -211,6 +211,7 @@ void clearkeys(void) { memset(keystatus,0,sizeof(keystatus)); }
 
 char myMapname[32];                                                  // wxcp
 char  quitflag;                                                      // wxyz
+short cTrns = -1;
 short cBlak = 0;                                                     // wxcl
 short cBlue = 1;                                                     // wxcl
 short cYell = 14;                                                    // wxcl
@@ -2811,7 +2812,7 @@ void overheadeditor(void)
 	drawline16(192,ydim-STATUS2DSIZ,192,ydim-STATUS2DSIZ+24,7);
 //    if (xdim2d > 1000)
 //	     printext16(xdim2d-200, ydim-STATUS2DSIZ+128, 8, -1, kensig, 0);
-	printext16(9L,ydim-STATUS2DSIZ+9L, 8, -1, kensig, 0);
+	printext16(9L,ydim-STATUS2DSIZ+9L, 8, cBlue, kensig, 0);
 //	printext16(8L,ydim-STATUS2DSIZ+8L,12,-1,kensig,0);
 	// printmessage16(REVISION);
 //	drawline16(0,ydim-1-24,xdim-1,ydim-1-24,7);
