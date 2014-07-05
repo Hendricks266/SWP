@@ -7242,7 +7242,7 @@ void PlayTestMap(void)
 	   {
 	   if (k == 1)           // No
            strcat(selectedboardfilename, " -monsters");
-       spawnlp( P_NOWAIT, "SWP.exe -z -map", "", selectedboardfilename, NULL );
+       spawnlp( P_NOWAIT, "SWP.exe", "SWP.exe", " -z -map ", selectedboardfilename, NULL );
        bflushchars();
        }
 }
@@ -7277,7 +7277,7 @@ void SWPBUILDHelp(void)
 
 //    myHandle = win_gethwnd();
     //spawnlp( P_NOWAIT, "SWPBUILDHelp.exe", "", "", NULL );
-    spawnlp( P_NOWAIT, "Notepad.exe", "", "SWPBUILDHelp.txt", NULL );
+    spawnlp( P_NOWAIT, "Notepad.exe", "Notepad.exe", "SWPBUILDHelp.txt", NULL );
     //SetFocus(myHandle);
     SetFocus((HWND)win_gethwnd());
 }
