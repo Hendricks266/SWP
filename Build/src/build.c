@@ -5181,6 +5181,8 @@ void overheadeditor(void)
 					keystatus[1] = 0;
 					bad = 0;
 					printmessage16("");
+					bflushchars();
+					clearkeys();
 				}
 				else if (ch == 'n' || ch == 'N')  //N
 				{
@@ -5521,8 +5523,10 @@ void overheadeditor(void)
 				}
 				else if (ch == 'p' || ch == 'P')  // Play               wxpy
 				{
-				// printmessage16(REVISION);
+				printmessage16("");
                 PlayTestMap();
+                bflushchars();
+                clearkeys();
 				bad = 0;
 				}
 				else if (ch == 'm' || ch == 'M')  // Menu               wxpy
@@ -5541,7 +5545,7 @@ void overheadeditor(void)
                    }
                 bflushchars();
                 clearkeys();
-               //  printmessage16(REVISION);
+                printmessage16("");
                 bad = 0;
   		        }
 				else if (ch == 'q' || ch == 'Q')  //Q
@@ -7244,6 +7248,7 @@ void PlayTestMap(void)
            strcat(selectedboardfilename, " -monsters");
        spawnlp( P_NOWAIT, "SWP.exe", "SWP.exe", " -z -map ", selectedboardfilename, NULL );
        bflushchars();
+       clearkeys();
        }
 }
 
