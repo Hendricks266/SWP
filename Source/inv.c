@@ -1116,8 +1116,11 @@ VOID InventoryBarUpdatePosition(PLAYERp pp)
                 y -= 15;
         }
 
-        pp->InventorySprite[inv]->x = x;
-        pp->InventorySprite[inv]->y = y;
+        if (pp->InventorySprite[inv])
+        {
+            pp->InventorySprite[inv]->x = x;
+            pp->InventorySprite[inv]->y = y;
+        }
     }
 }
 
