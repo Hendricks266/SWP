@@ -1099,7 +1099,7 @@ VOID InventoryBarUpdatePosition(PLAYERp pp)
     pp->InventorySelectionBox->x = x - 5;
     pp->InventorySelectionBox->y = y - 2; //5;
 
-    for (id = InventoryData; id->Name; id++, inv++)
+    for (id = InventoryData; id->Name && inv < MAX_INVENTORY; id++, inv++)
     {
         x = InventoryBarXpos[gs.BorderNum] + (inv * INVENTORY_ICON_WIDTH);
         y = InventoryBarYpos[gs.BorderNum];
