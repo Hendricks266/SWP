@@ -1180,9 +1180,13 @@ VOID PlayerUpdateInventory(PLAYERp pp, short InventoryNum)
         PANEL_SPRITEp psp;
 
         // Go translucent if used
-        for (id = InventoryData; id->Name; id++, inv++)
+        for (id = InventoryData; id->Name && inv < MAX_INVENTORY; id++, inv++)
         {
             psp = pp->InventorySprite[inv];
+
+            if (!psp)
+                continue;
+
             if (!pp->InventoryAmount[inv])
             {
                 //SET(psp->flags, PANF_TRANSLUCENT);
