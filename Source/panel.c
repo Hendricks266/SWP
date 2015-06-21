@@ -1064,10 +1064,18 @@ int WeaponOperate(PLAYERp pp)
 BOOL
 WeaponOK(PLAYERp pp)
     {
-    USERp u = User[pp->PlayerSprite];
+    USERp u;
     short min_ammo, WeaponNum, FindWeaponNum;
     static char wpn_order[] = {2,3,4,5,6,7,8,9,1,0};
     unsigned wpn_ndx=0;
+
+    if ((unsigned)pp->PlayerSprite >= MAXSPRITES)
+        return;
+
+    u = User[pp->PlayerSprite];
+
+    if (u == NULL)
+        return;
 
     // sword
     if (DamageData[u->WeaponNum].max_ammo == -1)
@@ -6238,6 +6246,9 @@ pChopsWait(PANEL_SPRITEp psp)
 void
 ChopsSetRetract(PLAYERp pp)
     {
+    if (pp == NULL || pp->Chops == NULL)
+        return;
+
     pSetState(pp->Chops, pp->Chops->RetractState);
     }
 

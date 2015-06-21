@@ -121,7 +121,7 @@ VOID PanelInvTestSuicide(PANEL_SPRITEp psp);
 
 VOID UpdateMiniBar(PLAYERp pp)
 {
-    USERp u = User[pp->PlayerSprite];
+    USERp u;
     short i, pal;
     long x, y;
     INVENTORY_DATAp id;
@@ -132,6 +132,10 @@ VOID UpdateMiniBar(PLAYERp pp)
     int ammox[20] = {53, 54, 53, 59, 54, 52, 52, 52, 55, 54, 54, 52, 0, 53, 53,55,58, 55, 55, 0};
     int ammoy[20] = {184, 180, 182, 180, 179, 180, 180, 180, 178, 181, 181, 181, 0, 184, 182,180,178, 178, 178, 0};
 
+    if ((unsigned)pp->PlayerSprite >= MAXSPRITES)
+        return;
+
+    u = User[pp->PlayerSprite];
 
     #define MINI_HUD_ARMOR_BOX_PIC   3030
     #define MINI_HUD_HEALTH_BOX_PIC  1803
@@ -149,6 +153,9 @@ VOID UpdateMiniBar(PLAYERp pp)
     }
     else
     if (gs.BorderNum != BORDER_MINI_BAR)
+        return;
+
+    if (u == NULL)
         return;
 
     if (gs.MiniHudTyp == 0)

@@ -753,7 +753,7 @@ KillSprite(SHORT SpriteNum)
         {
         TRAVERSE_SPRITE_STAT(headspritestat[STAT_ENEMY], i, nexti)
             {
-            if (User[i]->tgt_sp == sp)
+            if ((unsigned)i < MAXSPRITES && User[i] != NULL && User[i]->tgt_sp == sp)
                 {
                 DoActorPickClosePlayer(i);
                 }

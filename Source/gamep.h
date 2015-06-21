@@ -884,13 +884,20 @@ VOID UpdateMiniBarWeapons(PLAYERp pp, short Weapnum)
 
 VOID UpdateAltMiniHud(PLAYERp pp)
 {
-    USERp u = User[pp->PlayerSprite];
+    USERp u;
     INVENTORY_DATAp id;
     long x = 0, y = 152;
     short i;
     extern int32 ScreenBPP;
     static short StatusKeyPics[] = { 2392, 2394, 2393, 2395, 2448, 2449, 2458, 2459 };
 
+    if ((unsigned)pp->PlayerSprite >= MAXSPRITES)
+        return;
+
+    u = User[pp->PlayerSprite];
+
+    if (u == NULL)
+        return;
 
     x = 0;
     y = 200 - tilesizy[2472];

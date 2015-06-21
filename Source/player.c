@@ -2784,7 +2784,7 @@ DoPlayerSectorUpdatePostMove(PLAYERp pp)
     long fz,cz;
 
     // need to do updatesectorz if in connect area
-    if (FAF_ConnectArea(pp->cursectnum))
+    if ((unsigned)pp->cursectnum < MAXSECTORS && FAF_ConnectArea(pp->cursectnum))
         {
         sectnum = pp->cursectnum;
         updatesectorz(pp->posx, pp->posy, pp->posz, &pp->cursectnum);
@@ -7593,8 +7593,14 @@ int PlayerStateControl(SHORT SpriteNum)
     {
     USERp u;
 
+    if ((unsigned)SpriteNum >= MAXSPRITES)
+        return;
+
     // Convienience var
     u = User[SpriteNum];
+
+    if (u == NULL)
+        return;
 
     u->Tics += synctics;
 
@@ -7676,8 +7682,14 @@ MoveSkipSavePos(VOID)
             {
             TRAVERSE_SPRITE_STAT(headspritestat[stat], i, nexti)
                 {
+                if ((unsigned)i >= MAXSPRITES)
+                    continue;
+
                 sp = &sprite[i];
                 u = User[i];
+
+                if (sp == NULL || u == NULL)
+                    continue;
 
                 u->ox = sp->x;
                 u->oy = sp->y;
@@ -7695,8 +7707,14 @@ MoveSkipSavePos(VOID)
             {
             TRAVERSE_SPRITE_STAT(headspritestat[stat], i, nexti)
                 {
+                if ((unsigned)i >= MAXSPRITES)
+                    continue;
+
                 sp = &sprite[i];
                 u = User[i];
+
+                if (sp == NULL || u == NULL)
+                    continue;
 
                 u->ox = sp->x;
                 u->oy = sp->y;
