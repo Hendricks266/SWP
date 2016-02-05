@@ -3671,15 +3671,17 @@ void polymost_drawsprite (long snum)
 	tspr = tspriteptr[snum];
 	if (tspr->owner < 0 || tspr->picnum < 0) return;
 
+	spritenum         = tspr->owner;
+
+	if (picanm[tspr->picnum]&192)
+		tspr->picnum += animateoffs(tspr->picnum,spritenum+32768);
+
 	globalpicnum      = tspr->picnum;
 	globalshade       = tspr->shade;
 	globalpal         = tspr->pal;
 	globalorientation = tspr->cstat;
-	spritenum         = tspr->owner;
 
 	if ((globalorientation&48) != 48) {	// only non-voxel sprites should do this
-		if (picanm[globalpicnum]&192) globalpicnum += animateoffs(globalpicnum,spritenum+32768);
-
 		xoff = (long)((signed char)((picanm[globalpicnum]>>8)&255))+((long)tspr->xoffset);
 		yoff = (long)((signed char)((picanm[globalpicnum]>>16)&255))+((long)tspr->yoffset);
 	}

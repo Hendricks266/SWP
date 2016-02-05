@@ -3087,11 +3087,16 @@ static void drawsprite(long snum)
 	//============================================================================= //POLYMOST ENDS
 
 	tspr = tspriteptr[snum];
+	if (tspr->owner < 0 || tspr->picnum < 0) return;
+
+	spritenum = tspr->owner;
+
+	if (picanm[tspr->picnum]&192)
+		tspr->picnum += animateoffs(tspr->picnum,spritenum+32768);
 
 	xb = spritesx[snum];
 	yp = spritesy[snum];
 	tilenum = tspr->picnum;
-	spritenum = tspr->owner;
 	cstat = tspr->cstat;
 
 #ifdef SUPERBUILD
@@ -3108,7 +3113,6 @@ static void drawsprite(long snum)
 
 	if ((cstat&48) != 48)
 	{
-		if (picanm[tilenum]&192) tilenum += animateoffs(tilenum,spritenum+32768);
 		if ((tilesizx[tilenum] <= 0) || (tilesizy[tilenum] <= 0) || (spritenum < 0))
 			return;
 	}
