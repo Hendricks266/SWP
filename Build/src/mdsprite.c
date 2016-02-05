@@ -1529,9 +1529,11 @@ unsigned gloadtex (long *picbuf, long xsiz, long ysiz, long is8bit, long dapal)
 		if (palookup[dapal] == 0) dapal = 0;
 		for(i=xsiz*ysiz-1;i>=0;i--)
 		{
-			pic2[i].b = cptr[palette[(long)palookup[dapal][pic[i].a]*3+2]*4];
-			pic2[i].g = cptr[palette[(long)palookup[dapal][pic[i].a]*3+1]*4];
-			pic2[i].r = cptr[palette[(long)palookup[dapal][pic[i].a]*3+0]*4];
+			int const ii = palookup[dapal][pic[i].a];
+
+			pic2[i].b = cptr[curpalette[ii].b];
+			pic2[i].g = cptr[curpalette[ii].g];
+			pic2[i].r = cptr[curpalette[ii].r];
 			pic2[i].a = 255;
 		}
 	}
