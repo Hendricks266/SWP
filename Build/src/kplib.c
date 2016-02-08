@@ -174,13 +174,15 @@ static long bakr = 0x80, bakg = 0x80, bakb = 0x80; //this used to be public...
 static long gslidew = 0, gslider = 0, xm, xmn[4], xr0, xr1, xplc, yplc;
 static intptr_t nfplace;
 static long clen[320], cclen[19], bitpos, filt, xsiz, ysiz;
-static long xsizbpl, ixsiz, ixoff, iyoff, ixstp, iystp, intlac, nbpl, trnsrgb ASMNAME("trnsrgb");
+static long xsizbpl, ixsiz, ixoff, iyoff, ixstp, iystp, intlac, nbpl;
+long trnsrgb ASMNAME("trnsrgb");
 static long ccind[19] = {16,17,18,0,8,7,9,6,10,5,11,4,12,3,13,2,14,1,15};
 static long hxbit[59][2], ibuf0[288], nbuf0[32], ibuf1[32], nbuf1[32];
 static const unsigned char *filptr;
 static unsigned char slidebuf[32768], opixbuf0[4], opixbuf1[4];
 static unsigned char pnginited = 0, olinbuf[65536] ASMNAME("olinbuf"); //WARNING:max xres is: 65536/bpp-1
-static long gotcmov = -2, abstab10[1024] ASMNAME("abstab10");
+static long gotcmov = -2;
+long abstab10[1024] ASMNAME("abstab10");
 
 //Variables to speed up dynamic Huffman decoding:
 #define LOGQHUFSIZ0 9
