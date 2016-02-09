@@ -139,7 +139,7 @@ int32 JoystickAnalogueSaturate[MAXJOYAXES];
 int32 ScreenMode = 1;
 int32 ScreenWidth = 1024;
 int32 ScreenHeight = 768;
-int32 ScreenBPP = 32;
+int32 ScreenBPP = 8;
 int32 ForceSetup;
 
 extern char WangBangMacro[10][64];
@@ -261,7 +261,7 @@ void CONFIG_SetDefaults( void )
     ScreenMode = 1;
     ScreenWidth = 1024;
     ScreenHeight = 768;
-    ScreenBPP = 32;
+    ScreenBPP = 8;
     FXDevice = 0;
     MusicDevice = 0;
     FXVolume = 168;
