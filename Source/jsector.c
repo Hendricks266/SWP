@@ -1085,32 +1085,15 @@ void JAnalyzeSprites(SPRITEp tspr)
     DoAutoSize(tspr);
 
     if (getrendermode() == 3 && md_tilehasmodel(tspr->picnum) >= 0 && usemodels) return;
-
     // Check for voxels
-    //if (bVoxelsOn)
-    if (gs.Voxels)
+    switch (tspr->picnum)
         {
-        if (aVoxelArray[tspr->picnum].Voxel >= 0)
+        case 764: // Gun barrel
+            if (!usevoxels)
             {
-            // Turn on voxels
-            tspr->picnum = aVoxelArray[tspr->picnum].Voxel;     // Get the voxel number
-            tspr->cstat |= 48;          // Set stat to voxelize sprite
+                tspr->cstat |= 16;
             }
-        }
-    else
-        {
-        switch (tspr->picnum)
-            {
-            case 764: // Gun barrel
-
-                if (aVoxelArray[tspr->picnum].Voxel >= 0)
-                    {
-                    // Turn on voxels
-                    tspr->picnum = aVoxelArray[tspr->picnum].Voxel;     // Get the voxel number
-                    tspr->cstat |= 48;          // Set stat to voxelize sprite
-                    }
-                  break;
-            }
+            break;
         }
 }
 

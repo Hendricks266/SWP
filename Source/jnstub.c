@@ -96,10 +96,6 @@ void LoadKVXFromScript(char *filename);
 
 //void LogUserTime( BOOL bIsLoggingIn );
 
-// voxelarray format is:
-//      spritenumber, voxelnumber
-extern long aVoxelArray[MAXSPRITES];
-
 // Ken ALT highlighted array
 extern short highlightsector[MAXSECTORS];
 extern short highlightsectorcnt;
@@ -574,14 +570,6 @@ ExtAnalyzeSprites(void)
                     // tspr->z+=(sintable[(rotang*2)%2047]/16);
                     break;
                     }
-                }
-
-            if (aVoxelArray[tspr->picnum] >= 0)
-                {
-
-                // Turn on voxels
-                tspr->picnum = aVoxelArray[tspr->picnum];       // Get the voxel number
-                tspr->cstat |= 48;      // Set stat to voxelize sprite
                 }
             }
         }

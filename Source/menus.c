@@ -2000,7 +2000,7 @@ void MNU_InitMenus(void)
     buttonsettings[btn_music] = gs.MusicOn;
     buttonsettings[btn_talking] = gs.Talking;
 
-    buttonsettings[btn_voxels] = gs.Voxels;
+    buttonsettings[btn_voxels] = usevoxels;
     buttonsettings[btn_ambience] = gs.Ambient;
     buttonsettings[btn_playcd] = gs.PlayCD;
     buttonsettings[btn_flipstereo] = gs.FlipStereo;
@@ -3192,7 +3192,7 @@ void MNU_DoButton(MenuItem_p item, BOOL draw)
             gs.NetNuke = state = buttonsettings[item->button];
             break;
         case btn_voxels:
-            gs.Voxels = state = buttonsettings[item->button];
+            usevoxels = state = buttonsettings[item->button];
             break;
         case btn_stats:
             gs.Stats = state = buttonsettings[item->button];

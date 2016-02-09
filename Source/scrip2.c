@@ -292,24 +292,11 @@ BOOL TokenAvailable (void)
 
 void LoadKVXFromScript( char *filename )
 {
-    long lNumber=0,lTile=0; // lNumber is the voxel no. and lTile is the editart tile being
-                            // replaced.
+    long lTile=0;           // lTile is the editart tile being replaced.
     char *sName;            // KVS file being loaded in.
-
-    int grabbed=0;          // Number of lines parsed
 
     sName = (char *)AllocMem(256);    // Up to 256 bytes for path
     ASSERT(sName != NULL);
-
-    // zero out the array memory with -1's for pics not being voxelized
-    memset(&aVoxelArray[0],-1,sizeof(struct TILE_INFO_TYPE)*MAXTILES);
-    for(grabbed = 0; grabbed < MAXTILES; grabbed++)
-    {
-        aVoxelArray[grabbed].Voxel = -1;
-        aVoxelArray[grabbed].Parental = -1;
-    }
-
-    grabbed = 0;
 
     // Load the file
     if(!LoadScriptFile(filename))
@@ -324,24 +311,17 @@ void LoadKVXFromScript( char *filename )
         lTile = atol(token);
 
         GetToken(FALSE);
-        lNumber = atol(token);
+        // ignore lNumber
 
         GetToken(FALSE);
         strcpy(sName,token);            // Copy the whole token as a file name and path
 
         // Load the voxel file into memory
-        if (!qloadkvx(lNumber,sName)) {
-            // Store the sprite and voxel numbers for later use
-            aVoxelArray[lTile].Voxel = lNumber; // Voxel num
-	}
+        if (!qloadkvx(nextvoxid,sName)) {
+            tiletovox[lTile] = nextvoxid++;
+        }
 
-	if (lNumber >= nextvoxid)	// JBF: so voxels in the def file append to the list
-		nextvoxid = lNumber + 1;
-
-        grabbed++;
-        ASSERT(grabbed < MAXSPRITES);
-
-    } while (script_p < scriptend_p);
+    } while (script_p < scriptend_p && nextvoxid < MAXVOXELS);
 
         FreeMem(scriptbuffer);
     FreeMem(sName);
@@ -361,6 +341,11 @@ void LoadPLockFromScript( char *filename )
     char *sName;            // KVS file being loaded in.
 
         int grabbed=0;          // Number of lines parsed
+
+    for(grabbed = 0; grabbed < MAXTILES; grabbed++)
+    {
+        aVoxelArray[grabbed].Parental = -1;
+    }
 
     sName = (char *)AllocMem(256);    // Up to 256 bytes for path
     ASSERT(sName != NULL);

@@ -382,11 +382,8 @@ long ParseNum (char *str)
 
 
 
-// voxelarray format is:
-//  	spritenumber, voxelnumber
-long aVoxelArray[MAXTILES];
-
 extern int nextvoxid;
+
 
 // Load all the voxel files using swvoxfil.txt script file
 // Script file format:
@@ -399,17 +396,11 @@ extern int nextvoxid;
 
 void LoadKVXFromScript( char *filename )
 {
-	long lNumber=0,lTile=0;	// lNumber is the voxel no. and lTile is the editart tile being
-							// replaced.
+	long lTile=0;			// lTile is the editart tile being replaced.
 	char *sName;			// KVS file being loaded in.
-
-	int grabbed=0;			// Number of lines parsed
 
 	sName = (char *)malloc(256);	// Up to 256 bytes for path
 	ASSERT(sName != NULL);
-
-	// zero out the array memory with -1's for pics not being voxelized
-	memset(aVoxelArray,-1,sizeof(aVoxelArray));
 
 	// Load the file
 	if (!LoadScriptFile(filename)) return;
@@ -423,24 +414,17 @@ void LoadKVXFromScript( char *filename )
 		lTile = atol(token);
 
 		GetToken(FALSE);
-		lNumber = atol(token);
+		// ignore lNumber
 
 		GetToken(FALSE);
 		strcpy(sName,token);			// Copy the whole token as a file name and path
 
 		// Load the voxel file into memory
-		if (!qloadkvx(lNumber,sName)) {
-			// Store the sprite and voxel numbers for later use
-			aVoxelArray[lTile] = lNumber;	// Voxel num
+		if (!qloadkvx(nextvoxid,sName)) {
+			tiletovox[lTile] = nextvoxid++;
 		}
 
-		if (lNumber >= nextvoxid)	// JBF: so voxels in the def file append to the list
-			nextvoxid = lNumber + 1;
-	
-		grabbed++;
-		ASSERT(grabbed < MAXSPRITES);
-
-	} while (script_p < scriptend_p);
+	} while (script_p < scriptend_p && nextvoxid < MAXVOXELS);
 
 	free(scriptbuffer); 
 	script_p = NULL;

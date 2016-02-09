@@ -238,7 +238,7 @@ void ReadGameSetup( int32 scripthandle )
     dummy = -1;
     dummy = -1;
     SCRIPT_GetNumber( scripthandle, "Options", "Voxels",&dummy);
-    if (dummy != -1) gs.Voxels = dummy;
+    if (dummy != -1) usevoxels = dummy;
 
     dummy = -1;
     SCRIPT_GetNumber( scripthandle, "Options", "Stats",&dummy);
@@ -343,7 +343,7 @@ void WriteGameSetup( int32 scripthandle)
    SCRIPT_PutNumber( scripthandle, "Controls", "MouseAiming",dummy,FALSE,FALSE);
 
 
-   dummy = gs.Voxels;
+   dummy = usevoxels;
    SCRIPT_PutNumber( scripthandle, "Options", "Voxels",dummy,FALSE,FALSE);
    dummy = gs.MouseAimingOn;
    SCRIPT_PutNumber( scripthandle, "Options", "MouseAimingOn",dummy,FALSE,FALSE);
