@@ -41,7 +41,7 @@
 #include "cache1d.h"
 #include "editor.h"
 
-#define VERSION "SWPBUILD - Version 1.3 beta 1"
+#define VERSION "SWPBUILD - Version 1.3 beta 3"
 #define REVISION "0"
 
 #include "baselayer.h"
