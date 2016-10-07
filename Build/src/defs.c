@@ -9,6 +9,8 @@
 // Added widescreen texture option
 //
 
+#include <strings.h>
+
 #include "build.h"
 #include "compat.h"
 #include "baselayer.h"

@@ -31,6 +31,8 @@ Prepared for public release: 03/28/2005 - Charlie Wiederhold, 3D Realms
 // Added no music if autosave
 //
 
+#include <strings.h>
+
 #define MAIN
 #define QUIET
 #include "build.h"

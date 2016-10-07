@@ -28,6 +28,8 @@ Prepared for public release: 03/28/2005 - Charlie Wiederhold, 3D Realms
 // Fixed animations
 //
 
+#include <strings.h>
+
 #include "build.h"
 #include "compat.h"
 #include "cache1d.h"
@@ -480,7 +482,7 @@ int LoadNewAnim(short anum, char *extn)
         num = "";
         if (i < 10)
             num = "0";
-        sprintf(fnam,"SWP%d0%s%d%s", anum+1, num, i, extn);
+        sprintf(fnam,"SWP%d0%s%ld%s", anum+1, num, i, extn);
         hicsetsubsttex(iTile,0,fnam,-1.0,0);
         tilesizx[iTile] = 320;
         tilesizy[iTile] = 200;

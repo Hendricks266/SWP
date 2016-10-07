@@ -924,6 +924,8 @@ VOID UpdateAltMiniHud(PLAYERp pp)
 
 #include "gamepics.h"
 
+//FIXME - *pic etc should be intptr_t for max safety
+
 void kloadhud(long *pic, long *bpl, long *xsiz, long *ysiz)
 {
 	char *buf;
@@ -1022,11 +1024,11 @@ void kloadriot(long *pic, long *bpl, long *xsiz, long *ysiz)
 
 void CreatePics()
 {
-    int i, j, xsiz, ysiz, tile, *picptr;
+    long i, j, xsiz, ysiz, tile, *picptr;
     palette_t *col;
 
     tile = 2472; // alt minihud
-    kloadhud((intptr_t *)&picptr, &j, &xsiz, &ysiz);
+    kloadhud((long *)&picptr, &j, &xsiz, &ysiz);
     faketiledata[tile] = Bmalloc(xsiz*ysiz);
 
     for (i=xsiz-1;i>=0;i--)
@@ -1034,11 +1036,11 @@ void CreatePics()
         for (j=ysiz-1;j>=0;j--)
         {
             col = (palette_t *)&picptr[j*xsiz+i];
-            if (col->f < 0)
-            {
-                faketiledata[tile][i*ysiz+j] = 255;  // transparent
-                continue;
-            }
+//          if (col->f > 127)
+//          {
+//            faketiledata[tile][i*ysiz+j] = 255;  // transparent
+//            continue;
+//          }
             faketiledata[tile][i*ysiz+j] = getclosestcol(col->b>>2,col->g>>2,col->r>>2);
         }
      }
@@ -1049,7 +1051,7 @@ void CreatePics()
     Bfree(picptr);
 
     tile = 1798; // alt uzi ammo
-    kloaduzi((intptr_t *)&picptr, &j, &xsiz, &ysiz);
+    kloaduzi((long *)&picptr, &j, &xsiz, &ysiz);
     faketiledata[tile] = Bmalloc(xsiz*ysiz);
 
     for (i=xsiz-1;i>=0;i--)
@@ -1057,11 +1059,11 @@ void CreatePics()
         for (j=ysiz-1;j>=0;j--)
         {
             col = (palette_t *)&picptr[j*xsiz+i];
-            if (col->f < 0)
-            {
-                faketiledata[tile][i*ysiz+j] = 255;  // transparent
-                continue;
-            }
+//          if (col->f > 127)
+//          {
+//            faketiledata[tile][i*ysiz+j] = 255;  // transparent
+//            continue;
+//          }
             faketiledata[tile][i*ysiz+j] = getclosestcol(col->b>>2,col->g>>2,col->r>>2);
         }
      }
@@ -1072,7 +1074,7 @@ void CreatePics()
     Bfree(picptr);
 
     tile = 1821; // alt riot ammo
-    kloadriot((intptr_t *)&picptr, &j, &xsiz, &ysiz);
+    kloadriot((long *)&picptr, &j, &xsiz, &ysiz);
     faketiledata[tile] = Bmalloc(xsiz*ysiz);
 
     for (i=xsiz-1;i>=0;i--)
@@ -1080,11 +1082,11 @@ void CreatePics()
         for (j=ysiz-1;j>=0;j--)
         {
             col = (palette_t *)&picptr[j*xsiz+i];
-            if (col->f < 0)
-            {
-                faketiledata[tile][i*ysiz+j] = 255;  // transparent
-                continue;
-            }
+//          if (col->f > 127)
+//          {
+//            faketiledata[tile][i*ysiz+j] = 255;  // transparent
+//            continue;
+//          }
             faketiledata[tile][i*ysiz+j] = getclosestcol(col->b>>2,col->g>>2,col->r>>2);
         }
      }

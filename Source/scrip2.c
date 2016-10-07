@@ -29,6 +29,8 @@ Prepared for public release: 03/28/2005 - Charlie Wiederhold, 3D Realms
 // Added custom animations
 //
 
+#include <strings.h>
+
 // scriplib.c
 #include "build.h"
 #include "compat.h"

@@ -263,7 +263,7 @@ static void initmultiplayers_reset(void)
 	// 192.168.1.2     game /n1 192.168.1.100  game /n1 192.168.1.100 192.168.1.4
 	// 192.168.1.100   game 192.168.1.2 /n1    game 192.168.1.2 /n1 192.168.1.4
 	// 192.168.1.4                             game 192.168.1.2 192.168.1.100 /n1
-long initmultiplayersparms(long argc, char **argv)
+long initmultiplayersparms(long argc, const char **argv)
 {
 	long i, j, daindex, portnum = NETPORT;
 	char *st;
@@ -437,7 +437,7 @@ long initmultiplayerscycle(void)
 	return 1;
 }
 
-void initmultiplayers (long argc, char **argv, char damultioption, char dacomrateoption, char dapriority)
+void initmultiplayers (long argc, const char **argv, char damultioption, char dacomrateoption, char dapriority)
 {
 	long i, j, k, otims;
 

@@ -357,6 +357,8 @@ Prepared for public release: 03/28/2005 - Charlie Wiederhold, 3D Realms
 // September 2010 - 4.3.2.4
 //
 
+#include <strings.h>
+
 #define MAIN
 #define QUIET
 #include "build.h"
@@ -1728,7 +1730,7 @@ VOID InitLevel(VOID)
             if (Level > 0)
             {
                 // user map is part of game - treat it as such
-                if (LevelSong[0] == 0)
+                if (LevelSong[0] == '\0')
                     strcpy(LevelSong, LevelInfo[Level].SongName);
                 strcpy(LevelName, LevelInfo[Level].LevelName);
                 UserMapName[0] = '\0';
@@ -1737,7 +1739,7 @@ VOID InitLevel(VOID)
         else
         {
             strcpy(LevelName, LevelInfo[Level].LevelName);
-            if (LevelSong[0] == NULL)
+            if (LevelSong[0] == '\0')
                 strcpy(LevelSong, LevelInfo[Level].SongName);
             if (bGrp)
             {
@@ -3465,7 +3467,7 @@ VOID StatScreen(PLAYERp mpp)
         if (gs.NetGameType > 1)
             sprintf(ds,"%d", kills[i]);//pp->Kills);
         else
-            sprintf(ds,"%d/%d", kills[i], gNet.KillLimit);
+            sprintf(ds,"%d/%ld", kills[i], gNet.KillLimit);
         DisplayMiniBarSmString(mpp, x-8, y, 0, ds);
 
         y += STAT_OFF_Y;
@@ -4072,10 +4074,10 @@ void CommandLineHelp(void)
 
 char *grpfile = "sw.grp";
 
-VOID CheckCommandLine(long argc, char *argv[])
+VOID CheckCommandLine(long argc, const char *argv[])
 {
     int i, k;
-    char TempStr[255];
+    char TempStr[4096];
     char type;
     int cnt = 0;
     extern long MovesPerPacket;
@@ -4092,10 +4094,12 @@ VOID CheckCommandLine(long argc, char *argv[])
        initprintf("Commandline: %s\n", TempStr);
        }
 
+	char argstr[256];
     for (cnt = 1; cnt < argc; cnt++)
         {
-	    char *arg = argv[cnt];   // argv[1] = /net | argv[2] = /n1 | argv[3] = 192.168.0.2 | argv[4] = 192.168.0.4
-        if (*arg != '/' && *arg != '-') continue;
+        strcpy(argstr, argv[cnt]); // fix const issues with string comparison fns
+	    char *arg = &argstr[0];
+		if (*arg != '/' && *arg != '-') continue;
 	    if (firstnet > 0)
 	       {
 		   arg++;
@@ -4663,7 +4667,7 @@ VOID CheckCommandLine(long argc, char *argv[])
 
 //--------------------------------------------------------------------------
 
-long app_main(long argc, char *argv[])
+long app_main(long argc, const char *argv[])
 {
     int i;
     int stat, nexti;

@@ -99,6 +99,8 @@ Prepared for public release: 03/28/2005 - Charlie Wiederhold, 3D Realms
 // Added -by detection for bypass press(x)
 //
 
+#include <strings.h>
+
 #include "build.h"
 #include "compat.h"
 #include "osd.h"
@@ -189,9 +191,9 @@ BOOL MNU_CheckMapStatus(MenuItem *item);
 BOOL MNU_CheckStart(MenuItem *item);
 BOOL MNU_CheckOption(MenuItem *item);
 BOOL MNU_HostingCheck(MenuItem *item);
-BOOL MNU_DoPlayerName(void);
+BOOL MNU_DoPlayerName(UserCall call, MenuItem * item);
 BOOL MNU_PlayerName(void);
-BOOL MNU_DoIpAddress(void);
+BOOL MNU_DoIpAddress(UserCall call, MenuItem * item);
 void MNU_ClientDisplay(void);
 void MNU_DrawOptionString(short x, short y, char *string, short shade, short pal);
 
@@ -227,7 +229,7 @@ BOOL MenuInputMode = FALSE;
 SHORT MenuTextShade = 0;
 BOOL passwordvalid = FALSE;
 BOOL MNU_HurtTeammateCheck(MenuItem *item);
-BOOL MNU_TeamPlayChange(MenuItem *item);
+BOOL MNU_TeamPlayChange(void);
 
 extern BOOL bHosting;
 extern int32 NoHrp;
@@ -302,7 +304,7 @@ static void UpdateValidModes(int bpp, int fs)
 	}
 }
 
-static BOOL ApplyModeSettings(MenuItem *item)
+static BOOL ApplyModeSettings(void)
 {
 	int lastx, lasty, lastbpp, lastfs;
 	int newx, newy, newbpp, newfs;
@@ -495,7 +497,7 @@ BOOL MNU_MouseSetupCustom(UserCall call, MenuItem *item);
 MenuGroup mousesetupgroup = {0, 0, NULL, NULL, 0, 0, m_defshade, MNU_MouseSetupCustom, NULL, 0};
 
 BOOL MNU_MapGameInfo(UserCall call, MenuItem *item);
-BOOL MNU_MapKeyIn(void);
+BOOL MNU_MapKeyIn(UserCall call, MenuItem *item);
 BOOL MNU_MapStartUp(void);
 
 MenuItem skill_i[] =
@@ -533,7 +535,7 @@ MenuItem maps_i[] =
     };
 MenuGroup usermapgroup = {100, 5, "^User Maps", maps_i, pic_newgametitl, 0, m_defshade, MNU_MapGameInfo, MNU_MapKeyIn, 0};
 
-BOOL MNU_MusicKeyIn(void);
+BOOL MNU_MusicKeyIn(UserCall call, MenuItem *item);
 BOOL MNU_SetMusic(void);
 
 MenuItem music_i[] =
@@ -2759,7 +2761,7 @@ BOOL MNU_LoadSaveDraw(UserCall call, MenuItem_p item)
        sprintf(SaveGameInfo3, "Current Map: %s", CurrMapName );
        MNU_DrawString(SS_XSTART - 97-40, SS_YSTART + 100 + 45, SaveGameInfo3, 1, 23);
        second_tics = (PlayClock/120);
-       sprintf(SaveGameInfo4, "Time: %d mins - %d secs", (second_tics/60), (second_tics%60));
+       sprintf(SaveGameInfo4, "Time: %ld mins - %ld secs", (second_tics/60), (second_tics%60));
        MNU_DrawString(SS_XSTART - 38-40, SS_YSTART + 100 + 55, SaveGameInfo4, 1, 23);
        if (strlen(LevelInfo[Level].Description) > 3)
        {
@@ -3005,10 +3007,24 @@ BOOL MNU_CoopPlayCheck(MenuItem *item)
     return (TRUE);
 }
 
-BOOL MNU_TeamPlayChange(MenuItem *item)
+// Temporary hack for MNU_TeamPlayChange(),
+// as it requires a menu item. This sort of
+// thing should really be done the way DOOM
+// does the frame table (union of stuff like
+// actionf_v, actionf_p1, etc); but for this
+// one exception, it will have to do for now.
+//
+// Set in function MNU_DoItem() whenever
+// MNU_TeamPlayChange() might be called.
+MenuItem *itm_TeamPlayChange = NULL;
+
+BOOL MNU_TeamPlayChange(void)
 {
     if (CommEnabled && !bHosting)
-        SET(item->flags, mf_disabled);
+	{
+        SET(itm_TeamPlayChange->flags, mf_disabled);
+		itm_TeamPlayChange = NULL;
+	}
     // if team play changes then do a pre process again
     MNU_ItemPreProcess(currentmenu);
     return (TRUE);
@@ -4339,6 +4355,7 @@ static void MNU_UpLevel(void)
 ////////////////////////////////////////////////
 // Do a menu item action
 ////////////////////////////////////////////////
+
 static void MNU_DoItem(void)
 {
     MenuItem *item;
@@ -4356,6 +4373,8 @@ static void MNU_DoItem(void)
         if (TEST(item->flags, mf_disabled))
             return;
     }
+
+	itm_TeamPlayChange = item; // just in case
 
     switch (item->type)
     {
@@ -4395,7 +4414,10 @@ static void MNU_DrawItemIcon(MenuItem * item)
     if  (gs.SwapYinyang)
          yin = pic_shuriken1;
 
-    if (currentmenu->text > 0 && menucmp(sText, "^Episode") != 0 && menucmp(sText, "^Skill") != 0 && menucmp(sText, "^Options") != 0)
+    if ((intptr_t)currentmenu->text > 0 &&
+		menucmp(sText, "^Episode") != 0 &&
+		menucmp(sText, "^Skill") != 0 &&
+		menucmp(sText, "^Options") != 0)
         scale = MZ - 32768;
     else
     if (menucmp(sText, "^Episode") == 0 || menucmp(sText, "^Skill") == 0)
@@ -5463,7 +5485,7 @@ BOOL MNU_IpAddress(void)
     return (TRUE);
 }
 
-BOOL MNU_DoIpAddress(void)
+BOOL MNU_DoIpAddress(UserCall call, MenuItem * item)
 {
     signed char MNU_InputString(char *, short);
     char tmp[sizeof(MessageInputString)];
@@ -5539,7 +5561,7 @@ BOOL MNU_PlayerName(void)
     return (TRUE);
 }
 
-BOOL MNU_DoPlayerName(void)
+BOOL MNU_DoPlayerName(UserCall call, MenuItem * item)
 {
     signed char MNU_InputString(char *, short);
     char tmp[sizeof(MessageInputString)];
@@ -5862,7 +5884,7 @@ BOOL MNU_StartMultiGame(void)
     return (TRUE);
 }
 
-BOOL MNU_MapKeyIn(void)
+BOOL MNU_MapKeyIn(UserCall call, MenuItem *item)
 {
     short i, j;
 
@@ -5964,7 +5986,7 @@ BOOL MNU_CDMusicKeyIn(void)
 	return TRUE;
 }
 
-BOOL MNU_MusicKeyIn(void)
+BOOL MNU_MusicKeyIn(UserCall call, MenuItem *item)
 {
     short i, j;
     long zero = 0;
@@ -6078,7 +6100,7 @@ void MNU_ClientDisplay(void)
      MNU_DrawString(OPT_XS+20, OPT_LINE(3), ds, 1, mPal);
     }
 
-    sprintf(ds,"%d",gNet.KillLimit);
+    sprintf(ds,"%ld",gNet.KillLimit);
     MNU_DrawString(OPT_XSIDE+101, OPT_LINE(4), ds, 1, mPal);
 
     sprintf(ds,"%d Mins",TimeLimitTable[gNet.MaxTime]); //gNet.TimeLimit/120/60

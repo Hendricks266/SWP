@@ -218,6 +218,9 @@ char *MV_ErrorString
          ErrorString = "Null record function passed to MV_StartRecording.";
          break;
 
+	  case MV_NotImplemented:
+		 ErrorString = "Function not (yet) implemented";
+
       default :
          ErrorString = "Unknown Multivoc error code.";
          break;
@@ -605,7 +608,7 @@ playbackstatus MV_GetNextVOCBlock
          case 0 :
             // End of data
             if ( ( voice->LoopStart == NULL ) ||
-               ( voice->LoopStart >= ( ptr - 4 ) ) )
+               ( voice->LoopStart >= (char *)( ptr - 4 ) ) )
                {
                voice->Playing = FALSE;
                done = TRUE;
@@ -1733,7 +1736,7 @@ void MV_SetReverbDelay
    int maxdelay;
 
    maxdelay = MV_GetMaxReverbDelay();
-   MV_ReverbDelay = max( MixBufferSize, min( delay, maxdelay ) );
+   MV_ReverbDelay = max( MixBufferSize, (unsigned)min( delay, maxdelay ) );
    MV_ReverbDelay *= MV_SampleSize;
    }
 
@@ -2308,7 +2311,7 @@ int MV_PlayLoopedWAV
       length     /= 2;
       }
 
-   loopend    = min( loopend, data->size );
+   loopend    = min( loopend, (long)data->size );
    absloopend = min( absloopend, length );
 
    voice->Playing     = TRUE;
@@ -2327,7 +2330,7 @@ int MV_PlayLoopedWAV
    voice->LoopEnd     = voice->NextBlock + loopend;
    voice->LoopSize    = absloopend - absloopstart;
 
-   if ( ( loopstart >= data->size ) || ( loopstart < 0 ) )
+   if ( ( loopstart >= (long)data->size ) || ( loopstart < 0 ) )
       {
       voice->LoopStart = NULL;
       voice->LoopEnd   = NULL;
@@ -2512,6 +2515,8 @@ int MV_PlayLoopedOgg
    )
 {
     //MV_PlayLoopedVorbis(ptr, 0, loopstart, loopend, pitchoffset, vol, left, right, priority, callbackval);
+	MV_SetErrorCode( MV_NotImplemented );
+    return( MV_Error );
 }
 
 /*---------------------------------------------------------------------

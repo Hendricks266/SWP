@@ -34,6 +34,7 @@ Modifications for JonoF's port by Jonathon Fowler (jonof@edgenetwk.com)
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
+#include <stdint.h>
 #include <mmsystem.h>
 
 static HMIDISTRM hmido = (HMIDISTRM)-1;
@@ -116,7 +117,7 @@ void CALLBACK MPU_MIDICallback(HMIDIOUT handle, UINT uMsg, DWORD dwInstance, DWO
 		case MOM_DONE:
 			midiOutUnprepareHeader((HMIDIOUT)handle, (MIDIHDR*)dwParam1, sizeof(MIDIHDR));
 			for (i=0;i<NUMBUFFERS;i++) {
-				if (dwParam1 == (long)&bufferheaders[i]) {
+				if (dwParam1 == (uintptr_t)&bufferheaders[i]) {
 					eventcnt[i] = 0;	// marks the buffer as free
 //					printf("Finished buffer %d\n",i);
 					_MPU_BuffersWaiting--;
@@ -259,7 +260,7 @@ int MPU_Init
 
 	if (midiOutGetDevCaps(mididevice, &midicaps, sizeof(MIDIOUTCAPS)) != MMSYSERR_NOERROR) return MPU_Error;
 
-	if (midiStreamOpen(&hmido,&mididevice,1,(DWORD)MPU_MIDICallback,0L,CALLBACK_FUNCTION) != MMSYSERR_NOERROR) return(MPU_Error);
+	if (midiStreamOpen(&hmido,(LPUINT)&mididevice,1,(DWORD)MPU_MIDICallback,0L,CALLBACK_FUNCTION) != MMSYSERR_NOERROR) return(MPU_Error);
 
 	return( MPU_Ok );
    }
@@ -468,8 +469,7 @@ void MPU_SetVolume(int volume)
 
 int MPU_GetVolume(void)
 {
-	if (mididevice < 0) return 0;
-
+//	if (mididevice < 0) return 0;
 	return 0;
 }
 
