@@ -7589,7 +7589,8 @@ DoPlayerRun(PLAYERp pp)
     }
 
 
-int PlayerStateControl(SHORT SpriteNum)
+VOID
+PlayerStateControl(SHORT SpriteNum)
     {
     USERp u;
 
@@ -7645,7 +7646,7 @@ int PlayerStateControl(SHORT SpriteNum)
         if (u->State->Animator)
             (*u->State->Animator) (SpriteNum);
 
-    return (0);
+    return;
     }
 
 VOID

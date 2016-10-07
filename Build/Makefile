@@ -61,6 +61,7 @@ RC=windres
 AR=ar
 RANLIB=ranlib
 OURCFLAGS=$(debug) -W -Wall -Wimplicit -Wno-char-subscripts -Wno-unused \
+	-Wno-format -Wno-pointer-sign -Wno-return-type -Wno-sign-compare -Wno-type-limits -Wno-unused-but-set-parameter -Wno-unused-parameter \
 	-fno-pic -funsigned-char -fno-strict-aliasing -DNO_GCC_BUILTINS \
 	-DKSFORBUILD -I$(INC) -Werror-implicit-function-declaration
 OURCXXFLAGS=-fno-exceptions -fno-rtti

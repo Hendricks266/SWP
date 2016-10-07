@@ -28,6 +28,8 @@
 #error winlayer.c is for Windows only.
 #endif
 
+#include <strings.h>
+
 #define DIRECTINPUT_VERSION 0x0700
 #define DIRECTDRAW_VERSION  0x0600
 
@@ -71,7 +73,7 @@
 int   _buildargc = 0;
 const char **_buildargv = NULL;
 static char *argvbuf = NULL;
-extern long app_main(long argc, char *argv[]);
+extern long app_main(long argc, const char *argv[]);
 
 // Windows crud
 static HINSTANCE hInstance = 0;
@@ -371,12 +373,12 @@ static void print_os_version(void)
 
 int DeleteAutosave(short iEnd, char *gsv)
 {
-    FILE *fil;
+	int handle;
 
-    fil = kopen4load(gsv, 0);
-    if (fil)
+    handle = kopen4load(gsv, 0);
+    if (handle)
     {
-        kclose(fil);
+        kclose(handle);
         DeleteFile(gsv);
         if (iEnd == 1)
             initprintf("  - Game End: Autosave deleted.\n");
@@ -445,7 +447,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR lpCmdLine, int nC
 
     startwin_open();
 
-    _buildargc = SetCommandLine(argvbuf); //&_buildargv);
+    _buildargc = SetCommandLine(argvbuf);
 
 	// pipe standard outputs to files
 	if ((argp = Bgetenv("BUILD_LOGSTDOUT")) != NULL)
@@ -573,7 +575,7 @@ int SetCommandLine(char *argvbufx)
 		}
 		    *wp = 0;
 
-		_buildargv = (char**)malloc(sizeof(char*)*x); //_buildargc);
+		_buildargv = (const char**)malloc(sizeof(char*)*x);
 		wp = argvbufx;
 		for (i=0; i<x; i++,wp++)
 		{

@@ -292,7 +292,7 @@ typedef struct MENU_ITEM
 
 typedef struct
     {
-    long x, y;                          // Menu x,y position on screen.
+    long x, y;                          // Menu x,y position on screen.`
     char *text;
     MenuItem_p items;                   // Array of menu items for this menu.
     short titlepic;                   // Used to draw title on menu with.
@@ -338,9 +338,9 @@ BOOL MNU_GetSaveCustom(void);
 BOOL MNU_ParentalCustom(void);
 
 BOOL MNU_PlayerName(void);
-BOOL MNU_DoPlayerName(void);
+BOOL MNU_DoPlayerName(UserCall call, MenuItem * item);
 BOOL MNU_IpAddress(void);
-BOOL MNU_DoIpAddress(void);
+BOOL MNU_DoIpAddress(UserCall call, MenuItem * item);
 BOOL MNU_StartWBGame(void);
 BOOL MNU_CheckStatus(MenuItem *item);
 BOOL MNU_CheckMulti(MenuItem *item);

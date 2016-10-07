@@ -908,12 +908,12 @@ void addconquote(char *daquote);
 // Console
 //
 ///////////////////////////////////////////////////////////////////////////////////////////
-void CON_Message(char *message, ...);
-void CON_ConMessage(char *message, ...);
-void CON_StoreArg(char *userarg);
-BOOL CON_CheckParm(char *userarg);
+void CON_Message(const char *message, ...);
+void CON_ConMessage(const char *message, ...);
+void CON_StoreArg(const char *userarg);
+BOOL CON_CheckParm(const char *userarg);
 void CON_CommandHistory(signed char dir);
-BOOL CON_AddCommand(char *command, /*BOOL*/void (*function)(void));
+BOOL CON_AddCommand(const char *command, /*BOOL*/void (*function)(void));
 void CON_ProcessUserCommand( void );
 void CON_InitConsole( void );
 

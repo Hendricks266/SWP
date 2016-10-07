@@ -54,7 +54,8 @@ enum MV_Errors
    MV_IrqFailure,
    MV_DMAFailure,
    MV_DMA16Failure,
-   MV_NullRecordFunction
+   MV_NullRecordFunction,
+   MV_NotImplemented
    };
 
 char *MV_ErrorString( int ErrorNumber );

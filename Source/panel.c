@@ -1070,12 +1070,12 @@ WeaponOK(PLAYERp pp)
     unsigned wpn_ndx=0;
 
     if ((unsigned)pp->PlayerSprite >= MAXSPRITES)
-        return;
+        return(FALSE);
 
     u = User[pp->PlayerSprite];
 
     if (u == NULL)
-        return;
+        return(FALSE);
 
     // sword
     if (DamageData[u->WeaponNum].max_ammo == -1)
@@ -1971,7 +1971,7 @@ pStarRest(PANEL_SPRITEp psp)
             DoPlayerSpriteThrow(psp->PlayerP);
             }
         } else
-            WeaponOK(psp->PlayerP);
+            (void) WeaponOK(psp->PlayerP);
     }
 
 
@@ -2766,7 +2766,7 @@ pUziRest(PANEL_SPRITEp psp)
 
         pSetState(psp, psp->ActionState);
         } else
-            WeaponOK(psp->PlayerP);
+            (void) WeaponOK(psp->PlayerP);
     }
 
 void pUziAction(PANEL_SPRITEp psp)
@@ -3519,7 +3519,7 @@ void pShotgunRest(PANEL_SPRITEp psp)
             if (!WeaponOK(psp->PlayerP))
                 return;
         } else
-            WeaponOK(psp->PlayerP);
+            (void) WeaponOK(psp->PlayerP);
 }
 
 void pShotgunRestTest(PANEL_SPRITEp psp)
@@ -3881,7 +3881,7 @@ pRailOkTest(PANEL_SPRITEp psp)
     if (pWeaponHideKeys(psp, ps_RailHide))
         return;
 
-    WeaponOK(psp->PlayerP);
+    (void) WeaponOK(psp->PlayerP);
     }
 
 void
@@ -3916,7 +3916,7 @@ pRailRest(PANEL_SPRITEp psp)
                 pSetState(psp, ps_RailFireEMP);
             }
         } else
-            WeaponOK(psp->PlayerP);
+            (void) WeaponOK(psp->PlayerP);
     }
 
 void
@@ -4221,7 +4221,7 @@ pHotheadRestTest(PANEL_SPRITEp psp)
                 if (psp->PlayerP->WpnAmmo[WPN_HOTHEAD] < 10)
                     {
                     psp->PlayerP->WpnFlameType = 0;
-                    WeaponOK(psp->PlayerP);
+                    (void) WeaponOK(psp->PlayerP);
                     }
 
                 DoPlayerChooseYell(psp->PlayerP);
@@ -4320,7 +4320,7 @@ pHotheadRest(PANEL_SPRITEp psp)
            if (psp->PlayerP->WpnAmmo[WPN_HOTHEAD] < 10)
                {
                psp->PlayerP->WpnFlameType = 0;
-               WeaponOK(psp->PlayerP);
+               (void) WeaponOK(psp->PlayerP);
                }
 
             DoPlayerChooseYell(psp->PlayerP);
@@ -4330,7 +4330,7 @@ pHotheadRest(PANEL_SPRITEp psp)
             psp->over[0].yoff = HOTHEAD_FINGER_YOFF-10;
             }
         } else
-            WeaponOK(psp->PlayerP);
+            (void) WeaponOK(psp->PlayerP);
     }
 
 void
@@ -4894,7 +4894,7 @@ pMicroRest(PANEL_SPRITEp psp)
             if (psp->PlayerP->WpnAmmo[WPN_MICRO] <= 0 && psp->PlayerP->WpnRocketType != 2)
                 {
                 psp->PlayerP->WpnRocketNuke = 0;
-                WeaponOK(psp->PlayerP);
+                (void) WeaponOK(psp->PlayerP);
                 psp->PlayerP->WpnRocketNuke = 1;
                 return;
                 }
@@ -4913,7 +4913,7 @@ pMicroRest(PANEL_SPRITEp psp)
                 }
             }
         } else
-            WeaponOK(psp->PlayerP);
+            (void) WeaponOK(psp->PlayerP);
     }
 
 void
@@ -5213,7 +5213,7 @@ pHeartRest(PANEL_SPRITEp psp)
     else
         {
         FLAG_KEY_RESET(psp->PlayerP, SK_SHOOT);
-        WeaponOK(psp->PlayerP);
+        (void) WeaponOK(psp->PlayerP);
         }
     }
 
@@ -5770,7 +5770,7 @@ pGrenadeRest(PANEL_SPRITEp psp)
             pSetState(psp, psp->ActionState);
             }
         } else
-            WeaponOK(psp->PlayerP);
+            (void) WeaponOK(psp->PlayerP);
     }
 
 void
@@ -6010,7 +6010,7 @@ pMineRest(PANEL_SPRITEp psp)
             pSetState(psp, psp->ActionState);
             }
         } else
-            WeaponOK(psp->PlayerP);
+            (void) WeaponOK(psp->PlayerP);
     }
 
 void

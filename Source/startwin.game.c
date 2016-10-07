@@ -32,6 +32,8 @@
 
 #include "startdlg.h"
 
+#include <strings.h>
+
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <windowsx.h>
@@ -273,9 +275,9 @@ void PopulateMusic(void)
 		ComboBox_SetCurSel(GetDlgItem(pages[TAB_MEDA], IDMIDIDEV),0);
 		musicon = FALSE;
 	}
-	else
+	else // (MusicDevice is zero or positive)
 	{
-		if (MusicDevice >= nummididevs)
+		if ((uint32)MusicDevice >= nummididevs)
 		    MusicDevice = nummididevs-1;
 		Button_SetCheck(GetDlgItem(pages[TAB_MEDA], IDMUSICENABLE), TRUE);
 		EnableWindow(GetDlgItem(pages[TAB_MEDA], IDMIDIDEV), TRUE);

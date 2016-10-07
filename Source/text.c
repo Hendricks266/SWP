@@ -287,7 +287,7 @@ VOID DisplayMiniBarNumber(PLAYERp pp, short xs, short ys, int number)
     short i, j, k, p, c;
     char b[10];
 
-	Bsnprintf(b,10,"%ld",number);
+	Bsnprintf(b,10,"%d",number);
     i = strlen(b);
     j = 0;
 

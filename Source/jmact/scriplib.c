@@ -40,6 +40,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "file_lib.h"
 #include "_scrplib.h"
 #include <string.h>
+#include <strings.h>
 #include <stdio.h>
 #include <ctype.h>
 

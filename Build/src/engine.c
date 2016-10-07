@@ -18,6 +18,8 @@
 
 #define ENGINE
 
+#include <strings.h>
+
 #include "compat.h"
 #include "build.h"
 #include "pragmas.h"

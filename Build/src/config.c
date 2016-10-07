@@ -1,6 +1,8 @@
 // Evil and Nasty Configuration File Reader for KenBuild
 // by Jonathon Fowler
 
+#include <strings.h>
+
 #include "compat.h"
 #include "build.h"
 #include "editor.h"
