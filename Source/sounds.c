@@ -30,6 +30,8 @@ Prepared for public release: 03/28/2005 - Charlie Wiederhold, 3D Realms
 // Fixed sound crashes
 //
 
+#include <strings.h>
+
 #include <math.h>
 #include "build.h"
 #include "compat.h"

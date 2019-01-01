@@ -12,6 +12,8 @@
 
 #define WITHKPLIB
 
+#include <strings.h>
+
 #include "compat.h"
 #include "cache1d.h"
 #include "pragmas.h"
@@ -22,7 +24,7 @@
 
 	//Insert '|' in front of filename
 	//Doing this tells kzopen to load the file only if inside a .ZIP file
-static long kzipopen(char *filnam)
+static long kzipopen(const char *filnam)
 {
 	unsigned int i;
 	char newst[BMAX_PATH+4];
@@ -430,7 +432,7 @@ static char filenamsav[MAXOPENFILES][260];
 static long kzcurhand = -1;
 #endif
 
-long initgroupfile(char *filename)
+long initgroupfile(const char *filename)
 {
 	char buf[16];
 	long i, j, k;
@@ -567,7 +569,7 @@ void uninitgroupfile(void)
 	}
 }
 
-long kopen4load(char *filename, char searchfirst)
+long kopen4load(const char *filename, char searchfirst)
 {
 	long i, j, k, fil, newhandle;
 	char bad, *gfileptr;

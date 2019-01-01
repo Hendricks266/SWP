@@ -20748,7 +20748,7 @@ BOOL TestDontStick(short SpriteNum, short hitsect, short hitwall, long hitz)
         {
         ASSERT(SpriteNum>=0);
         hitwall = NORM_WALL(u->ret);
-        hitsect = sp->sectnum;
+        // hitsect = sp->sectnum; // Not used so commented out - MH
         }
 
     wp = &wall[hitwall];

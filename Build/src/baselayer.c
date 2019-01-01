@@ -1,3 +1,5 @@
+#include <strings.h>
+
 #include "compat.h"
 #include "osd.h"
 #include "build.h"

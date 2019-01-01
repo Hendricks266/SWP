@@ -27,7 +27,7 @@ int addsearchpath(const char *p);
 SWPVOID checkforhrp(char *pth, short iMap);
 void LoadDefFiles(short iTyp);
 void GetName(char *sPath, char *sTemp);
-long initgroupfile(char *filename);
+long initgroupfile(const char *filename);
 int checksearchpath(char *pth);
 void AutoSaveGame(short disp, int iTime);
 void GetGameFiles(char *gpath);

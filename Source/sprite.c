@@ -36,6 +36,8 @@ Prepared for public release: 03/28/2005 - Charlie Wiederhold, 3D Realms
 // Added autosave for key pickup
 //
 
+#include <strings.h>
+
 #include "build.h"
 #include "compat.h"
 
@@ -6980,7 +6982,7 @@ SpriteControl(VOID)
     {
         u = User[i];
 
-        if (u <= 0)
+        if ((intptr_t)u <= 0)
             continue;
 
             if (u->Tics)

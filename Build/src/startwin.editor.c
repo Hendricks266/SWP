@@ -5,6 +5,8 @@
 #error Only for Windows
 #endif
 
+#include <strings.h>
+
 #include "build.h"
 #include "editor.h"
 #include "winlayer.h"

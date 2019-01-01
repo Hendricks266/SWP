@@ -1412,10 +1412,10 @@ VOID PrintLocationInfo(PLAYERp pp)
             sprintf(buffer, "POSZ : %ld", pp->posz);
             printext256(x, y, 1, -1, buffer, 0);
             y += J_STEP;
-            sprintf(buffer, "ANGL : %ld", (LONG) pp->pang);
+            sprintf(buffer, "ANGL : %d", pp->pang);
             printext256(x, y, 1, -1, buffer, 0);
             y += J_STEP;
-            sprintf(buffer, "SECT : %ld", pp->cursectnum);
+            sprintf(buffer, "SECT : %d", pp->cursectnum);
             printext256(x, y, 1, -1, buffer, 0);
             y += J_STEP;
             }

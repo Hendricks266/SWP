@@ -2,6 +2,8 @@
 // for the Build Engine
 // by Jonathon Fowler (jonof@edgenetwk.com)
 
+#include <strings.h>
+
 #include "build.h"
 #include "osd.h"
 #include "compat.h"

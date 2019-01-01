@@ -55,6 +55,8 @@ Prepared for public release: 03/28/2005 - Charlie Wiederhold, 3D Realms
 // Added LoopFactor
 //
 
+#include <strings.h>
+
 #include "compat.h"
 
 #include "settings.h"
@@ -728,7 +730,7 @@ int32 CONFIG_ReadSetup( void )
 
       for (i=0; i<8; i++)
           {
-          Bsprintf(buf,"IPAddress_%ld",i+1);
+          Bsprintf(buf,"IPAddress_%d",i+1);
           SCRIPT_GetString( scripthandle, "Network", buf, IPAddressArg[i]);
           }
 
@@ -857,7 +859,7 @@ void CONFIG_WriteSetup( void )
    }
 
    SCRIPT_GetString(scripthandle, "Controls", "MouseButton0",buf);   // always fails on initial startup wxyz
-   if (buf[0] == NULL)
+   if (buf[0] == '\0')
        SCRIPT_PutString(scripthandle, "Controls", "MouseButton0", "Fire");
 
    for (dummy=0;dummy<MAXMOUSEAXES;dummy++)
@@ -910,7 +912,7 @@ void CONFIG_WriteSetup( void )
 
    for (i=0; i<8; i++)
        {
-       Bsprintf(buf,"IPAddress_%ld",i+1);
+       Bsprintf(buf,"IPAddress_%d",i+1);
        SCRIPT_PutString( scripthandle, "Network", buf, IPAddressArg[i]);
        }
    SCRIPT_PutNumber(scripthandle, "Network", "LastIpUsed", LastIpUsed, FALSE, FALSE);

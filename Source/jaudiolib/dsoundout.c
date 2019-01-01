@@ -261,7 +261,7 @@ int DSOUND_Init(int soundcard, int mixrate, int numchannels, int samplebits, int
 		return DSOUND_Error;
 	}
 
-	hr = IDirectSoundBuffer_QueryInterface(lpDSBSecondary, &IID_IDirectSoundNotify, &lpDSNotify);
+	hr = IDirectSoundBuffer_QueryInterface(lpDSBSecondary, &IID_IDirectSoundNotify, (void **)&lpDSNotify);
 	if (hr != DS_OK) {
 		DSOUND_Shutdown();
 		DSOUND_SetErrorCode(DSOUND_FailedQueryNotify);
@@ -399,7 +399,14 @@ static DWORD WINAPI isr(LPVOID parm)
 	while (1) {
 		rv = WaitForMultipleObjects(1+_DSOUND_NumBuffers, handles, FALSE, INFINITE);
 
-		if (!(rv >= WAIT_OBJECT_0 && rv <= WAIT_OBJECT_0+1+_DSOUND_NumBuffers)) return -1;
+		// Failed?
+		if (rv == 0xFFFFFFFF) return 0xFFFFFFFF; // NOT -1 -- DWORD is unsigned!!
+
+		// Remove dependency on actual value of WAIT_OBJECT_*
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wtype-limits"
+		if (!(rv >= WAIT_OBJECT_0 && rv <= WAIT_OBJECT_0+1+(unsigned)_DSOUND_NumBuffers)) return 0xFFFFFFFF;
+#pragma GCC diagnostic pop
 
 		if (rv == WAIT_OBJECT_0) {
 			// we've been asked to finish up

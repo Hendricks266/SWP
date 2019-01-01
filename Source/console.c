@@ -74,7 +74,7 @@ extern BOOL QuitFlag;
 // FUNCTION PROTOTYPES ///////////////////////////////////////////////////////////////////////
 void CON_ProcessOptions( void );
 void CON_ClearConsole( void );
-BYTE CON_CommandCmp(char *str1, char *str2, long len);
+BYTE CON_CommandCmp(const char *str1, const char *str2, long len);
 void CheatInput(void);
 
 // Modify actor routines
@@ -107,7 +107,7 @@ void CON_DumpSoundList( void );
 
 typedef struct
 {
-    char *command;              // Text string representing the command that calls this function
+    const char *command;        // Text string representing the command that calls this function
     void (*function)(void);     // Function assigned to the command, take no parameters
 
 } CON_COMMAND, *CON_COMMANDp;
@@ -206,10 +206,10 @@ BYTE con_message[80]; // Holds the current console message to send to adduserquo
 //
 // Frank's neato input string checker, useful for my stuff too.
 //
-BYTE CON_CommandCmp(char *str1, char *str2, long len)
+BYTE CON_CommandCmp(const char *str1, const char *str2, long len)
 {
-    char *cp1 = str1;
-    char *cp2 = str2;
+    const char *cp1 = str1;
+    const char *cp2 = str2;
 
     do
     {
@@ -230,7 +230,7 @@ BYTE CON_CommandCmp(char *str1, char *str2, long len)
     return(TRUE);
 }
 
-BOOL IsCommand(char *str)
+BOOL IsCommand(const char *str)
     {
     int i;
     char first[512];
@@ -257,7 +257,7 @@ BOOL IsCommand(char *str)
 // Sends a message to the user quote array
 //
 
-void CON_Message(char *message, ...)
+void CON_Message(const char *message, ...)
 {
     va_list argptr;
 
@@ -273,7 +273,7 @@ void CON_Message(char *message, ...)
 // Sends a message to the console quote array
 //
 
-void CON_ConMessage(char *message, ...)
+void CON_ConMessage(const char *message, ...)
 {
     va_list argptr;
 
@@ -288,7 +288,7 @@ void CON_ConMessage(char *message, ...)
 //
 // Stores user arguments passed in on the command line for later inspection
 //
-void CON_StoreArg(char *userarg)
+void CON_StoreArg(const char *userarg)
 {
     if(con_argnum < MAX_USER_ARGS)
     {
@@ -301,7 +301,7 @@ void CON_StoreArg(char *userarg)
 //
 // Checkes the user command array to see if user did in fact pass in a particular argument
 //
-BOOL CON_CheckParm(char *userarg)
+BOOL CON_CheckParm(const char *userarg)
 {
     SHORT i;
 
@@ -328,7 +328,7 @@ void CON_CommandHistory(signed char dir)
     strcpy(MessageInputString, command_history[curr_history]);
 }
 
-void CON_AddHistory(char *commandstr)
+void CON_AddHistory(const char *commandstr)
 {
     long i;
 
@@ -344,7 +344,7 @@ void CON_AddHistory(char *commandstr)
 //
 // Adds a command name to the command list and assigns the appropriate function pointer
 //
-BOOL CON_AddCommand(char *command, /*BOOL*/void (*function)(void))
+BOOL CON_AddCommand(const char *command, /*BOOL*/void (*function)(void))
 {
     if(command != NULL && function != NULL && numcommands < MAX_CONSOLE_COMMANDS)
     {
@@ -832,13 +832,15 @@ long TileRangeMem(int start)
     return(total);
     }
 
+#define MAXSPRWAL (MAXSPRITES < MAXWALLS ? MAXWALLS : MAXSPRITES)
+
 void CON_Cache( void )
     {
-    char incache[8192]; // 8192 so it can index maxwalls as well
+    char incache[MAXSPRWAL]; // V8 maps go up beyond 8192
     int i,j,tottiles,totsprites,totactors;
 
 
-    memset(incache,0,8192);
+    memset(incache,0,MAXSPRWAL);
 
     // Calculate all level tiles, non-actor stuff
     for(i=0;i<numsectors;i++)
@@ -855,13 +857,13 @@ void CON_Cache( void )
         }
 
     tottiles = 0;
-    for(i=0;i<8192;i++)
+    for(i=0;i<MAXSPRWAL;i++)
         if (incache[i] > 0)
             tottiles += tilesizx[i]*tilesizy[i];
 
     //////////////////////////////////////////////
 
-    memset(incache,0,8192);
+    memset(incache,0,MAXSPRWAL);
 
     // Sprites on the stat list get counted as cached, others don't
     for(i=0;i<MAXSPRITES;i++)

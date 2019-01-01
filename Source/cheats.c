@@ -32,6 +32,8 @@ Prepared for public release: 03/28/2005 - Charlie Wiederhold, 3D Realms
 // Added 2 uzi's for swgimme
 //
 
+#include <strings.h>
+
 #include "build.h"
 #include "compat.h"
 
