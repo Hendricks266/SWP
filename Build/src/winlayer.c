@@ -400,9 +400,14 @@ static void LoadEBacktrace(void)
     HMODULE ebacktrace = LoadLibraryA(EBACKTRACEDLL);
     if (ebacktrace)
     {
+// MH 20190102
+// This idiom is a consequence of how the Win32 API
+// is set up; so don't bother warning us about it.
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wcast-function-type"
         dllSetString SetTechnicalName = (dllSetString) GetProcAddress(ebacktrace, "SetTechnicalName");
         dllSetString SetProperName = (dllSetString) GetProcAddress(ebacktrace, "SetProperName");
-
+#pragma GCC diagnostic pop
         if (SetTechnicalName)
             SetTechnicalName(AppTechnicalName);
 
@@ -1432,7 +1437,7 @@ static void GetKeyNames(void)
 	int i;
 	DIDEVICEOBJECTINSTANCE key;
 	HRESULT res;
-	char tbuf[MAX_PATH];
+	char tbuf[sizeof(key.tszName)];
 
 	memset(keynames,0,sizeof(keynames));
 	for (i=0;i<256;i++)
@@ -1444,7 +1449,12 @@ static void GetKeyNames(void)
 		if (FAILED(res)) continue;
 
 		CharToOem(key.tszName, tbuf);
-		strncpy(keynames[i], tbuf, sizeof(keynames[i])-1);
+		// These strings are declared with less than
+		// the max size so we KNOW we are doing this.
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wstringop-truncation"
+	    strncpy(keynames[i], tbuf, sizeof(keynames[i])-1);
+#pragma GCC diagnostic pop
 	}
 }
 
@@ -2165,7 +2175,7 @@ int setvideomode(int x, int y, int c, int fs)
 
 #if defined(USE_OPENGL) && defined(POLYMOST)
 
-//function pointer typdefs
+//function pointer typedefs
 typedef void (APIENTRY *PFNWGLEXTSWAPCONTROLPROC) (int);
 typedef int (*PFNWGLEXTGETSWAPINTERVALPROC) (void);
 
@@ -2179,7 +2189,13 @@ void InitVSync()
 
     if (bpp > 8 && Bstrcmp((char *)extensions,"WGL_EXT_swap_control"))
     {
+// MH 20190102
+// This idiom is a consequence of how the Win32 API
+// is set up; so don't bother warning us about it.
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wcast-function-type"
         wglSwapIntervalEXT = (PFNWGLEXTSWAPCONTROLPROC)bwglGetProcAddress("wglSwapIntervalEXT");
+#pragma GCC diagnostic pop
         wglGetSwapIntervalEXT = (PFNWGLEXTGETSWAPINTERVALPROC)bwglGetProcAddress("wglGetSwapIntervalEXT");
         isync = 1;
     }

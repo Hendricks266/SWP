@@ -82,7 +82,7 @@ char custdeffile[80] = "";
 char custtxtfile[80] = "";
 char RTSCustom[128] = "";
 char fname[128];
-char svgame[40];
+char svgame[52];
 char MapsPlayed[2000][40];
 char LastMusic[80];
 
@@ -592,7 +592,7 @@ void LoadDefFiles(short iTyp)
 long SetupUserMap()
 {
     long i = 0;
-    char mp[80];
+    char mp[166];
     char mt[10];
 
     SetLastPlayed(MenuMap, 1);
@@ -612,10 +612,10 @@ long SetupUserMap()
 long SetupUserGame(short gnum)
 {
     long i;
-    char mp[80];
-    char mu[80];
+    char mp[221];
+    char mu[167];
     char sBuff[80];
-    char gFol[80];
+    char gFol[84];
     char gn[40];
 
     i = strlen(MenuGame);   // .grp or .zip
@@ -710,7 +710,7 @@ long SetupMultiPlayer()
     else
     if (MenuGame[0] != 0)   // .grp or .zip
     {
-       char gFol[80];
+       char gFol[84];
 
        gFol[0] = 0;
        if (GameFolder[0] != 0)
@@ -1232,7 +1232,7 @@ int CheckAutosave()
 
     if (Autosave > 0 && numplayers <= 1)
     {
-       char fn[40];
+       char fn[61];
 
        Bsprintf(fn, "%sgamex.asv", svgame);
        i = kopen4load(fn, 0);

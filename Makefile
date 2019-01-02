@@ -40,16 +40,20 @@ OURCFLAGS=$(debug) \
 	\
 	-Wall -Wextra \
 	-Wno-char-subscripts \
-	-Wno-pointer-sign \
 	-Wno-unused \
+	-Wno-pointer-sign \
 	-Wno-unused-parameter \
+	-Wno-misleading-indentation \
+	-Wno-implicit-fallthrough\
+	-Wno-shift-negative-value \
+	-Wno-expansion-to-defined \
+	-Wno-format-truncation \
+	\
 	-funsigned-char \
 	-fno-strict-aliasing \
 	\
 	-DNO_GCC_BUILTINS \
-	-I$(INC) -I$(EINC) -I$(SRC)/jmact -I$(SRC)/jaudiolib \
-	-Wimplicit-int \
-	-Werror-implicit-function-declaration
+	-I$(INC) -I$(EINC) -I$(SRC)/jmact -I$(SRC)/jaudiolib
 OURCXXFLAGS=-fno-exceptions -fno-rtti
 LIBS=-lm
 

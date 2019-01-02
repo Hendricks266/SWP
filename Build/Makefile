@@ -60,10 +60,33 @@ AS=nasm
 RC=windres
 AR=ar
 RANLIB=ranlib
-OURCFLAGS=$(debug) -W -Wall -Wimplicit -Wno-char-subscripts -Wno-unused \
-	-Wno-format -Wno-pointer-sign -Wno-return-type -Wno-sign-compare -Wno-type-limits -Wno-unused-but-set-parameter -Wno-unused-parameter \
-	-fno-pic -funsigned-char -fno-strict-aliasing -DNO_GCC_BUILTINS \
-	-DKSFORBUILD -I$(INC) -Werror-implicit-function-declaration
+OURCFLAGS=$(debug) \
+	\
+	-Wall -Wextra \
+	-Wno-char-subscripts \
+	-Wno-unused \
+	-Wno-pointer-sign \
+	-Wno-unused-parameter \
+	-Wno-misleading-indentation \
+	-Wno-implicit-fallthrough\
+	-Wno-shift-negative-value \
+	-Wno-expansion-to-defined \
+	-Wno-format-truncation \
+	\
+	-Wno-return-type \
+	-Wno-sign-compare \
+	-Wno-type-limits \
+	-Wno-unused-but-set-parameter \
+	-Wno-format \
+	\
+	-fno-pic \
+	\
+	-funsigned-char \
+	-fno-strict-aliasing \
+	\
+	-DNO_GCC_BUILTINS \
+	-DKSFORBUILD \
+	-I$(INC)
 OURCXXFLAGS=-fno-exceptions -fno-rtti
 GAMECFLAGS=-I$(GAME)
 LIBS= -lm

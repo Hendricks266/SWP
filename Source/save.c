@@ -803,7 +803,7 @@ int LoadGame(short save_num)
     extern BOOL InMenuLevel;
     extern short LoadSavedGame;
 
-    char gm[6];
+    char gm[11];
 
     gm[0] = 0;
     sprintf(gm, "game%d", save_num);

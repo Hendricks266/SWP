@@ -53,7 +53,7 @@ Prepared for public release: 03/28/2005 - Charlie Wiederhold, 3D Realms
 
 extern char isShareware, useDarts;
 #define SW_SHAREWARE (isShareware)
-#define SwpVer "4.3.3 beta 3"
+#define SwpVer "4.3.3 beta 4"
 #define SwpRev "0"
 
 // Turn warning off for unreferenced variables.

@@ -2630,7 +2630,7 @@ static BOOL MNU_DrawLoadSave(short game_num)
 
 static char SaveGameInfo1[80];
 static char SaveGameInfo2[80];
-static char SaveGameInfo3[80];
+static char SaveGameInfo3[93];
 static char SaveGameInfo4[80];
 static char SaveGameInfo5[80];
 
@@ -5488,7 +5488,7 @@ BOOL MNU_IpAddress(void)
 BOOL MNU_DoIpAddress(UserCall call, MenuItem * item)
 {
     signed char MNU_InputString(char *, short);
-    char tmp[sizeof(MessageInputString)];
+    char tmp[1+sizeof(MessageInputString)];
     static BOOL cur_show;
     short i, w, xx = 170;
     short ipnum = currentmenu->cursor;
@@ -5564,7 +5564,7 @@ BOOL MNU_PlayerName(void)
 BOOL MNU_DoPlayerName(UserCall call, MenuItem * item)
 {
     signed char MNU_InputString(char *, short);
-    char tmp[sizeof(MessageInputString)];
+    char tmp[1+sizeof(MessageInputString)];
     static BOOL cur_show;
 
     if (currentmenu->cursor == 0)
