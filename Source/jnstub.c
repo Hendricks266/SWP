@@ -2269,7 +2269,7 @@ ExtGetSpriteCaption(short spritenum)
     {
     SPRITEp sp = &sprite[spritenum];
     char* p = "";
-    char name[64];
+    char name[66];
     char tp[30];
     char multi_str[30] = "";
     SHORT data;

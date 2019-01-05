@@ -2774,7 +2774,7 @@ int CheckAnimations(long iNum)                                        // wxvc
 
 void overheadeditor(void)
 {
-	char buffer[80], *dabuffer, ch;
+	char buffer[270], *dabuffer, ch;
 	long i, j, k, m=0, mousxplc, mousyplc, firstx=0, firsty=0, oposz, col;
 	long templong, templong1, templong2, doubvel;
 	long startwall, endwall, dax, day, daz, x1, y1, x2, y2, x3, y3, x4, y4;
@@ -6238,7 +6238,7 @@ long menuselect(void)
 {
 	int listsize;
 	long i, j, topplc;
-	char ch, buffer[78], *sb;
+	char ch, buffer[83], *sb;
 	CACHE1D_FIND_REC *dir;
 
 	int bakpathsearchmode = pathsearchmode;

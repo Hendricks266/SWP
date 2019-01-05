@@ -151,7 +151,6 @@ extern BOOL cdvalid, enabled;
 short TimeLimitTable[9] = {0,3,5,10,15,20,30,45,60};
 
 short QuickLoadNum = -1;
-char QuickLoadDescrDialog[32];
 BOOL QuickSaveMode = FALSE;
 BOOL SavePrompt = FALSE;
 
@@ -1808,6 +1807,7 @@ BOOL MNU_QuickLoadCustom(UserCall call, MenuItem_p item)
     extern BOOL DrawScreen;
     extern long Autotick;
     long ret;
+	char QuickLoadDescrDialog[89];
 
     if (cust_callback == NULL)
     {
@@ -2779,7 +2779,7 @@ BOOL MNU_LoadSaveDraw(UserCall call, MenuItem_p item)
         if (i == game_num && MenuInputMode && !SavePrompt)
         {
             static BOOL cur_show;
-            char tmp[sizeof(SaveGameDescr[0])];
+            char tmp[1+sizeof(SaveGameDescr[0])];
 
             //cur_show ^= 1;
 	        cur_show = (totalclock & 32);

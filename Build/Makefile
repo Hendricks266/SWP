@@ -77,7 +77,6 @@ OURCFLAGS=$(debug) \
 	-Wno-sign-compare \
 	-Wno-type-limits \
 	-Wno-unused-but-set-parameter \
-	-Wno-format \
 	\
 	-fno-pic \
 	\
