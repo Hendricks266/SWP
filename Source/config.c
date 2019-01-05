@@ -629,17 +629,21 @@ int32 CONFIG_ReadSetup( void )
    if (SafeFileExists(setupfilename))
        scripthandle = SCRIPT_Load(setupfilename);
 
-   if (scripthandle < 0) return -1;
+   if (scripthandle < 0)
+	   return -1;
 
       SCRIPT_GetNumber( scripthandle, "Screen Setup", "ScreenMode",&ScreenMode);
       SCRIPT_GetNumber( scripthandle, "Screen Setup", "ScreenWidth",&ScreenWidth);
       SCRIPT_GetNumber( scripthandle, "Screen Setup", "ScreenHeight",&ScreenHeight);
-      SCRIPT_GetNumber( scripthandle, "Screen Setup", "ScreenBPP", &ScreenBPP);
-      if (ScreenBPP < 8) ScreenBPP = 8;
-
-      gs.SetHighres = 0;
-      if (ScreenBPP > 8)
-          gs.SetHighres = 1;
+	  if (!SCRIPT_GetNumber( scripthandle, "Screen Setup", "ScreenBPP", &ScreenBPP))
+	  {
+		// If ScreenBPP was set/changed...
+		if (ScreenBPP < 8)
+		  ScreenBPP = 8;
+	    gs.SetHighres = 0;
+        if (ScreenBPP > 8)
+		  gs.SetHighres = 1;
+	  }
 
 #ifdef RENDERTYPEWIN
       SCRIPT_GetNumber( scripthandle, "Screen Setup", "MaxRefreshFreq", (int32*)&maxrefreshfreq);
@@ -652,63 +656,106 @@ int32 CONFIG_ReadSetup( void )
 
       SCRIPT_GetNumber( scripthandle, "Screen Setup", "GLFovscreen", &glfovscreen);
       SCRIPT_GetNumber( scripthandle, "Screen Setup", "GLWidescreen", &glwidescreen);
-      SCRIPT_GetNumber( scripthandle, "Screen Setup", "GLVSync", &dummy);
-      vsync = dummy;
+	  if (!SCRIPT_GetNumber( scripthandle, "Screen Setup", "GLVSync", &dummy))
+	  {
+		// If vsync was set/changed...
+		vsync = dummy;
+	  }
 
       SCRIPT_GetNumber( scripthandle, "Screen Setup", "HighTiles", &usehightile);
       SCRIPT_GetNumber( scripthandle, "Screen Setup", "HighModels", &usemodels);
 
       SCRIPT_GetNumber( scripthandle, "Screen Setup", "Usegoodalpha", &usegoodalpha);
-      SCRIPT_GetNumber( scripthandle, "Screen Setup", "LcdMonitor",&dummy);
-      LcdMon = dummy;
+      if (!SCRIPT_GetNumber( scripthandle, "Screen Setup", "LcdMonitor",&dummy))
+	  {
+		// If LcdMon was set/changed...
+		LcdMon = dummy;
+	  }
+      
 
       SCRIPT_GetNumber( scripthandle, "Sound Setup", "FXDevice",&FXDevice);
       SCRIPT_GetNumber( scripthandle, "Sound Setup", "MusicDevice",&MusicDevice);
-      SCRIPT_GetNumber( scripthandle, "Sound Setup", "FXVolume",&FXVolume);
-      gs.SoundVolume = FXVolume;
-      SCRIPT_GetNumber( scripthandle, "Sound Setup", "MusicVolume",&MusicVolume);
-      gs.MusicVolume = MusicVolume;
+      if (!SCRIPT_GetNumber( scripthandle, "Sound Setup", "FXVolume",&FXVolume))
+	  {
+		// If FXVolume was set/changed...
+		gs.SoundVolume = FXVolume;
+	  }
+      if (!SCRIPT_GetNumber( scripthandle, "Sound Setup", "MusicVolume",&MusicVolume))
+	  {
+		// If MusicVolume was set/changed...
+		gs.MusicVolume = FXVolume;
+	  }
 
       SCRIPT_GetNumber( scripthandle, "Sound Setup", "NumVoices",&NumVoices);
       SCRIPT_GetNumber( scripthandle, "Sound Setup", "NumChannels",&NumChannels);
       SCRIPT_GetNumber( scripthandle, "Sound Setup", "NumBits",&NumBits);
       SCRIPT_GetNumber( scripthandle, "Sound Setup", "MixRate",&MixRate);
-      SCRIPT_GetNumber( scripthandle, "Sound Setup", "ReverseStereo",&dummy);
-      gs.FlipStereo = dummy;
-      if (gs.FlipStereo) gs.FlipStereo = 1;
+      if (!SCRIPT_GetNumber( scripthandle, "Sound Setup", "ReverseStereo",&dummy))
+	  {
+		// If ReverseStereo was set/changed...
+        gs.FlipStereo = dummy;
+        if (gs.FlipStereo) gs.FlipStereo = 1;
+	  }
 
       SCRIPT_GetNumber( scripthandle, "Setup", "ForceSetup",&ForceSetup);
       SCRIPT_GetNumber( scripthandle, "Controls","UseMouse",&UseMouse);
       SCRIPT_GetNumber( scripthandle, "Controls","UseJoystick",&UseJoystick);
 
-      SCRIPT_GetNumber( scripthandle, "SwpOptions","WeaponSwitch",&dummy);
-      gs.WeaponSwitch = dummy;
+	  if (!SCRIPT_GetNumber( scripthandle, "SwpOptions","WeaponSwitch",&dummy))
+	  {
+		// If WeaponSwitch was set/changed...
+        gs.WeaponSwitch = dummy;
+	  }
 
-      SCRIPT_GetNumber( scripthandle, "SwpOptions","SwpUseDarts",&dummy);
-      gs.UseDarts = dummy;
+	  if (!SCRIPT_GetNumber( scripthandle, "SwpOptions","SwpUseDarts",&dummy))
+	  {
+		// If SwpUseDarts was set/changed...
+        gs.UseDarts = dummy;
+	  }
 
-      SCRIPT_GetNumber( scripthandle, "SwpOptions","SwapYinyang",&dummy);
-      gs.SwapYinyang = dummy;
+	  if (!SCRIPT_GetNumber( scripthandle, "SwpOptions","SwapYinyang",&dummy))
+	  {
+		// If SwapYinyang was set/changed...
+        gs.SwapYinyang = dummy;
+	  }
 
-      SCRIPT_GetNumber( scripthandle, "SwpOptions","ShowTEN",&dummy);
-      gs.ShowTEN = dummy;
+	  if (!SCRIPT_GetNumber( scripthandle, "SwpOptions","ShowTEN",&dummy))
+	  {
+		// If ShowTEN was set/changed...
+        gs.ShowTEN = dummy;
+	  }
 
-      SCRIPT_GetNumber( scripthandle, "SwpOptions","AutoSaveGame",&dummy);
-      Autosave = dummy;
+	  if (!SCRIPT_GetNumber( scripthandle, "SwpOptions","AutoSaveGame",&dummy))
+	  {
+		// If AutoSaveGame was set/changed...
+        Autosave = dummy;
+	  }
 
-      SCRIPT_GetNumber( scripthandle, "SwpOptions","RandomMusic",&dummy);
-      RandomMusic = dummy;
+	  if (!SCRIPT_GetNumber( scripthandle, "SwpOptions","RandomMusic",&dummy))
+	  {
+		// If RandomMusic was set/changed...
+        RandomMusic = dummy;
+	  }
 
-      SCRIPT_GetNumber( scripthandle, "SwpOptions","SwpNinjaHack",&dummy);
-      gs.UseNinjaHack = dummy;
+	  if (!SCRIPT_GetNumber( scripthandle, "SwpOptions","SwpNinjaHack",&dummy))
+	  {
+		// If SwpNinjaHack was set/changed...
+        gs.UseNinjaHack = dummy;
+	  }
 
-      SCRIPT_GetNumber( scripthandle, "SwpOptions","SwpCarHack",&dummy);
-      gs.UseCarHack = dummy;
+	  if (!SCRIPT_GetNumber( scripthandle, "SwpOptions","SwpCarHack",&dummy))
+	  {
+		// If SwpCarHack was set/changed...
+        gs.UseCarHack = dummy;
+	  }
 
-      SCRIPT_GetNumber( scripthandle, "SwpOptions","MenuTextColor",&dummy);
-      if (dummy < 0 || dummy > 14)
-          dummy = 5;
-      gs.MenuTextColor = dummy;
+	  if (!SCRIPT_GetNumber( scripthandle, "SwpOptions","MenuTextColor",&dummy))
+	  {
+		// If MenuTextColor was set/changed...
+        if (dummy < 0 || dummy > 14)
+            dummy = 5;
+        gs.MenuTextColor = dummy;
+	  }
 
       dummy = 0;
       SCRIPT_GetNumber( scripthandle, "SwpOptions", "MiniHudType",&dummy);
@@ -734,10 +781,13 @@ int32 CONFIG_ReadSetup( void )
           SCRIPT_GetString( scripthandle, "Network", buf, IPAddressArg[i]);
           }
 
-      SCRIPT_GetNumber(scripthandle, "Network", "LastIpUsed", &dummy);
-      if (IPAddressArg[dummy] == NULL)
-          dummy = 0;
-      LastIpUsed = dummy;
+	  if (!SCRIPT_GetNumber( scripthandle, "Network", "LastIpUsed", &dummy))
+	  {
+		// If LastIpUsed was set/changed...
+        if (IPAddressArg[dummy] == NULL)
+            dummy = 0;
+        LastIpUsed = dummy;
+	  }
 
    ReadGameSetup(scripthandle);
    gs.BorderMem = gs.BorderNum;
