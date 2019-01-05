@@ -39,6 +39,9 @@
 #include <windowsx.h>
 #include <mmsystem.h>
 #include <winbase.h>
+#ifdef _WIN32_IE
+#  undef _WIN32_IE
+#endif
 #define _WIN32_IE 0x0400
 #include <commctrl.h>
 #include <stdio.h>
@@ -1734,7 +1737,7 @@ void GetMapNames(char *fname)
 {
     HWND hwnd;
     FILE *fn;
-    char grpname[80];
+    char grpname[81];
     char gbuf[16];
     int i, j;
 
@@ -1845,7 +1848,7 @@ void GetMapFiles(char *mpath, short wb)
 {
     HWND hwnd;
     char mbuf[80];
-    char xbuf[80];
+    char xbuf[133];
     short i, j=0;
 
     if (wb)
@@ -1881,7 +1884,7 @@ void GetMapFiles(char *mpath, short wb)
 void LoadMusicFiles(char *mpath)
 {
     HWND hwnd;
-    char mbuf[128];
+    char mbuf[130];
 
     if (cdplay)
     {

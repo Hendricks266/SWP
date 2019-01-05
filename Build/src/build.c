@@ -7289,12 +7289,19 @@ void SWPBUILDHelp(void)
 
 void BackupMap(void)                                                 // wxas
 {
-    char fn[BMAX_PATH];
-    short i;
+	// MH 20190102
+	// Fix warning coming from theoretical truncation.
+	// We know boardfilename is null-terminated so the
+	// previous convoluted shenigans are unnecessary.
+	// It was also being copied without a terminator;
+	// if file name didn't have an exactly 3-character
+	// extension, a terminator would never be added!
 
-    fn[0] = 0;
-    i = strlen(boardfilename);
-    strncpy(fn, boardfilename, i);
+    char fn[sizeof(boardfilename)];
+	short i;
+
+    strcpy(fn, boardfilename);
+	i=strlen(fn);
 
     if (fn[i-4] == '.')
        {

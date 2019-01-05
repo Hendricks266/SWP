@@ -786,7 +786,7 @@ JS_DrawMirrors(PLAYERp pp, long tx, long ty, long tz, short tpang, long tphoriz)
                     // Show teleport destination
                     // NOTE: Adding MAXSECTORS lets you draw a room, even if
                     // you are outside of it!
-                    if (!mirror[cnt].mstate == m_viewon)
+                    if (!(mirror[cnt].mstate == m_viewon))
                         {
                         tilesizx[MIRROR] = tilesizy[MIRROR] = 0;
                         // Set TV camera sprite size to 0 to show mirror

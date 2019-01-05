@@ -594,7 +594,7 @@ extern long bufferjitter;
 
 BOOL CameraTestMode = FALSE;
 
-char ds[256];                           // debug string
+char ds[645];                           // debug string
 
 extern short NormalVisibility;
 

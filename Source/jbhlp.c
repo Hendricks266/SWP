@@ -123,7 +123,6 @@ void ContextHelp(short spritenum)
     int i,fp;
     char t,*tc;
     char x=0,y=4;
-    char *name,*hightag;
     char *filebuffer;
     SPRITEp sp;
     short hitag=0;
@@ -163,8 +162,8 @@ void ContextHelp(short spritenum)
     //strupr(filebuffer);
 
     // Assign a token name to search for based on the sprite being pointed to.
-    name = (char *)malloc(20);
-    hightag = (char *)malloc(sizeof(short));
+    char name[20];
+    char hightag[7];
 
     // Make the token
     strcpy(name,"@TAG");
