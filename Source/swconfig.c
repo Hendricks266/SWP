@@ -144,6 +144,7 @@ void ReadGameSetup( int32 scripthandle )
         SCRIPT_GetString( scripthandle, "Network",ds,WangBangMacro[dummy]);
         }
 
+	dummy = -1; // MH 20190105 - Was missing this assignment
     SCRIPT_GetNumber( scripthandle, "Network", "NetGameType",&dummy);
     if (dummy != -1) gs.NetGameType = dummy;
 
@@ -183,8 +184,11 @@ void ReadGameSetup( int32 scripthandle )
     SCRIPT_GetNumber( scripthandle, "Network", "NetNuke",&dummy);
     if (dummy != -1) gs.NetNuke = dummy;
 
-    SCRIPT_GetString( scripthandle, "Options","Rooster",gs.Password);
-    DecodePassword(gs.Password);
+    if (!SCRIPT_GetString( scripthandle, "Options","Rooster",gs.Password))
+	{
+	  // If Rooster was set/changed...
+      DecodePassword(gs.Password);
+	}
 
     // option stuff
     dummy = -1;
@@ -235,7 +239,6 @@ void ReadGameSetup( int32 scripthandle )
     SCRIPT_GetNumber( scripthandle, "Controls", "MouseAiming",&dummy);
     if (dummy != -1) gs.MouseAimingType = dummy;
 
-    dummy = -1;
     dummy = -1;
     SCRIPT_GetNumber( scripthandle, "Options", "Voxels",&dummy);
     if (dummy != -1) usevoxels = dummy;
